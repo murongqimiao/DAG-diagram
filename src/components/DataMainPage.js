@@ -1,6 +1,5 @@
 const tap = [{
-  name: 'Step1',
-  sel: true
+  name: 'Step1'
 }, {
   name: 'Step2'
 }, {
@@ -8,9 +7,8 @@ const tap = [{
 }, {
   name: 'Step4'
 }, {
-  name: 'Step5'
-}, {
-  name: 'Step6'
+  name: 'Step5',
+  sel: true
 }]
 
 export { tap }

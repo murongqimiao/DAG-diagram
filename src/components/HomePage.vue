@@ -14,7 +14,6 @@
         <Step3 v-if="tap[2].sel"/>
         <Step4 v-if="tap[3].sel"/>
         <Step5 v-if="tap[4].sel"/>
-        <Step6 v-if="tap[5].sel"/>
       </div>
     </div>
   </div>
@@ -42,7 +41,6 @@ export default {
   mounted() {
     if (window.sessionStorage['step']) {
       const i = window.sessionStorage.step
-      console.log(i)
       this.selStep(i)
     }
   },
