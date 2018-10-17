@@ -1,22 +1,18 @@
 <template>
   <svg
-  @mousedown="svgMouseDown"
-  @mousemove="dragIng($event)"
-  @mouseup="dragEnd($event)"
   id="svgContent"
   xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1260" height="1029" data-spm-anchor-id="TODO.11007039.0.i6.12b64a9bcbXQmm">
         <g
         v-for="(item, i) in DataAll"
         :key="i" class="svgEach"
-        :transform="`translate(${item.translate.left}, ${item.translate.top})`"
-        @mousedown="dragPre($event, i)">
+        :transform="`translate(${item.translate.left}, ${item.translate.top})`">
             <foreignObject width="180" height="30" >
-            <body xmlns="http://www.w3.org/1999/xhtml">
-              <div :class="choice.paneNode === i ? 'pane-node-content selected' : 'pane-node-content'" @click="selPaneNode(i)">
+            <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0">
+              <div :class="choice.paneNode === i ? 'pane-node-content selected' : 'pane-node-content'">
                   <span class="icon icon-data"></span>
                   <span class="name">{{item.name}}</span>
-                  <span @mouseup="linkEnd($event, item.id)" :class="item.parentNode ? 'parentLink' : 'parentRing'">{{i}}</span>
-                  <span @mousedown="linkPre($event, i)"  :class="item.childNode ? 'childLink' : 'childRing'"></span>
+                  <span :class="item.parentNode ? 'parentLink' : 'parentRing'">{{i}}</span>
+                  <span :class="item.childNode ? 'childLink' : 'childRing'"></span>
               </div>
             </body>
           </foreignObject>
@@ -38,117 +34,26 @@
             </body>
           </foreignObject>
         </g>
-        <g>
-          <path
-          class="connector"
-          :d="dragLinkPath()"
-          ></path>
-          <foreignObject width="12" height="12" >
-            <body xmlns="http://www.w3.org/1999/xhtml">
-              <div
-              v-show="currentEvent === 'dragLink'"
-              :style="{transform: `translate(${dragLink.toX - 6}px, ${dragLink.toY - 6}px)`}"
-              class="dragLinkArrows">
-              </div>
-            </body>
-          </foreignObject>
-        </g>
     </svg>
 </template>
 <script>
 export default {
   methods: {
-    selPaneNode(i) {
-      // 选取节点
-      this.choice.paneNode = this.choice.paneNode === i ? -1 : i;
-    },
-    setInitRect() {
-      let { left, top } = document
-        .getElementById("svgContent")
-        .getBoundingClientRect();
-      this.initPos = { left, top }; // 修正坐标
-    },
-    dragPre(e, i) {
-      // 准备拖动节点
-      this.setInitRect();
-      this.currentEvent = "dragPane"; // 修正行为
-      this.choice.index = i;
-      this.setDragFramePosition(e);
-    },
-    linkPre(e, i) {
-      this.setInitRect();
-      this.currentEvent = "dragLink";
-      this.choice.index = i;
-      this.setDragLinkPostion(e, true);
-      e.preventDefault();
-      e.stopPropagation();
-    },
-    dragIng(e) {
-      if (this.currentEvent === "dragPane") {
-        this.setDragFramePosition(e);
-      }
-      if (this.currentEvent === "dragLink") {
-        this.setDragLinkPostion(e);
-      }
-    },
-    dragEnd(e) {
-      // 拖动结束
-      if (this.currentEvent === "dragPane") {
-        this.dragFrame = { dragFrame: false, posX: 0, posY: 0 };
-        this.setPanePosition(e);
-      }
-      this.currentEvent = null;
-    },
-    linkEnd(e, i) {
-      if (this.currentEvent === "dragLink") {
-        this.DataAll[this.choice.index].linkTo.push({ id: i })
-        this.DataAll.find(item => item.id === i).parentNode = 1
-      }
-      this.currentEvent = null
-    },
-    setDragFramePosition(e) {
-      const x = e.x - this.initPos.left;
-      const y = e.y - this.initPos.top;
-      this.dragFrame = { posX: x - 90, posY: y - 15 };
-    },
-    setDragLinkPostion(e, init) {
-      // 定位连线
-      const x = e.x - this.initPos.left;
-      const y = e.y - this.initPos.top;
-      if (init) {
-        this.dragLink = Object.assign({}, this.dragLink, {
-          fromX: x,
-          fromY: y
-        });
-      }
-      this.dragLink = Object.assign({}, this.dragLink, { toX: x, toY: y });
-    },
-    setPanePosition(e) {
-      const x = e.x - this.initPos.left - 90;
-      const y = e.y - this.initPos.top - 15;
-      const i = this.choice.index;
-      this.DataAll[i].translate = { left: x, top: y };
-    },
     computedLink(i, each, n) {
-      const { left, top } = this.DataAll[i].translate; // 起始点
-      const aimObj = this.DataAll.find(item => item.id === each.id).translate;
+      const { left, top } = this.DataAll[i].translate; // 起点位置
+      const aimObj = this.DataAll.find(item => item.id === each.id).translate; // 终点坐标
+      /**
+       * 关于贝塞尔曲线坐标公式直接看
+       * https://brucewar.gitbooks.io/svg-tutorial/15.SVG-path%E5%85%83%E7%B4%A0.html
+       * path里关于贝塞尔的部分
+       * step5 整合以后的计算公式更清晰, 此处可以跳过
+       */
       return `M 90 30  Q 90 ${(aimObj.top - top + 30) / 2} ${(aimObj.left -
         left +
         180) /
         2} ${(aimObj.top - top + 30) / 2} T ${aimObj.left -
         left +
         90} ${aimObj.top - top}`;
-    },
-    dragLinkPath() {
-      if (this.currentEvent === "dragLink") {
-        const { fromX, fromY, toX, toY } = this.dragLink;
-        return `M ${fromX} ${fromY}  Q ${fromX} ${(fromY + toY) / 2} ${(toX + fromX) / 2} ${(fromY + toY) / 2} T ${toX} ${toY}`;
-      } else {
-        return `M 0 0 T 0 0`
-      }
-    },
-    svgMouseDown() {
-      this.selPaneNode(-1); // 关闭选取节点
     }
   },
   data() {
@@ -311,6 +216,8 @@ export default {
   font-size: 12px;
   -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
+  position: relative;
+  box-sizing: border-box;
   .icon {
     width: 26px;
     height: 26px;
@@ -334,18 +241,6 @@ export default {
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
-  }
-  .parentLink {
-    font-size: 0;
-    height: 12px;
-    width: 12px;
-    position: absolute;
-    top: 0;
-    left: 90px;
-    transform: translateX(-50%);
-    border-top: 6px solid black;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
   }
   .parentRing {
     font-size: 0;
@@ -371,6 +266,16 @@ export default {
     background: #ffffff;
     cursor: crosshair;
   }
+}
+.parentLink {
+  font-size: 0;
+  position: absolute;
+  top: 0;
+  left: 90px;
+  transform: translateX(-50%);
+  border-top: 6px solid black;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
 }
 .selected {
   background: rgba(227, 244, 255, 0.9) !important;

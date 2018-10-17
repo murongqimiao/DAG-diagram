@@ -303,6 +303,7 @@ export default {
   position: relative;
 }
 .pane-node-content {
+  box-sizing: border-box;
   width: 180px;
   height: 30px;
   background-color: hsla(0, 0%, 100%, 0.9);

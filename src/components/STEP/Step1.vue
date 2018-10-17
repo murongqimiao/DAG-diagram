@@ -18,11 +18,32 @@
     </svg>
 </template>
 <script>
-import DataAll from './SVG_Data.js'
+import DataAll from "./SVG_Data.js";
 export default {
   data() {
     return {
-      DataAll: DataAll // 此处存放数据
+      DataAll: DataAll, // 此处存放数据
+      /**
+       * 以下为数据结构简单讲解
+       * 此数据结构为出版, 仅以实现为目的,在step5后数据结构替换为真实场景数据结构,稍有不同.
+       */
+      simulate: {
+        name: "name1", // 此处为节点名称
+        description: "description1",
+        id: 1, // 此处为节点id, 捆绑整图id的唯一身份标识
+        parentNode: 0, // 父节点数量
+        childNode: 2, // 子节点数量
+        imgContent: "", // 节点img地址
+        parentDetails: { // 预留内容
+          a: "",
+          b: ""
+        },
+        linkTo: [{ id: 2 }, { id: 3 }], // 链接的子节点id
+        translate: { // 每个节点的坐标位置 x轴 - y轴
+          left: 100,
+          top: 20
+        }
+      }
     };
   }
 };

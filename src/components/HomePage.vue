@@ -14,6 +14,7 @@
         <Step3 v-if="tap[2].sel"/>
         <Step4 v-if="tap[3].sel"/>
         <Step5 v-if="tap[4].sel"/>
+        <Step6 v-if="tap[5].sel"/>
       </div>
     </div>
   </div>
@@ -31,13 +32,20 @@ export default {
   },
   methods: {
     selStep(i) {
+      window.sessionStorage['step'] = i
       this.tap.forEach((item, n) => {
-        i === n ? (item.sel = true) : (item.sel = false);
+        i - n === 0 ? (item.sel = true) : (item.sel = false);
       });
       this.tap = JSON.parse(JSON.stringify(this.tap));
     }
   },
-  mounted() {},
+  mounted() {
+    if (window.sessionStorage['step']) {
+      const i = window.sessionStorage.step
+      console.log(i)
+      this.selStep(i)
+    }
+  },
   components: {
     ...Step
   }
