@@ -19,7 +19,14 @@
 </template>
 <script>
 import DataAll from "./SVG_Data.js";
+import { mapState } from 'vuex';
+
 export default {
+  computed: mapState({
+    Data: store => store.DataAll
+  }),
+  mounted() {
+  },
   data() {
     return {
       DataAll: DataAll, // 此处存放数据
