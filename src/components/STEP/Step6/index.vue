@@ -12,7 +12,7 @@
         @contextmenu="r_click_nodes($event, i)"
         @mousedown="dragPre($event, i)">
             <foreignObject width="180" height="30" >
-            <body xmlns="http://www.w3.org/1999/xhtml">
+            <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
               <div :class="choice.paneNode === i ? 'pane-node-content selected' : 'pane-node-content'">
                   <span class="icon icon-data"></span>
                   <span class="name">{{item.name}}</span>
@@ -244,6 +244,7 @@ export default {
   position: relative;
 }
 .pane-node-content {
+  box-sizing: border-box;
   width: 180px;
   height: 30px;
   background-color: hsla(0, 0%, 100%, 0.9);

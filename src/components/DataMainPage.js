@@ -11,6 +11,14 @@ const tap = [{
   name: 'Step5'
 }, {
   name: 'Step6'
+}, {
+  name: 'Step6'
+}, {
+  name: 'Step7'
+}, {
+  name: 'Step8'
+}, {
+  name: 'Step9'
 }]
 
 export { tap }
