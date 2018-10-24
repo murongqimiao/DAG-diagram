@@ -9,6 +9,8 @@ npm i    ->     npm  run dev
 ###  
 基于SVG的DAG(单向无环图)前端实现.分享给有类似需求的前端研发同学.
 
+简书配套教程地址: https://www.jianshu.com/p/b044f94e8211
+
 本项目为公司内部PAI需求,
 参考了国内外其他公司的DAG实现,
 

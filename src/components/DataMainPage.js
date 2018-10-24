@@ -12,8 +12,6 @@ const tap = [{
 }, {
   name: 'Step6'
 }, {
-  name: 'Step6'
-}, {
   name: 'Step7'
 }, {
   name: 'Step8'
