@@ -19,6 +19,7 @@
         <Step4 v-if="tap[3].sel"/>
         <Step5 v-if="tap[4].sel"/>
         <Step6 v-if="tap[5].sel"/>
+        <Step7 v-if="tap[6].sel"/>
       </div>
     </div>
     <nodes-bus v-if="dragBus" :value="busValue.value" :pos_x="busValue.pos_x" :pos_y="busValue.pos_y" />
@@ -100,8 +101,8 @@ export default {
       }
       if (dragDes && dragDes.drag && e.toElement.id === "svgContent") {
         const { model_id, type } = dragDes;
-        const pos_x = e.offsetX - 90; // 参数修正
-        const pos_y = e.offsetY - 15; // 参数修正
+        const pos_x = (e.offsetX - 90) / (sessionStorage['svgScale'] || 1); // 参数修正
+        const pos_y = (e.offsetY - 15) / (sessionStorage['svgScale'] || 1); // 参数修正
         const params = {
           model_id: sessionStorage["newGraph"],
           desp: {
@@ -122,6 +123,7 @@ export default {
       const i = window.sessionStorage.step;
       this.selStep(i);
     }
+    sessionStorage['svgScale'] = 1
   },
   components: {
     ...Step,
@@ -195,6 +197,7 @@ export default {
   top: 0;
   bottom: 0;
   right: 0;
+  overflow: scroll;
 }
 .nodes_bus {
   user-select: none;

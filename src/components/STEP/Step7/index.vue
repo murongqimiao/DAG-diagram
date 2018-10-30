@@ -4,8 +4,8 @@
      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1260" height="1029" data-spm-anchor-id="TODO.11007039.0.i6.12b64a9bcbXQmm"
     @mousedown="svgMouseDown"
     @mousemove="dragIng($event)"
-    @mouseup="dragEnd($event)">
-    <g :transform="`scale(${svgScale})`" >
+    @mouseup="dragEnd($event)" >
+    <g :transform="`scale(${svgScale})`" id="svg_graph_area">
           <g
           v-for="(item, i) in DataAll.nodes"
           :key="'_' + i" class="svgEach"
@@ -36,6 +36,7 @@
           <SimulateArrow v-if="currentEvent === 'dragLink'" :dragLink="dragLink"/>
           <EditArea :isEditAreaShow="is_edit_area" @close_click_nodes="close_click_nodes"/>
       </g>
+      <Control @sizeInit="sizeInit" @sizeExpend="sizeExpend" @sizeShrink="sizeShrink" />
     </svg>
 </template>
 <script>
@@ -43,6 +44,7 @@ import Arrow from "./arrow.vue";
 import SimulateArrow from "./simulateArrow.vue";
 import SimulateFrame from "./simulateFrame.vue";
 import EditArea from './editArea.vue';
+import Control from './control.vue';
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -71,6 +73,21 @@ export default {
       "saveGraph",
       "moveNode"
     ]),
+    sizeInit() {
+      // 初始化大小
+      this.svgScale = 1
+      sessionStorage['svgScale'] = 1
+    },
+    sizeExpend() {
+      // 将图像放大
+      this.svgScale += 0.1
+      sessionStorage['svgScale'] = this.svgScale
+    },
+    sizeShrink() {
+      // 图像缩小
+      this.svgScale -= 0.1
+      sessionStorage['svgScale'] = this.svgScale
+    },
     selPaneNode(i) {
       // 选取节点
       this.choice.paneNode = this.choice.paneNode === i ? -1 : i;
@@ -79,7 +96,12 @@ export default {
       let { left, top } = document
         .getElementById("svgContent")
         .getBoundingClientRect();
+      let graph = document
+      .getElementById('svg_graph_area')
+      .getBoundingClientRect();
+      console.log('修正了坐标')
       this.initPos = { left, top }; // 修正坐标
+      this.initGraph = { left: graph.left, top: graph.top }
     },
     dragPre(e, i) {
       // 准备拖动节点
@@ -116,8 +138,8 @@ export default {
       // 拖动结束
       if (this.currentEvent === "PaneDraging") {
         this.dragFrame = { dragFrame: false, posX: 0, posY: 0 };
-        const x = e.x - this.initPos.left - 90;
-        const y = e.y - this.initPos.top - 15;
+        const x = (e.x - this.initPos.left) / this.svgScale - 90;
+        const y = (e.y - this.initPos.top) / this.svgScale - 15;
         let params = {
           model_id: sessionStorage["newGraph"],
           id: this.DataAll.nodes[this.choice.index].id,
@@ -125,6 +147,7 @@ export default {
           pos_y: y
         };
         this.moveNode(params);
+
         // if (e.timeStamp - this.timeStamp > 200) {
         //   this.setPanePosition(e);
         // }
@@ -156,12 +179,15 @@ export default {
     setDragFramePosition(e) {
       const x = e.x - this.initPos.left;
       const y = e.y - this.initPos.top;
-      this.dragFrame = { posX: x - 90, posY: y - 15 };
+      const x1 = this.initGraph.left - this.initPos.left;
+      const y1 = this.initGraph.top - this.initPos.top;
+      console.log((x - x1) / this.svgScale, (y - y1) / this.svgScale)
+      this.dragFrame = {posX: (x / this.svgScale) - 90, posY: (y / this.svgScale) - 15};
     },
     setDragLinkPostion(e, init) {
       // 定位连线
-      const x = e.x - this.initPos.left;
-      const y = e.y - this.initPos.top;
+      const x = (e.x - this.initPos.left) / this.svgScale;
+      const y = (e.y - this.initPos.top) / this.svgScale;
       if (init) {
         this.dragLink = Object.assign({}, this.dragLink, {
           fromX: x,
@@ -173,8 +199,8 @@ export default {
     r_click_nodes(e, i) { // 节点的右键事件
       this.setInitRect()
       const id = this.DataAll.nodes[i].id;
-      const x = e.x - this.initPos.left;
-      const y = e.y - this.initPos.top;
+      const x = (e.x - this.initPos.left) / this.svgScale;
+      const y = (e.y - this.initPos.top) / this.svgScale;
       this.is_edit_area = {
         value: true,
         x,
@@ -237,7 +263,8 @@ export default {
     Arrow,
     SimulateArrow,
     SimulateFrame,
-    EditArea
+    EditArea,
+    Control
   }
 };
 </script>
