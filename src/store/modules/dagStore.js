@@ -104,9 +104,6 @@ const dagStore = {
     },
     changeSize: ({ commit }, action) => { // 改变size
       commit('CHANGE_SIZE', action)
-    },
-    selAreaEnd: ({ commit }, area) => { // 框选节点
-      commit('SEL_AREA_END', area)
     }
   },
   mutations: {
@@ -200,9 +197,6 @@ const dagStore = {
         in_ports: [0, 1, 2, 3, 4],
         out_ports: [0, 1, 2, 3, 4]
       })
-    },
-    SEL_AREA_END: (state, area) => {
-      console.log('area', area)
     }
   }
 };

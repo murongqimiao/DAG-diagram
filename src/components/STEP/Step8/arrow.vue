@@ -152,6 +152,7 @@ export default {
   stroke: hsla(0, 0%, 50%, 0.6);
   stroke-width: 2px;
   fill: none;
+  cursor: pointer;
 }
 .menu_cover {
   position: fixed;
@@ -164,6 +165,7 @@ export default {
   stroke: hsla(0, 0%, 50%, 0.4);
   stroke-width: 5px;
   fill: none;
+  cursor: pointer;
 }
 .menu_contain {
   width: 150px;

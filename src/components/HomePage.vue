@@ -72,7 +72,7 @@ export default {
        **/
       let dragDes = null;
       if (sessionStorage["dragDes"]) {
-        dragDes = JSON.parse(sessionStorage["dragDes"])
+        dragDes = JSON.parse(sessionStorage["dragDes"]);
       }
       if (dragDes && dragDes.drag) {
         const x = e.pageX;
@@ -98,12 +98,16 @@ export default {
     endNodesBus(e) {
       let dragDes = null;
       if (sessionStorage["dragDes"]) {
-        dragDes = JSON.parse(sessionStorage["dragDes"])
+        dragDes = JSON.parse(sessionStorage["dragDes"]);
       }
       if (dragDes && dragDes.drag && e.toElement.id === "svgContent") {
         const { model_id, type } = dragDes;
-        const pos_x = (e.offsetX - 90) / (sessionStorage['svgScale'] || 1); // 参数修正
-        const pos_y = (e.offsetY - 15) / (sessionStorage['svgScale'] || 1); // 参数修正
+        const pos_x =
+          (e.offsetX - 90 - (sessionStorage["svg_left"] || 0)) /
+          (sessionStorage["svgScale"] || 1); // 参数修正
+        const pos_y =
+          (e.offsetY - 15 - (sessionStorage["svg_top"] || 0)) /
+          (sessionStorage["svgScale"] || 1); // 参数修正
         const params = {
           model_id: sessionStorage["newGraph"],
           desp: {
@@ -124,7 +128,7 @@ export default {
       const i = window.sessionStorage.step;
       this.selStep(i);
     }
-    sessionStorage['svgScale'] = 1
+    sessionStorage["svgScale"] = 1;
   },
   components: {
     ...Step,
@@ -198,7 +202,6 @@ export default {
   top: 0;
   bottom: 0;
   right: 0;
-  overflow: scroll;
 }
 .nodes_bus {
   user-select: none;

@@ -7,6 +7,7 @@
                 <span @click="sizeShrink">一</span>
                 <span @click="sizeInit">╬</span>
                 <span :class="['sel_area', 'sel_area_ing'].indexOf(currentEvent) !== -1 ? 'sel_ing' : ''" @click="sel_area($event)">口</span>
+                <span @click="fullScreen">{{ changeScreen }}</span>
             </div>
         </body>
         </foreignObject>
@@ -19,25 +20,40 @@ export default {
     currentEvent: {
       type: String,
       default: () => {
-        ''
+        "";
       }
     }
   },
+  data() {
+    return {
+      changeScreen: "全"
+    };
+  },
   methods: {
     sizeExpend() {
-      this.$emit('sizeExpend')
+      this.$emit("sizeExpend");
     },
     sizeShrink() {
-      this.$emit('sizeShrink')
+      this.$emit("sizeShrink");
     },
     sizeInit() {
-      this.$emit('sizeInit')
+      this.$emit("sizeInit");
     },
     sel_area(e) {
-      this.$emit('sel_area')
+      this.$emit("sel_area");
       e.preventDefault();
       e.stopPropagation();
       e.cancelBubble = true;
+    },
+    fullScreen() {
+      if (this.changeScreen === "全") {
+        this.changeScreen = "关";
+        let root = document.getElementById("svgContent");
+        root.webkitRequestFullScreen();
+      } else {
+        this.changeScreen = "全";
+        document.webkitExitFullscreen();
+      }
     }
   }
 };
@@ -46,7 +62,7 @@ export default {
 <style lang="scss" scoped>
 .control_menu {
   height: 30px;
-  width: 100px;
+  width: 150px;
   background: #cccccc;
   justify-content: space-around;
   display: flex;
@@ -67,7 +83,7 @@ export default {
   }
 }
 .sel_ing {
-  color: blue;
-  border: 1px solid blue !important;
+  color: #289de9;
+  border: 1px solid #289de9 !important;
 }
 </style>
