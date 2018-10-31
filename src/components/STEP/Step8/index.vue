@@ -180,6 +180,8 @@ export default {
       this.changeSize("init"); // 回归到默认倍数
       this.svg_left = 0; // 回归到默认位置
       this.svg_top = 0;
+      sessionStorage['svg_left'] = 0;
+      sessionStorage['svg_top'] = 0;
     },
     sizeExpend() {
       this.changeSize("expend"); // 画板放大0.1
