@@ -4,8 +4,8 @@
      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1260" height="1029" data-spm-anchor-id="TODO.11007039.0.i6.12b64a9bcbXQmm"
     @mousedown="svgMouseDown"
     @mousemove="dragIng($event)"
-    @mouseup="dragEnd($event)" >
-    <g :transform="`scale(${svgScale})`" id="svg_graph_area">
+    @mouseup="dragEnd($event)">
+    <g :transform="`scale(${svgScale})`" >
           <g
           v-for="(item, i) in DataAll.nodes"
           :key="'_' + i" class="svgEach"
@@ -32,34 +32,39 @@
             </foreignObject>
           </g>
           <SimulateFrame  v-if="currentEvent === 'PaneDraging'" :dragFrame="dragFrame" />
-          <Arrow v-for="(each, n) in DataAll.edges" :key="'____' + n" :DataAll="DataAll" :each="each" :index="n" :svgScale="svgScale" />
+          <Arrow v-for="(each, n) in DataAll.edges" :key="'____' + n" :DataAll="DataAll" :each="each" :index="n" />
           <SimulateArrow v-if="currentEvent === 'dragLink'" :dragLink="dragLink"/>
           <EditArea :isEditAreaShow="is_edit_area" @close_click_nodes="close_click_nodes"/>
+          <SimulateSelArea v-if="['sel_area', 'sel_area_ing'].indexOf(currentEvent) !== -1" :simulate_sel_area="simulate_sel_area" />
       </g>
-      <Control @sizeInit="sizeInit" @sizeExpend="sizeExpend" @sizeShrink="sizeShrink" />
+      <Control @sizeInit="sizeInit" @sizeExpend="sizeExpend" @sizeShrink="sizeShrink"  @sel_area="sel_area" :currentEvent="currentEvent" />
     </svg>
 </template>
 <script>
 import Arrow from "./arrow.vue";
 import SimulateArrow from "./simulateArrow.vue";
 import SimulateFrame from "./simulateFrame.vue";
-import EditArea from './editArea.vue';
-import Control from './control.vue';
+import EditArea from "./editArea.vue";
 import { mapState, mapActions } from "vuex";
+import Control from "./control.vue";
+import SimulateSelArea from "./simulateSelArea.vue";
 
 export default {
   props: {
-    model_id: { // 入参model_id 如果此入参存在,则认为是打开已保存的模型
+    model_id: {
+      // 入参model_id 如果此入参存在,则认为是打开已保存的模型
       type: String,
       default: null
     },
-    template: { // 入参template 如果model_id不存在, 则会新建一个此类型的模型.
+    template: {
+      // 入参template 如果model_id不存在, 则会新建一个此类型的模型.
       type: String,
       default: "default"
     }
   },
   computed: mapState({
-    DataAll: state => state.dagStore.DataAll
+    DataAll: state => state.dagStore.DataAll,
+    svgScale: state => state.dagStore.svgSize
   }),
   methods: {
     ...mapActions([
@@ -71,22 +76,28 @@ export default {
       "delNode",
       "showGraph",
       "saveGraph",
-      "moveNode"
+      "moveNode",
+      "changeSize",
+      "selAreaEnd"
     ]),
     sizeInit() {
-      // 初始化大小
-      this.svgScale = 1
-      sessionStorage['svgScale'] = 1
+      this.changeSize("init");
     },
     sizeExpend() {
-      // 将图像放大
-      this.svgScale += 0.1
-      sessionStorage['svgScale'] = this.svgScale
+      this.changeSize("expend");
     },
     sizeShrink() {
-      // 图像缩小
-      this.svgScale -= 0.1
-      sessionStorage['svgScale'] = this.svgScale
+      this.changeSize("shrink");
+    },
+    sel_area() {
+      // 开始框选操作
+      this.currentEvent = "sel_area";
+      this.simulate_sel_area = {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0
+      };
     },
     selPaneNode(i) {
       // 选取节点
@@ -96,11 +107,7 @@ export default {
       let { left, top } = document
         .getElementById("svgContent")
         .getBoundingClientRect();
-      let graph = document
-      .getElementById('svg_graph_area')
-      .getBoundingClientRect();
       this.initPos = { left, top }; // 修正坐标
-      this.initGraph = { left: graph.left, top: graph.top }
     },
     dragPre(e, i) {
       // 准备拖动节点
@@ -132,6 +139,18 @@ export default {
       if (this.currentEvent === "dragLink") {
         this.setDragLinkPostion(e);
       }
+      if (this.currentEvent === "sel_area_ing") {
+        this.setSelAreaPostion(e);
+      }
+    },
+    setSelAreaPostion(e) {
+      const x = (e.x - this.initPos.left) / this.svgScale;
+      const y = (e.y - this.initPos.top) / this.svgScale;
+      const width = x - this.simulate_sel_area.left;
+      const height = y - this.simulate_sel_area.top;
+      this.simulate_sel_area.width = width;
+      this.simulate_sel_area.height = height;
+      console.log(this.simulate_sel_area)
     },
     dragEnd(e) {
       // 拖动结束
@@ -146,10 +165,15 @@ export default {
           pos_y: y
         };
         this.moveNode(params);
-
-        // if (e.timeStamp - this.timeStamp > 200) {
-        //   this.setPanePosition(e);
-        // }
+      }
+      if (this.currentEvent === "sel_area_ing") {
+        this.selAreaEnd(this.simulate_sel_area);
+        this.simulate_sel_area = {
+          left: 0,
+          top: 0,
+          width: 0,
+          height: 0
+        };
       }
       this.currentEvent = null;
     },
@@ -166,21 +190,16 @@ export default {
           }
         };
         this.addEdge(params);
-        // this.DataAll.edges.push({
-        //   src_node_id: this.DataAll.nodes[this.choice.index].id,
-        //   src_output_idx: this.choice.point,
-        //   dst_node_id: this.DataAll.nodes[i].id,
-        //   dst_input_idx: nth
-        // });
       }
       this.currentEvent = null;
     },
     setDragFramePosition(e) {
       const x = e.x - this.initPos.left;
       const y = e.y - this.initPos.top;
-      const x1 = this.initGraph.left - this.initPos.left;
-      const y1 = this.initGraph.top - this.initPos.top;
-      this.dragFrame = {posX: (x / this.svgScale) - 90, posY: (y / this.svgScale) - 15};
+      this.dragFrame = {
+        posX: x / this.svgScale - 90,
+        posY: y / this.svgScale - 15
+      };
     },
     setDragLinkPostion(e, init) {
       // 定位连线
@@ -194,8 +213,9 @@ export default {
       }
       this.dragLink = Object.assign({}, this.dragLink, { toX: x, toY: y });
     },
-    r_click_nodes(e, i) { // 节点的右键事件
-      this.setInitRect()
+    r_click_nodes(e, i) {
+      // 节点的右键事件
+      this.setInitRect();
       const id = this.DataAll.nodes[i].id;
       const x = (e.x - this.initPos.left) / this.svgScale;
       const y = (e.y - this.initPos.top) / this.svgScale;
@@ -204,26 +224,38 @@ export default {
         x,
         y,
         id
-      }
+      };
       e.stopPropagation();
       e.cancelBubble = true;
       e.preventDefault();
     },
     close_click_nodes() {
-      this.is_edit_area = { value: false, x: -9999, y: -9999 }
+      this.is_edit_area = { value: false, x: -9999, y: -9999 };
     },
     setPanePosition(e) {
       const x = e.x - this.initPos.left - 90;
       const y = e.y - this.initPos.top - 15;
       const i = this.choice.index;
       this.DataAll.nodes[i] = Object.assign({}, this.DataAll.nodes[i], {
-        pos_x: x,
-        pos_y: y
+        pos_x: x / this.svgScale,
+        pos_y: y / this.svgScale
       });
       this.DataAll = JSON.parse(JSON.stringify(this.DataAll));
     },
-    svgMouseDown() {
+    svgMouseDown(e) {
       // this.selPaneNode(-1); // 关闭选取节点
+      this.setInitRect();
+      if (this.currentEvent === "sel_area") {
+        this.currentEvent = "sel_area_ing"
+        const x = (e.x - this.initPos.left) / this.svgScale;
+        const y = (e.y - this.initPos.top) / this.svgScale;
+        this.simulate_sel_area = {
+          left: x,
+          top: y,
+          width: 0,
+          height: 0
+        };
+      }
     }
   },
   data() {
@@ -254,7 +286,12 @@ export default {
         x: -9999,
         y: -9999
       }, // 是否在编辑节点
-      svgScale: 1 // 缩放比例
+      simulate_sel_area: {
+        left: 10,
+        top: 50,
+        width: 0,
+        height: 0
+      }
     };
   },
   components: {
@@ -262,7 +299,8 @@ export default {
     SimulateArrow,
     SimulateFrame,
     EditArea,
-    Control
+    Control,
+    SimulateSelArea
   }
 };
 </script>
@@ -419,5 +457,9 @@ export default {
   stroke: hsla(0, 0%, 50%, 0.6);
   stroke-width: 2px;
   fill: none;
+}
+.simulate_sel_area {
+  border: 3px dashed blue;
+  position: absolute;
 }
 </style>

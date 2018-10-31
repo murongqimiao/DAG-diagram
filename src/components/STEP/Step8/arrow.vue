@@ -26,7 +26,7 @@
         </g>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   props: {
@@ -38,11 +38,11 @@ export default {
     },
     index: {
       type: Number
-    },
-    svgScale: {
-      type: Number
     }
   },
+  computed: mapState({
+    svgScale: state => state.dagStore.svgSize
+  }),
   data() {
     return {
       isHover: false,
@@ -77,9 +77,9 @@ export default {
       this.delEdge(params)
     },
     r_click(e) {
-      const x = e.offsetX;
-      const y = e.offsetY;
-      this.menu_style = Object.assign({}, this.menu_style, { left: `${x / this.svgScale}px`, top: `${y / this.svgScale}px` })
+      const x = e.offsetX / this.svgScale;
+      const y = e.offsetY / this.svgScale;
+      this.menu_style = Object.assign({}, this.menu_style, { left: `${x}px`, top: `${y}px` })
       this.r_click_menu = true;
       e.stopPropagation();
       e.preventDefault();

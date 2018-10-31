@@ -74,7 +74,8 @@ const dagStore = {
         src_output_idx: 3
       }],
       model_id: 21
-    }
+    },
+    svgSize: 1
   },
   actions: {
     openGraph: ({ commit }, model_id) => { // 打开图
@@ -84,6 +85,7 @@ const dagStore = {
     newGraph: ({ commit }, params) => { // 新增图
     },
     addEdge: ({ commit }, { desp }) => { // 增加边
+      console.log(desp)
       commit('ADD_EDGE_DATA', desp)
     },
     delEdge: ({ commit }, { id }) => { // 删除边
@@ -99,9 +101,30 @@ const dagStore = {
       commit('DEL_NODE_DATA', id)
     },
     saveGraph: () => {
+    },
+    changeSize: ({ commit }, action) => { // 改变size
+      commit('CHANGE_SIZE', action)
+    },
+    selAreaEnd: ({ commit }, area) => { // 框选节点
+      commit('SEL_AREA_END', area)
     }
   },
   mutations: {
+    CHANGE_SIZE: (state, action) => {
+      switch (action) {
+        case 'init':
+          state.svgSize = 1
+          break
+        case 'expend':
+          state.svgSize += 0.1
+          break
+        case 'shrink':
+          state.svgSize -= 0.1
+          break
+        default: state.svgSize = state.svgSize
+      }
+      sessionStorage['svgScale'] = state.svgSize
+    },
     UPDATE_DATA: (state, data) => {
       state.DataAll = data;
     },
@@ -177,6 +200,9 @@ const dagStore = {
         in_ports: [0, 1, 2, 3, 4],
         out_ports: [0, 1, 2, 3, 4]
       })
+    },
+    SEL_AREA_END: (state, area) => {
+      console.log('area', area)
     }
   }
 };
