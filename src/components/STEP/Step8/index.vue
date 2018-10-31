@@ -1,6 +1,7 @@
 <template>
   <svg
      id="svgContent"
+     :style="{cursor: this.currentEvent === 'move_graph' ? 'grabbing' : 'grab'}"
      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1260" height="1029" data-spm-anchor-id="TODO.11007039.0.i6.12b64a9bcbXQmm"
     @mousedown="svgMouseDown"
     @mousemove="dragIng($event)"
@@ -66,6 +67,10 @@ export default {
     DataAll: state => state.dagStore.DataAll,
     svgScale: state => state.dagStore.svgSize
   }),
+  mounted() {
+    sessionStorage['svg_left'] = 0;
+    sessionStorage['svg_top'] = 0;
+  },
   methods: {
     ...mapActions([
       "openGraph",
@@ -197,8 +202,12 @@ export default {
     paneDragEnd(e) {
       // 节点拖动结束
       this.dragFrame = { dragFrame: false, posX: 0, posY: 0 };
-      const x = (e.x - this.initPos.left) / this.svgScale - 90;
-      const y = (e.y - this.initPos.top) / this.svgScale - 15;
+      const x =
+        (e.x - this.initPos.left - (sessionStorage["svg_left"] || 0)) / this.svgScale -
+        90;
+      const y =
+        (e.y - this.initPos.top - (sessionStorage["svg_top"] || 0)) / this.svgScale -
+        15;
       let params = {
         model_id: sessionStorage["newGraph"],
         id: this.DataAll.nodes[this.choice.index].id,
@@ -218,8 +227,12 @@ export default {
     selAreaStart(e) {
       // 框选节点开始
       this.currentEvent = "sel_area_ing";
-      const x = (e.x - this.initPos.left) / this.svgScale;
-      const y = (e.y - this.initPos.top) / this.svgScale;
+      const x =
+        (e.x - this.initPos.left - (sessionStorage["svg_left"] || 0)) /
+        this.svgScale;
+      const y =
+        (e.y - this.initPos.top - (sessionStorage["svg_top"] || 0)) /
+        this.svgScale;
       this.simulate_sel_area = {
         left: x,
         top: y,
@@ -229,8 +242,12 @@ export default {
     },
     setSelAreaPostion(e) {
       // 框选节点ing
-      const x = (e.x - this.initPos.left) / this.svgScale;
-      const y = (e.y - this.initPos.top) / this.svgScale;
+      const x =
+        (e.x - this.initPos.left - (sessionStorage["svg_left"] || 0)) /
+        this.svgScale;
+      const y =
+        (e.y - this.initPos.top - (sessionStorage["svg_top"] || 0)) /
+        this.svgScale;
       const width = x - this.simulate_sel_area.left;
       const height = y - this.simulate_sel_area.top;
       this.simulate_sel_area.width = width;
@@ -273,8 +290,8 @@ export default {
      */
     setDragFramePosition(e) {
       // 节点拖拽模态
-      const x = e.x - this.initPos.left;
-      const y = e.y - this.initPos.top;
+      const x = e.x - this.initPos.left - (sessionStorage["svg_left"] || 0);
+      const y = e.y - this.initPos.top - (sessionStorage["svg_top"] || 0);
       this.dragFrame = {
         posX: x / this.svgScale - 90,
         posY: y / this.svgScale - 15
@@ -282,8 +299,12 @@ export default {
     },
     setDragLinkPostion(e, init) {
       // 节点连线模态
-      const x = (e.x - this.initPos.left) / this.svgScale;
-      const y = (e.y - this.initPos.top) / this.svgScale;
+      const x =
+        (e.x - this.initPos.left - (sessionStorage["svg_left"] || 0)) /
+        this.svgScale;
+      const y =
+        (e.y - this.initPos.top - (sessionStorage["svg_top"] || 0)) /
+        this.svgScale;
       if (init) {
         this.dragLink = Object.assign({}, this.dragLink, {
           fromX: x,
@@ -300,8 +321,12 @@ export default {
       // 节点右键模态
       this.setInitRect();
       const id = this.DataAll.nodes[i].id;
-      const x = (e.x - this.initPos.left) / this.svgScale;
-      const y = (e.y - this.initPos.top) / this.svgScale;
+      const x =
+        (e.x - this.initPos.left - (sessionStorage["svg_left"] || 0)) /
+        this.svgScale;
+      const y =
+        (e.y - this.initPos.top - (sessionStorage["svg_top"] || 0)) /
+        this.svgScale;
       this.is_edit_area = {
         value: true,
         x,
