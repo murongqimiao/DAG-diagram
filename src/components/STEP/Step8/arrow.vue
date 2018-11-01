@@ -49,8 +49,8 @@ export default {
       r_click_menu: false,
       menu_style: {
         position: "absolute",
-        left: "358px",
-        top: "264px"
+        left: `${358}px`,
+        top: `${264}px`
       }
     };
   },
@@ -79,7 +79,7 @@ export default {
     r_click(e) {
       const x = e.offsetX / this.svgScale;
       const y = e.offsetY / this.svgScale;
-      this.menu_style = Object.assign({}, this.menu_style, { left: `${x}px`, top: `${y}px` })
+      this.menu_style = Object.assign({}, this.menu_style, { left: `${x - (sessionStorage['svg_left'] || 0)}px`, top: `${y - (sessionStorage['svg_top'] || 0)}px` })
       this.r_click_menu = true;
       e.stopPropagation();
       e.preventDefault();
