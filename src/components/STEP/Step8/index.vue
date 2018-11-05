@@ -68,8 +68,8 @@ export default {
     svgScale: state => state.dagStore.svgSize
   }),
   mounted() {
-    sessionStorage['svg_left'] = 0;
-    sessionStorage['svg_top'] = 0;
+    sessionStorage["svg_left"] = 0;
+    sessionStorage["svg_top"] = 0;
   },
   methods: {
     ...mapActions([
@@ -101,35 +101,35 @@ export default {
     },
     dragIng(e) {
       // 事件发放器 根据currentEvent来执行系列事件
-      if (
-        this.currentEvent === "dragPane" &&
-        e.timeStamp - this.timeStamp > 200 // 拖动节点延迟200毫秒响应, 来判断点击事件
-      ) {
-        this.currentEvent = "PaneDraging"; // 确认是拖动节点
-      } else if (this.currentEvent === "PaneDraging") {
-        this.setDragFramePosition(e); // 触发节点拖动
-      } else if (this.currentEvent === "dragLink") {
-        this.setDragLinkPostion(e); // 触发连线拖动
-      } else if (this.currentEvent === "sel_area_ing") {
-        this.setSelAreaPostion(e); // 触发框选
-      } else if (this.currentEvent === "move_graph") {
-        this.graphMoveIng(e);
+      switch (this.currentEvent) {
+        case 'dragPane': 
+          if(e.timeStamp - this.timeStamp > 200) {
+            this.currentEvent = "PaneDraging"; // 确认是拖动节点
+          };
+          break;
+        case 'PaneDraging':
+           this.setDragFramePosition(e); // 触发节点拖动
+           break;
+        case 'dragLink':
+          this.setDragLinkPostion(e); // 触发连线拖动
+          break;
+        case 'sel_area_ing':
+          this.setSelAreaPostion(e); // 触发框选
+          break;
+        case 'move_graph':
+          this.graphMoveIng(e);
+          break;
+        default: () => {}
       }
     },
     dragEnd(e) {
       // 拖动结束
-      if (this.currentEvent === "PaneDraging") {
-        this.paneDragEnd(e); // 触发节点拖动结束
-      }
-      if (this.currentEvent === "sel_area_ing") {
-        this.getSelNodes(this.simulate_sel_area);
-        this.simulate_sel_area = {
-          // 触发框选结束
-          left: 0,
-          top: 0,
-          width: 0,
-          height: 0
-        };
+      switch (this.currentEvent) {
+        case 'PaneDraging':  this.paneDragEnd(e); // 触发节点拖动结束
+        break;
+        case 'sel_area_ing': this.getSelNodes(this.simulate_sel_area);
+        break;
+        default: () => {}
       }
       this.currentEvent = null;
     },
@@ -180,8 +180,8 @@ export default {
       this.changeSize("init"); // 回归到默认倍数
       this.svg_left = 0; // 回归到默认位置
       this.svg_top = 0;
-      sessionStorage['svg_left'] = 0;
-      sessionStorage['svg_top'] = 0;
+      sessionStorage["svg_left"] = 0;
+      sessionStorage["svg_top"] = 0;
     },
     sizeExpend() {
       this.changeSize("expend"); // 画板放大0.1
@@ -205,10 +205,12 @@ export default {
       // 节点拖动结束
       this.dragFrame = { dragFrame: false, posX: 0, posY: 0 };
       const x =
-        (e.x - this.initPos.left - (sessionStorage["svg_left"] || 0)) / this.svgScale -
+        (e.x - this.initPos.left - (sessionStorage["svg_left"] || 0)) /
+          this.svgScale -
         90;
       const y =
-        (e.y - this.initPos.top - (sessionStorage["svg_top"] || 0)) / this.svgScale -
+        (e.y - this.initPos.top - (sessionStorage["svg_top"] || 0)) /
+          this.svgScale -
         15;
       let params = {
         model_id: sessionStorage["newGraph"],
@@ -271,6 +273,13 @@ export default {
         }
       });
       console.log("目前选择的节点是", this.choice.paneNode);
+      this.simulate_sel_area = {
+        // 触发框选结束
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0
+      };
     },
     /**
      * 画布拖动
