@@ -30,6 +30,7 @@ module.exports = {
     'quotes': 'off',
     'camelcase': 'off',
     'indent': 'off',
-    'no-unused-vars': 'off'
+    'no-unused-vars': 'off',
+    'no-unused-expressions': 'off'
   }
 }

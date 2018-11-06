@@ -102,8 +102,8 @@ export default {
     dragIng(e) {
       // 事件发放器 根据currentEvent来执行系列事件
       switch (this.currentEvent) {
-        case 'dragPane': 
-          if(e.timeStamp - this.timeStamp > 200) {
+        case 'dragPane':
+          if (e.timeStamp - this.timeStamp > 200) {
             this.currentEvent = "PaneDraging"; // 确认是拖动节点
           };
           break;
@@ -119,17 +119,17 @@ export default {
         case 'move_graph':
           this.graphMoveIng(e);
           break;
-        default: () => {}
+        default: () => { }
       }
     },
     dragEnd(e) {
       // 拖动结束
       switch (this.currentEvent) {
-        case 'PaneDraging':  this.paneDragEnd(e); // 触发节点拖动结束
+        case 'PaneDraging': this.paneDragEnd(e); // 触发节点拖动结束
         break;
         case 'sel_area_ing': this.getSelNodes(this.simulate_sel_area);
         break;
-        default: () => {}
+        default: () => { }
       }
       this.currentEvent = null;
     },

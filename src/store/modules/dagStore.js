@@ -47,6 +47,33 @@ const dagStore = {
         type: 'constant',
         in_ports: [0, 1, 2, 3, 4],
         out_ports: [0, 1, 2, 3, 4]
+      }, {
+        name: "name11",
+        id: 8,
+        imgContent: "",
+        pos_x: 230,
+        pos_y: 700,
+        type: 'constant',
+        in_ports: [0, 1, 2, 3, 4],
+        out_ports: [0, 1, 2, 3, 4]
+      }, {
+        name: "name12",
+        id: 9,
+        imgContent: "",
+        pos_x: 600,
+        pos_y: 400,
+        type: 'constant',
+        in_ports: [0, 1, 2, 3, 4],
+        out_ports: [0, 1, 2, 3, 4]
+      }, {
+        name: "name13",
+        id: 10,
+        imgContent: "",
+        pos_x: 420,
+        pos_y: 500,
+        type: 'constant',
+        in_ports: [0, 1, 2, 3, 4],
+        out_ports: [0, 1, 2, 3, 4]
       }],
       edges: [{
         id: 1,
@@ -67,11 +94,29 @@ const dagStore = {
         src_node_id: 5,
         src_output_idx: 0
       }, {
-        id: 3,
+        id: 4,
         dst_input_idx: 2,
         dst_node_id: 7,
         src_node_id: 1,
         src_output_idx: 3
+      }, {
+        id: 5,
+        dst_input_idx: 2,
+        dst_node_id: 8,
+        src_node_id: 1,
+        src_output_idx: 0
+      }, {
+        id: 6,
+        dst_input_idx: 2,
+        dst_node_id: 9,
+        src_node_id: 7,
+        src_output_idx: 3
+      }, {
+        id: 6,
+        dst_input_idx: 2,
+        dst_node_id: 10,
+        src_node_id: 7,
+        src_output_idx: 2
       }],
       model_id: 21
     },
