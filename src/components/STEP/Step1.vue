@@ -6,8 +6,8 @@
         v-for="(item, i) in DataAll"
         :key="i" class="svgEach"
         :transform="`translate(${item.translate.left}, ${item.translate.top})`">
-            <foreignObject width="180" height="30" >
-            <body xmlns="http://www.w3.org/1999/xhtml">
+            <foreignObject  width="180" height="30" >
+            <body style="margin: 0" xmlns="http://www.w3.org/1999/xhtml">
               <div class="pane-node-content">
                   <span class="icon icon-data"></span>
                   <span class="name">{{item.name}}</span>

@@ -234,7 +234,7 @@ export default {
   }
 }
 .pane-node-parent-hl {
-  position: absolute;
+  position: fixed;
   top: -5px;
   height: 10px;
   width: 100%;
@@ -261,7 +261,7 @@ export default {
 }
 
 .pane-node-parent {
-  position: absolute;
+  position: fixed;
   top: -5px;
   height: 10px;
   width: 100%;
@@ -287,7 +287,7 @@ export default {
 }
 
 .pane-node-children {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   display: flex;

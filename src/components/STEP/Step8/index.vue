@@ -15,6 +15,7 @@
           @mousedown="dragPre($event, i, item)">
               <foreignObject width="180" height="30" >
               <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
+              <div>
                 <div :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'">
                     <span class="icon icon-data"></span>
                     <span class="name">{{item.name}}</span>
@@ -29,6 +30,7 @@
                     <span class="space" @mousedown="linkPre($event, i, nth)"></span>
                   </div>
                 </div>
+              </div>
               </body>
             </foreignObject>
           </g>
@@ -479,7 +481,7 @@ export default {
   }
 }
 .pane-node-parent-hl {
-  position: absolute;
+  position: fixed;
   top: -5px;
   height: 10px;
   width: 100%;
@@ -506,7 +508,7 @@ export default {
 }
 
 .pane-node-parent {
-  position: absolute;
+  position: fixed;
   top: -5px;
   height: 10px;
   width: 100%;
@@ -531,7 +533,7 @@ export default {
 }
 
 .pane-node-children {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   display: flex;

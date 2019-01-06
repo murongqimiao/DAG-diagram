@@ -216,7 +216,7 @@ export default {
   font-size: 12px;
   -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
-  position: relative;
+  position: fixed;
   box-sizing: border-box;
   .icon {
     width: 26px;

@@ -306,7 +306,7 @@ export default {
   }
   .parentLink {
     font-size: 0;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 90px;
     transform: translateX(-50%);
@@ -318,7 +318,7 @@ export default {
     font-size: 0;
     height: 10px;
     width: 10px;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 90px;
     transform: translate(-50%, -50%);
@@ -329,7 +329,7 @@ export default {
   .childLink {
     height: 10px;
     width: 10px;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 90px;
     transform: translate(-50%, 50%);
