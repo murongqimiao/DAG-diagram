@@ -502,9 +502,6 @@ export default {
     box-shadow: 0 0 0 6px #3ddd73;
   }
 }
-.pane-node-parent-hl:hover {
-  box-shadow: 0 0 0 6px #3ddd73;
-}
 .pane-node-parent-hl > div {
   position: relative;
   display: inline-block;
