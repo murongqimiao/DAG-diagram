@@ -4,7 +4,7 @@
   :transform="`translate(${dragFrame.posX}, ${dragFrame.posY})`"
   class="dragFrame">
     <foreignObject width="180" height="30" >
-      <body xmlns="http://www.w3.org/1999/xhtml">
+      <body style="margin: 0" xmlns="http://www.w3.org/1999/xhtml">
         <div
         class="dragFrameArea">
         </div>
@@ -35,6 +35,7 @@ export default {
     font-size: 12px;
     -webkit-transition: background-color 0.2s;
     transition: background-color 0.2s;
+    box-sizing: border-box;
   }
 }
 </style>
