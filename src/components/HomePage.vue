@@ -5,7 +5,6 @@
     </div>
     <div class="mainContent">
       <div class="nav">
-        <div>假装是侧栏导航</div>
         <div>↓↓↓拖动节点至右边↓↓↓</div>
         <div class="nodes_bus">
           <span @mousedown="dragIt('Constant')">这是一个常量</span>
