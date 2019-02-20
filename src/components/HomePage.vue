@@ -6,10 +6,10 @@
     <div class="mainContent">
       <div class="nav">
         <div>假装是侧栏导航</div>
-        <div>点击顶部导航,查看实现流程</div>
+        <div>↓↓↓拖动节点至右边↓↓↓</div>
         <div class="nodes_bus">
-          <span @mousedown="dragIt('拖动1')">拖动我吧1</span>
-          <span @mousedown="dragIt('拖动2')">拖动我吧2</span>
+          <span @mousedown="dragIt('Constant')">这是一个常量</span>
+          <span @mousedown="dragIt('Function')">这是一个函数</span>
         </div>
       </div>
       <div class="DAG-content">
@@ -216,5 +216,6 @@ export default {
   transform: translateX(-50%);
   margin-bottom: 30px;
   cursor: move;
+  border-radius: 50px;
 }
 </style>

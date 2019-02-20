@@ -20,4 +20,8 @@ export default {
   height: 100%;
   width: 100%;
 }
+foreignObject {
+  /* 解决foreignObject默认遮挡溢出部分导致的形变 */
+  overflow: inherit;
+}
 </style>
