@@ -12,13 +12,15 @@
           :key="'_' + i" class="svgEach"
           :transform="`translate(${item.pos_x}, ${item.pos_y})`"
           @contextmenu="r_click_nodes($event, i)"
+          @dblclick="focusInput($event.path[0])"
           @mousedown="dragPre($event, i, item)">
               <foreignObject width="180" height="30" >
               <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
               <div>
                 <div :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'">
                     <span class="icon icon-data"></span>
-                    <span class="name">{{item.name}}</span>
+                    <input type="text" class="name"  v-model="item.name">
+                    <!-- <span class="name">{{item.name}}</span> -->
                 </div>
                 <div :class="currentEvent === 'dragLink' ? 'pane-node-parent-hl' : 'pane-node-parent' ">
                   <div v-for="(poi, nth) in item.in_ports" :key="'__' + nth" :style="{width: `${ 100 / (item.in_ports.length + 1)}%`}">
@@ -283,6 +285,9 @@ export default {
         height: 0
       };
     },
+    focusInput(el) { // 双击选中input
+      if (el) { el.focus() }
+    },
     /**
      * 画布拖动
      */
@@ -447,7 +452,7 @@ export default {
     float: left;
     margin-left: 2px;
     width: 135px;
-    height: 28px;
+    // height: 28px;
     line-height: 28px;
     font-size: 14px;
     overflow: hidden;
@@ -455,6 +460,9 @@ export default {
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
+    height: 26px;
+    background: transparent;
+    border: none;
   }
   .parentLink {
     font-size: 0;
