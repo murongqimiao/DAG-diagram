@@ -1,5 +1,9 @@
 前端实现有向无环图
 ===========
+![image](https://img.shields.io/github/languages/count/murongqimiao/DAGBoard.svg)
+![image](https://img.shields.io/github/languages/top/murongqimiao/DAGBoard.svg)
+
+
 `基于SVG的DAG(单向无环图)前端实现.适用于机器学习平台或流程图.`
 
 本项目为公司内部PAI需求,
