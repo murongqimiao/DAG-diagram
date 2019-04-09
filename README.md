@@ -2,6 +2,8 @@
 ===========
 ![image](https://img.shields.io/github/languages/count/murongqimiao/DAGBoard.svg)
 ![image](https://img.shields.io/github/languages/top/murongqimiao/DAGBoard.svg)
+![images](https://img.shields.io/badge/chrome-72.0.3626.121正式版+-red.svg)
+
 
 
 `基于SVG的DAG(单向无环图)前端实现.适用于机器学习平台或流程图.`
