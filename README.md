@@ -23,6 +23,9 @@
 * [ 教程2 ]  https://www.jianshu.com/p/e02771a5d72b
 * [ 教程3 ]  https://www.jianshu.com/p/5d29b09cb031
 
+## 感谢打赏!~
+[蜗牛]大佬
+
 
 ### 已经实现的内容:
 * 图. 节点. 连线 的展示
@@ -66,3 +69,6 @@
 ### 沟通联系
 `前端工程化实践群793841737`
 或者issue 一步到位
+
+### 赞助打赏
+https://github.com/murongqimiao/sundries/blob/master/payeeAli.jpg
