@@ -71,6 +71,11 @@ export default {
     DataAll: state => state.dagStore.DataAll,
     svgScale: state => state.dagStore.svgSize
   }),
+  created() {
+    this.$nextTick(() => {
+      this.setMouseWheelEvent()
+    })
+  },
   mounted() {
     sessionStorage["svg_left"] = 0;
     sessionStorage["svg_top"] = 0;
@@ -192,6 +197,33 @@ export default {
     },
     sizeShrink() {
       this.changeSize("shrink"); // 画板缩小0.1
+    },
+    onMouseWheel(e) { // 鼠标滚动或mac触摸板可以改变size
+        if (!e) return false
+        let multiple = (e.wheelDelta / 10)
+        if (this.canMouseWheelUse && (multiple * multiple) > 1) {
+          multiple > 0
+          ? this.sizeExpend()
+          : this.sizeShrink()
+          this.canMouseWheelUse = false
+          setTimeout(() => { // 节流
+            this.canMouseWheelUse = true
+          }, 50)
+        }
+      },
+    setMouseWheelEvent() { // 绑定鼠标滚轮事件
+      const addEvent = (obj, xEvent, fn) => {
+        if (obj.attachEvent) {
+          obj.attachEvent('on' + xEvent, fn);
+        } else {
+          obj.addEventListener(xEvent, fn, false);
+        }
+      }
+
+      var oDiv = document.getElementById('svgContent');
+      // 当滚轮事件发生时，执行onMouseWheel这个函数
+      addEvent(oDiv, 'mousewheel', this.onMouseWheel);
+      addEvent(oDiv, 'DOMMouseScroll', this.onMouseWheel);
     },
     /**
      * 节点事件 单选 框选 拖动
@@ -409,7 +441,8 @@ export default {
       svg_trans_init: {
         x: 0,
         y: 0
-      }
+      },
+      canMouseWheelUse: true
     };
   },
   components: {
