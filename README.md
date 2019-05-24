@@ -1,4 +1,7 @@
 *服务器迁移通知:  由于本人vultr到期不再续用...要迁移服务器内容到新的云服务器, 2019年05月10日17点开始, 期间zhanglizhong.cn 会出现无法登陆, 大家谅解...
+*大家好, 国内要备案, 太麻烦了, 迁回去了, 向vultr低头
+
+增加一个github线上地址  https://murongqimiao.github.io/DAGBoard/#/
 
 前端实现有向无环图
 ===========
@@ -16,7 +19,7 @@
 
 
 ## 在线预览
-[zhanglizhong.cn](zhanglizhong.cn)
+[https://murongqimiao.github.io/DAGBoard/#/](https://murongqimiao.github.io/DAGBoard/#/)
 
 
 
@@ -38,15 +41,14 @@
 * 连线的增删 ( 开放右键功能 v1.0.0
 * 整图放缩 拖动 框选节点 v1.0.0
 * 鼠标滚轮和mac现在可以控制缩放了  v1.0.1
-
+* 双击节点可以改名字 v1.0.1
+* 节点效果的动态更改(running状态) v1.0.1
 
 
 ### 版本更新预告:
 考虑加入
-* 双击节点可以改名字,
 * 根据type类型的不同增加节点的图形
-* 节点效果的动态更改(running状态)
-
+* 做成黑盒
 
 
 ### 目录结构
