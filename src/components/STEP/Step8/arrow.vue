@@ -4,7 +4,7 @@
           <path
           @mouseover="pathHover"
           @mouseout="pathOut"
-          :class="(isHover || r_click_menu) ? 'connector-hl' : 'connector'"
+          :class="(isHover || r_click_menu) ? 'connector-hl' : each.type && each.type == 'active' ? 'connector-active' :'connector'"
           :d="computedLink()"
           @contextmenu="r_click($event)"
           ></path>
@@ -153,6 +153,20 @@ export default {
   stroke-width: 2px;
   fill: none;
   cursor: pointer;
+}
+.connector-active {
+  stroke: rgba(91, 230, 20, 0.6);
+  stroke-dasharray: 5;
+  fill: none;
+  cursor: pointer;
+  stroke-width: 2px;
+  stroke-dashoffset: 20px;
+  animation: grown 4s infinite linear;
+}
+@keyframes grown {
+  to{
+    stroke-dashoffset: 0px;
+  }
 }
 .menu_cover {
   position: fixed;
