@@ -49,7 +49,7 @@ module.exports = {
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../docs'),
-    assetsSubDirectory: 'DAGBoard/static',
+    assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 
     /**
