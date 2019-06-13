@@ -1,7 +1,7 @@
 <template>
   <div class="page-content" @mousedown="startNodesBus($event)" @mousemove="moveNodesBus($event)" @mouseup="endNodesBus($event)">
     <div class="tapBar">
-      <div :class="item.sel ? 'tapEachSel ': 'tapEach'"  @click="selStep(i)" v-for="(item , i) in tap" :key="i">{{ item.name }}</div>
+      <div class="title">前端DAG(流程图、关系图、机器学习平台可用)</div>
     </div>
     <div class="mainContent">
       <div class="nav">
@@ -10,16 +10,20 @@
           <span @mousedown="dragIt('Constant')">这是一个常量</span>
           <span @mousedown="dragIt('Function')">这是一个函数</span>
         </div>
+        <div id="helpContent">
+          <p>帮助:</p>
+          <p>1.画布拖动, 空白处摁下鼠标左键, 然后移动</p>
+          <p>2.节点拖动, 左键点击节点,按着左键拖动 </p>
+          <p>3.关系建立, 在节点下部滑动鼠标, 鼠标移入小圆圈会改变状态, 然后摁着左键拖动到其他节点的顶部, 移入节点顶部变绿即可松手</p>
+          <p>4.删除节点, 节点上点右键,找删除</p>
+          <p>5.增加节点,拖动左侧节点实例到右侧</p>
+          <p>6.删除关系,关系连线上点右键, 找删除</p>
+          <p>7.全屏,左上角控制面板找全屏</p>
+          <p>8.放缩, 滚动鼠标滚轮,mac双指滑触摸,或者左上角控制面板找全屏</p>
+        </div>
       </div>
       <div class="DAG-content">
-        <Step1 v-if="tap[0].sel"/>
-        <Step2 v-if="tap[1].sel"/>
-        <Step3 v-if="tap[2].sel"/>
-        <Step4 v-if="tap[3].sel"/>
-        <Step5 v-if="tap[4].sel"/>
-        <Step6 v-if="tap[5].sel"/>
-        <Step7 v-if="tap[6].sel"/>
-        <Step8 v-if="tap[7].sel"/>
+        <dagContent/>
       </div>
     </div>
     <nodes-bus v-if="dragBus" :value="busValue.value" :pos_x="busValue.pos_x" :pos_y="busValue.pos_y" />
@@ -27,15 +31,13 @@
 </template>
 
 <script>
-import { tap } from "./DataMainPage.js";
-import Step from "./STEP";
+import dagContent from "./STEP/dagContent";
 import NodesBus from "./nodesBus";
 import { mapActions } from "vuex";
 
 export default {
   data() {
     return {
-      tap: tap,
       dragBus: false,
       busValue: {
         value: "name",
@@ -46,13 +48,6 @@ export default {
   },
   methods: {
     ...mapActions(["addNode"]),
-    selStep(i) {
-      window.sessionStorage["step"] = i;
-      this.tap.forEach((item, n) => {
-        i - n === 0 ? (item.sel = true) : (item.sel = false);
-      });
-      this.tap = JSON.parse(JSON.stringify(this.tap));
-    },
     dragIt(val) {
       sessionStorage["dragDes"] = JSON.stringify({
         drag: true,
@@ -123,14 +118,9 @@ export default {
     }
   },
   mounted() {
-    if (window.sessionStorage["step"]) {
-      const i = window.sessionStorage.step;
-      this.selStep(i);
-    }
-    sessionStorage["svgScale"] = 1;
   },
   components: {
-    ...Step,
+    dagContent,
     NodesBus
   }
 };
@@ -154,6 +144,12 @@ export default {
   padding-top: 10px;
   padding-left: 300px;
 }
+
+.tapBar .title {
+  color: white;
+  font-weight: bold;
+}
+
 .tapEach {
   height: 50px;
   line-height: 50px;
@@ -179,6 +175,12 @@ export default {
   top: 70px;
   bottom: 0;
   text-align: left;
+}
+.mainContent #helpContent {
+  margin-top: 100px;
+  text-align: left;
+  text-indent: 20px;
+  line-height: 20px;
 }
 .mainContent .nav {
   width: 300px;
