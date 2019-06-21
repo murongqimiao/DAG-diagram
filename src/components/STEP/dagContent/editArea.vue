@@ -37,10 +37,12 @@ export default {
       e.stopPropagation();
     },
     get_menu_style() {
+      let left = Number(this.isEditAreaShow.x) + Number(sessionStorage['svg_left']);
+      let top = Number(this.isEditAreaShow.y) + Number(sessionStorage['svg_top']);
       return {
         position: "absolute",
-        left: this.isEditAreaShow.x + 'px',
-        top: this.isEditAreaShow.y + 'px'
+        left: left + 'px',
+        top: top + 'px'
       }
     },
     delEdges() {
@@ -88,6 +90,6 @@ export default {
 }
 .menu_contain span:hover {
   background-color: rgba(40, 157, 233, 0.3);
-  cursor: none;
+  cursor: pointer;
 }
 </style>

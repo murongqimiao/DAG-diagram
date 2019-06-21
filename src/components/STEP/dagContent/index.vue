@@ -39,9 +39,9 @@
           <SimulateFrame  v-if="currentEvent === 'PaneDraging'" :dragFrame="dragFrame" />
           <Arrow v-for="(each, n) in DataAll.edges" :key="'____' + n" :DataAll="DataAll" :each="each" :index="n" />
           <SimulateArrow v-if="currentEvent === 'dragLink'" :dragLink="dragLink"/>
-          <EditArea :isEditAreaShow="is_edit_area" @close_click_nodes="close_click_nodes"/>
           <SimulateSelArea v-if="['sel_area', 'sel_area_ing'].indexOf(currentEvent) !== -1" :simulate_sel_area="simulate_sel_area" />
       </g>
+      <EditArea :isEditAreaShow="is_edit_area" @close_click_nodes="close_click_nodes"/>
       <Control @sizeInit="sizeInit" @sizeExpend="sizeExpend" @sizeShrink="sizeShrink"  @sel_area="sel_area" :currentEvent="currentEvent" />
     </svg>
 </template>
