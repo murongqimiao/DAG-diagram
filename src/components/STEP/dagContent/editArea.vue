@@ -37,8 +37,8 @@ export default {
       e.stopPropagation();
     },
     get_menu_style() {
-      let left = Number(this.isEditAreaShow.x) + Number(sessionStorage['svg_left']);
-      let top = Number(this.isEditAreaShow.y) + Number(sessionStorage['svg_top']);
+      let left = this.isEditAreaShow.x;
+      let top = this.isEditAreaShow.y;
       return {
         position: "absolute",
         left: left + 'px',

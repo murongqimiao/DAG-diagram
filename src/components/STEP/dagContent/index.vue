@@ -371,12 +371,8 @@ export default {
       // 节点右键模态
       this.setInitRect();
       const id = this.DataAll.nodes[i].id;
-      const x =
-        (e.x - this.initPos.left - (sessionStorage["svg_left"] || 0)) /
-        this.svgScale;
-      const y =
-        (e.y - this.initPos.top - (sessionStorage["svg_top"] || 0)) /
-        this.svgScale;
+      const x = e.x - this.initPos.left;
+      const y = e.y - this.initPos.top;
       this.is_edit_area = {
         value: true,
         x,
