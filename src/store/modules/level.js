@@ -42,41 +42,41 @@ let historyList = [
   {
     time: 0.0,
     action: [
-      { node_id: 'bf37cd8a88a2cb91', node_name: 'Data', type: 'running' }
+      { node_id: 'bf37cd8a88a2cb91', node_name: 'light', type: 'running' }
     ]
   },
   {
     time: 0.5,
     action: [
-      { node_id: 'bf37cd8a88a2cb9b', node_name: 'business', type: 'running' },
-      { node_id: 'bf37cd8a88a2cb9b', node_name: 'business', type: 'finished' },
-      { node_id: 'bf37cd8a88a2cb9c', node_name: 'crawler', type: 'running' }
+      { node_id: 'bf37cd8a88a2cb9b', node_name: 'light', type: 'running' },
+      { node_id: 'bf37cd8a88a2cb9b', node_name: 'light', type: 'finished' },
+      { node_id: 'bf37cd8a88a2cb9c', node_name: 'light', type: 'running' }
     ]
   },
   {
     time: 2.9,
     action: [
-      { node_id: 'bf37cd8a88a2cb9c', node_name: 'crawler', type: 'finished' },
-      { node_id: 'bf37cd8a88a2cb9w', node_name: 'we', type: 'running' }
+      { node_id: 'bf37cd8a88a2cb9c', node_name: 'light', type: 'finished' },
+      { node_id: 'bf37cd8a88a2cb9w', node_name: 'light', type: 'running' }
     ]
   },
   {
     time: 3.7,
     action: [
-      { node_id: 'bf37cd8a88a2cb91', node_name: 'Data', type: 'finished' },
-      { node_id: 'bf37cd8a88a2cb9w', node_name: 'we', type: 'finished' }
+      { node_id: 'bf37cd8a88a2cb91', node_name: 'light', type: 'finished' },
+      { node_id: 'bf37cd8a88a2cb9w', node_name: 'light', type: 'finished' }
     ]
   },
   {
     time: 3.99,
     action: [
-      { node_id: 'd0e294906a6a076f', node_name: 'Features', type: 'running' }
+      { node_id: 'd0e294906a6a076f', node_name: 'light', type: 'running' }
     ]
   },
   {
     time: 4.0,
     action: [
-      { node_id: 'd0e294906a6a0766', node_name: 'shallow_op', type: 'running' }
+      { node_id: 'd0e294906a6a0766', node_name: 'light', type: 'running' }
     ]
   },
   {
@@ -92,7 +92,7 @@ let historyList = [
   {
     time: 4.070223,
     action: [
-      { node_id: 'bb7b4d9341ffe881', node_name: 'shallow_tb', type: 'running' }
+      { node_id: 'bb7b4d9341ffe881', node_name: 'light', type: 'running' }
     ]
   },
   {
@@ -100,7 +100,7 @@ let historyList = [
     action: [
       {
         node_id: 'bb7b4d9341ffe881',
-        node_name: 'Generage 0 Features',
+        node_name: 'light 0 Features',
         type: 'finished'
       }
     ]
@@ -108,7 +108,7 @@ let historyList = [
   {
     time: 4.109985,
     action: [
-      { node_id: '7e1135653e4ceb48', node_name: 'shallow_edu', type: 'running' }
+      { node_id: '7e1135653e4ceb48', node_name: 'light', type: 'running' }
     ]
   },
   {
@@ -116,7 +116,7 @@ let historyList = [
     action: [
       {
         node_id: '7e1135653e4ceb48',
-        node_name: 'Generage 0 Features',
+        node_name: 'light 0 Features',
         type: 'finished'
       }
     ]
@@ -126,7 +126,7 @@ let historyList = [
     action: [
       {
         node_id: 'b5e0f0e3b6b24081',
-        node_name: 'shallow_bank',
+        node_name: 'light',
         type: 'running'
       }
     ]
@@ -136,7 +136,7 @@ let historyList = [
     action: [
       {
         node_id: 'b5e0f0e3b6b24081',
-        node_name: 'Generage 0 Features',
+        node_name: 'light 0 Features',
         type: 'finished'
       }
     ]
@@ -146,7 +146,7 @@ let historyList = [
     action: [
       {
         node_id: 'f3bb46e711e89a28',
-        node_name: 'shallow_black',
+        node_name: 'light',
         type: 'running'
       }
     ]
@@ -156,7 +156,7 @@ let historyList = [
     action: [
       {
         node_id: 'f3bb46e711e89a28',
-        node_name: 'Generage 8 Features',
+        node_name: 'light 8 Features',
         type: 'finished'
       }
     ]
@@ -166,7 +166,7 @@ let historyList = [
     action: [
       {
         node_id: '46ffab08872440d5',
-        node_name: 'shallow_work',
+        node_name: 'light',
         type: 'running'
       }
     ]
@@ -177,7 +177,7 @@ let historyList = [
       { node_id: 'd0e294906a6a076f', node_name: 'Features', type: 'finished' },
       {
         node_id: '46ffab08872440d5',
-        node_name: 'Generage 45 Features',
+        node_name: 'light 45 Features',
         type: 'finished'
       }
     ]
@@ -193,7 +193,7 @@ let historyList = [
     action: [
       {
         node_id: '078d93b64d47125b',
-        node_name: 'advanced_income',
+        node_name: 'light',
         type: 'running'
       }
     ]
@@ -203,7 +203,7 @@ let historyList = [
     action: [
       {
         node_id: '078d93b64d47125b',
-        node_name: 'advanced_income',
+        node_name: 'light',
         type: 'finished'
       }
     ]
@@ -213,7 +213,7 @@ let historyList = [
     action: [
       {
         node_id: '0aba4979011e0cc8',
-        node_name: 'advanced_debt',
+        node_name: 'light',
         type: 'running'
       }
     ]
@@ -223,7 +223,7 @@ let historyList = [
     action: [
       {
         node_id: '0aba4979011e0cc8',
-        node_name: 'advanced_debt',
+        node_name: 'light',
         type: 'finished'
       }
     ]
@@ -233,7 +233,7 @@ let historyList = [
     action: [
       {
         node_id: 'c82d433ad78a588b',
-        node_name: 'advanced_before_loan',
+        node_name: 'light',
         type: 'running'
       }
     ]
@@ -244,7 +244,7 @@ let historyList = [
       { node_id: '078d93b64d47125m', node_name: 'Models', type: 'finished' },
       {
         node_id: 'c82d433ad78a588b',
-        node_name: 'advanced_before_loan',
+        node_name: 'light',
         type: 'finished'
       }
     ]
@@ -252,25 +252,25 @@ let historyList = [
   {
     time: 10.078222,
     action: [
-      { node_id: '4f9c15cdc02a35cs', node_name: 'ScoreCards', type: 'running' }
+      { node_id: '4f9c15cdc02a35cs', node_name: 'light', type: 'running' }
     ]
   },
   {
     time: 10.088222,
     action: [
-      { node_id: '4f9c15cdc02a35cb', node_name: 'score_card', type: 'running' }
+      { node_id: '4f9c15cdc02a35cb', node_name: 'light', type: 'running' }
     ]
   },
   {
     time: 10.719785,
     action: [
-      { node_id: '4f9c15cdc02a35cb', node_name: 'score_card', type: 'finished' }
+      { node_id: '4f9c15cdc02a35cb', node_name: 'light', type: 'finished' }
     ]
   },
   {
     time: 12.367431,
     action: [
-      { node_id: 'aead66f6681c705a', node_name: 'anti_fraud', type: 'running' }
+      { node_id: 'aead66f6681c705a', node_name: 'light', type: 'running' }
     ]
   },
   {
@@ -281,7 +281,7 @@ let historyList = [
         node_name: 'Get Approved Amount 3258, PASS',
         type: 'finished'
       },
-      { node_id: 'aead66f6681c705a', node_name: 'anti_fraud', type: 'finished' }
+      { node_id: 'aead66f6681c705a', node_name: 'light', type: 'finished' }
     ]
   }
 ]
