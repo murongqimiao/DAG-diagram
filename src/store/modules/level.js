@@ -1,41 +1,47 @@
 let level = {
   bf37cd8a88a2cb91: 1,
-  bf37cd8a88a2cb9c: 3,
-  bf37cd8a88a2cb9b: 3,
-  bf37cd8a88a2cb9w: 3,
+  bf37cd8a88a2cb9c: 1,
+  bf37cd8a88a2cb9b: 1,
+  bf37cd8a88a2cb9w: 1,
   d0e294906a6a076f: 2,
-  d0e294906a6a0766: 3,
-  bb7b4d9341ffe881: 3,
-  b5e0f0e3b6b24081: 3,
-  '7e1135653e4ceb48': 3,
-  '46ffab08872440d5': 3,
-  f3bb46e711e89a28: 3,
-  '078d93b64d47125m': 2,
+  d0e294906a6a0766: 2,
+  bb7b4d9341ffe881: 2,
+  b5e0f0e3b6b24081: 2,
+  '7e1135653e4ceb48': 2,
+  '46ffab08872440d5': 2,
+  f3bb46e711e89a28: 2,
+  '078d93b64d47125m': 3,
   c82d433ad78a588b: 3,
   '078d93b64d47125b': 3,
   '0aba4979011e0cc8': 3,
-  '4f9c15cdc02a35cs': 3,
+  '4f9c15cdc02a35cs': 4,
   aead66f6681c705a: 4,
   '4f9c15cdc02a35cb': 4
 }
 
 let levelTrans = {
-  1: ['bf37cd8a88a2cb91'],
-  2: ['d0e294906a6a076f', '078d93b64d47125m'],
-  3: [
-    'bf37cd8a88a2cb9c',
-    'bf37cd8a88a2cb9b',
+  1: [
+    'bf37cd8a88a2cb91',
     'bf37cd8a88a2cb9w',
+    'bf37cd8a88a2cb9c',
+    'bf37cd8a88a2cb9b'
+  ],
+  2: [
+    'd0e294906a6a076f',
     'd0e294906a6a0766',
     'bb7b4d9341ffe881',
-    '4f9c15cdc02a35cs',
-    'b5e0f0e3b6b24081',
+    '46ffab08872440d5',
     'f3bb46e711e89a28',
-    'c82d433ad78a588b',
-    '078d93b64d47125b',
-    '0aba4979011e0cc8'
+    'b5e0f0e3b6b24081',
+    '7e1135653e4ceb48'
   ],
-  4: ['aead66f6681c705a', '4f9c15cdc02a35cb']
+  3: [
+    '078d93b64d47125m',
+    '0aba4979011e0cc8',
+    'c82d433ad78a588b',
+    '078d93b64d47125b'
+  ],
+  4: ['4f9c15cdc02a35cs', '4f9c15cdc02a35cb', 'aead66f6681c705a']
 }
 
 let historyList = [

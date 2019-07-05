@@ -36,18 +36,27 @@ const dagStore = {
       let _nodes = []
       let _edges = []
       Object.keys(nodes).map((item, i) => {
+        // level[item] 节点层级  leveltTrans[level[item]].indexOf(item) 相同层级节点的序号 0为主节点 其余为辅助节点
+        const deep = level[item]
+        const ordinal = levelTrans[level[item]].indexOf(item)
+        const isOdd = level[item] % 2 !== 0 ? -1 : 1
         _nodes.push({
           id: item,
           name: nodes[item].node_name,
           in_ports: [0],
           out_ports: [0],
           pos_x:
-            (levelTrans[level[item]].indexOf(item) -
-              levelTrans[level[item]].length / 2) *
-              100 +
-            500 +
-            Math.random() * 50,
-          pos_y: level[item] * 250 - 200 + Math.random() * 300
+            700 +
+            250 * isOdd +
+            (Math.random() - 0.5) * 10 +
+            (ordinal === 0
+              ? 0
+              : isOdd * 500 + Math.abs(5 - ordinal) * isOdd * -75),
+          pos_y:
+            deep * 170 -
+            100 +
+            (ordinal === 0 ? 0 : (4 - ordinal) * 50) +
+            (Math.random() - 0.5) * 10
         })
       })
       edges.map((item, id) => {

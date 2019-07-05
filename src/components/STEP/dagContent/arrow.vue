@@ -159,6 +159,16 @@ export default {
   stroke-width: 2px;
   fill: none;
   cursor: pointer;
+  stroke-dasharray: 100%;
+  animation: line_success 2s;
+  @keyframes line_success {
+    0% {
+      stroke-dashoffset: 100%;
+    }
+    100% {
+      stroke-dashoffset: 0%;
+    }
+  }
 }
 .connector-active {
   stroke: rgba(91, 230, 20, 0.6);
