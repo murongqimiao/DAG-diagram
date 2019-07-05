@@ -57,14 +57,14 @@ let historyList = [
     time: 2.9,
     action: [
       { node_id: 'bf37cd8a88a2cb9c', node_name: 'crawler', type: 'finished' },
-      { node_id: 'bf37cd8a88a2cb9w', node_name: 'wecash', type: 'running' }
+      { node_id: 'bf37cd8a88a2cb9w', node_name: 'we', type: 'running' }
     ]
   },
   {
     time: 3.7,
     action: [
       { node_id: 'bf37cd8a88a2cb91', node_name: 'Data', type: 'finished' },
-      { node_id: 'bf37cd8a88a2cb9w', node_name: 'wecash', type: 'finished' }
+      { node_id: 'bf37cd8a88a2cb9w', node_name: 'we', type: 'finished' }
     ]
   },
   {

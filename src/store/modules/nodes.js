@@ -2,7 +2,7 @@ let nodes = {
   bf37cd8a88a2cb91: { node_name: 'Data', type: 'waiting' },
   bf37cd8a88a2cb9c: { node_name: 'crawler', type: 'waiting' },
   bf37cd8a88a2cb9b: { node_name: 'business', type: 'waiting' },
-  bf37cd8a88a2cb9w: { node_name: 'wecash', type: 'waiting' },
+  bf37cd8a88a2cb9w: { node_name: 'we', type: 'waiting' },
   d0e294906a6a076f: { node_name: 'Features', type: 'waiting' },
   d0e294906a6a0766: { node_name: 'shallow_op', type: 'waiting' },
   bb7b4d9341ffe881: { node_name: 'shallow_tb', type: 'waiting' },
