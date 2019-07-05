@@ -1,7 +1,7 @@
 <template>
   <div class="page-content" @mousedown="startNodesBus($event)" @mousemove="moveNodesBus($event)" @mouseup="endNodesBus($event)">
     <div class="tapBar">
-      <div class="title">前端DAG(流程图、关系图、机器学习平台可用)</div>
+      <div class="title">DAG 机器学习|流程图 可视化</div>
     </div>
     <div class="mainContent">
       <div class="nav">
@@ -20,6 +20,7 @@
           <p>6.删除关系,关系连线上点右键, 找删除</p>
           <p>7.全屏,左上角控制面板找全屏</p>
           <p>8.放缩, 滚动鼠标滚轮,mac双指滑触摸,或者左上角控制面板找全屏</p>
+          <p>9.新增节点动态训练模拟,点击控制台的运行图标即可</p>
         </div>
       </div>
       <div class="DAG-content">
@@ -148,6 +149,7 @@ export default {
 .tapBar .title {
   color: white;
   font-weight: bold;
+  font-size: 30px;
 }
 
 .tapEach {

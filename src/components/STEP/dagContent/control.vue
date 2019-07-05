@@ -3,6 +3,9 @@
         <foreignObject width="200px" height="30px" style="position: relative">
         <body xmlns="http://www.w3.org/1999/xhtml">
             <div class="control_menu">
+                 <span @click="changeModelRunningStatus">
+                  <i :class="modelRunningStatus ?  'el-icon-video-pause' : 'el-icon-video-play'"></i>
+                </span>
                 <span @click="sizeExpend">
                   <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-fangda"></use>
@@ -44,6 +47,10 @@ export default {
       default: () => {
         "";
       }
+    },
+    modelRunningStatus: {
+      type: Boolean,
+      default: () => false
     }
   },
   data() {
@@ -76,6 +83,9 @@ export default {
         this.changeScreen = "全";
         document.webkitExitFullscreen();
       }
+    },
+    changeModelRunningStatus() {
+      this.$emit('changeModelRunningStatus', !this.modelRunningStatus)
     }
   }
 };

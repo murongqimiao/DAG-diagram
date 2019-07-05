@@ -2,7 +2,7 @@
   <svg
      id="svgContent"
      :style="{cursor: this.currentEvent === 'move_graph' ? 'grabbing' : 'grab'}"
-     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1260" height="1029" data-spm-anchor-id="TODO.11007039.0.i6.12b64a9bcbXQmm"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="100%" height="1029" data-spm-anchor-id="TODO.11007039.0.i6.12b64a9bcbXQmm"
     @mousedown="svgMouseDown"
     @mousemove="dragIng($event)"
     @mouseup="dragEnd($event)">
@@ -18,7 +18,7 @@
               <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
               <div>
                 <div :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'">
-                    <span class="icon icon-data"></span>
+                    <i :class="`${getPaneNodeIconClass(item.type)} icon icon-data`"></i>
                     <input type="text" class="name"  v-model="item.name">
                     <!-- <span class="name">{{item.name}}</span> -->
                 </div>
@@ -42,7 +42,7 @@
           <SimulateSelArea v-if="['sel_area', 'sel_area_ing'].indexOf(currentEvent) !== -1" :simulate_sel_area="simulate_sel_area" />
       </g>
       <EditArea :isEditAreaShow="is_edit_area" @close_click_nodes="close_click_nodes"/>
-      <Control @sizeInit="sizeInit" @sizeExpend="sizeExpend" @sizeShrink="sizeShrink"  @sel_area="sel_area" :currentEvent="currentEvent" />
+      <Control @changeModelRunningStatus="changeModelRunningStatus" @sizeInit="sizeInit" @sizeExpend="sizeExpend" @sizeShrink="sizeShrink"  @sel_area="sel_area" :modelRunningStatus="modelRunningStatus" :currentEvent="currentEvent" />
     </svg>
 </template>
 <script>
@@ -67,14 +67,18 @@ export default {
       default: "default"
     }
   },
+
   computed: mapState({
     DataAll: state => state.dagStore.DataAll,
-    svgScale: state => state.dagStore.svgSize
+    svgScale: state => state.dagStore.svgSize,
+    historyList: state => state.dagStore.historyList
   }),
   created() {
     this.$nextTick(() => {
       this.setMouseWheelEvent()
     })
+    // 获取图像
+    this.openGraph()
   },
   mounted() {
     sessionStorage["svg_left"] = 0;
@@ -91,8 +95,24 @@ export default {
       "showGraph",
       "saveGraph",
       "moveNode",
-      "changeSize"
+      "changeSize",
+      "activeGraph",
+      "stopGraph"
     ]),
+    startActive() {
+      // 激活图像状态变更
+      console.log(this.step)
+      let step = this.step
+      if (step === this.historyList.length || step > this.historyList.length || !this.modelRunningStatus) return false
+      this.activeGraph(step)
+      if (this.nextStep) {
+        clearTimeout(this.nextStep)
+      }
+      this.nextStep = setTimeout(() => {
+        this.step++
+        this.startActive()
+      }, (this.historyList[step + 1].time - this.historyList[step].time) * 1000)
+    },
     /**
      * 事件分发器
      */
@@ -392,6 +412,35 @@ export default {
         .getElementById("svgContent")
         .getBoundingClientRect();
       this.initPos = { left, top };
+    },
+    /**
+     * 执行&暂停模型训练模拟
+     */
+    changeModelRunningStatus(status) {
+       if (!status) {
+         if (this.step > 0) { this.step-- }
+        this.modelRunningStatus = status
+        this.stopGraph()
+      } else {
+        this.modelRunningStatus = status
+        this.startActive()
+      }
+    },
+    getPaneNodeIconClass(name) {
+      let className = 'el-icon-timer'
+      switch (name) {
+        case 'active':
+          className = 'el-icon-loading'
+          break
+        case 'success':
+          className = 'el-icon-check paneSuccess'
+          break
+        case 'pause':
+          className = 'el-icon-video-pause'
+          break
+        default:
+      }
+      return className
     }
   },
   data() {
@@ -438,7 +487,10 @@ export default {
         x: 0,
         y: 0
       },
-      canMouseWheelUse: true
+      canMouseWheelUse: true,
+      step: 0, // 模型训练计步
+      modelRunningStatus: false,
+      nextStep: null
     };
   },
   components: {
@@ -473,7 +525,7 @@ export default {
     border-radius: 100%;
     float: left;
     color: #fff;
-    font-size: 16px;
+    font-size: 26px;
     background-color: #289de9;
     cursor: pointer;
   }
@@ -538,6 +590,9 @@ export default {
   .space:hover {
     box-shadow: 0 0 0 6px #3ddd73;
   }
+}
+.paneSuccess {
+  background: #3ddd73 !important;
 }
 .pane-node-parent-hl > div {
   position: relative;

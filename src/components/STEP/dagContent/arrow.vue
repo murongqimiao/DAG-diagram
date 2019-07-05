@@ -4,7 +4,7 @@
           <path
           @mouseover="pathHover"
           @mouseout="pathOut"
-          :class="(isHover || r_click_menu) ? 'connector-hl' : each.type && each.type == 'active' ? 'connector-active' :'connector'"
+          :class="(isHover || r_click_menu) ? 'connector-hl' : each.type && each.type == 'active' ? 'connector-active' : each.type && each.type == 'success' ? 'connector' : 'defaultArrow'"
           :d="computedLink()"
           @contextmenu="r_click($event)"
           ></path>
@@ -98,6 +98,12 @@ export default {
         } = this.each;
         const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
         const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
+        // if (!f_Pos) {
+        //   alert(src_node_id)
+        // }
+        // if (!t_Pos) {
+        //   alert(dst_node_id)
+        // }
         const f_X =
           f_Pos.pos_x +
           (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
@@ -162,6 +168,12 @@ export default {
   stroke-width: 2px;
   stroke-dashoffset: 20px;
   animation: grown 4s infinite linear;
+}
+.defaultArrow {
+  stroke: hsla(0, 0%, 50%, 0.1);
+  stroke-width: 2px;
+  fill: none;
+  cursor: pointer;
 }
 @keyframes grown {
   to{

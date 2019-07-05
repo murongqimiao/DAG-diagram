@@ -1,3 +1,4 @@
+<!-- 这里是拖入节点时的模拟元素 -->
 <template>
   <div class="nodesBus-contain" :style="{left: this.pos_x + 90 + 'px', top: this.pos_y + 30 + 'px' }">
     <div class="nodesBus">
