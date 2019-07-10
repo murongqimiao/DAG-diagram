@@ -5,6 +5,7 @@
      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="100%" height="1029" data-spm-anchor-id="TODO.11007039.0.i6.12b64a9bcbXQmm"
     @mousedown="svgMouseDown"
     @mousemove="dragIng($event)"
+    @mouseleave="atMouseOut"
     @mouseup="dragEnd($event)">
     <g :transform="` translate(${svg_left}, ${svg_top}) scale(${svgScale})`" >
           <g
@@ -112,6 +113,10 @@ export default {
         this.step++
         this.startActive()
       }, (this.historyList[step + 1].time - this.historyList[step].time) * 1000)
+    },
+    atMouseOut() {
+      // 鼠标移出
+      this.currentEvent = null
     },
     /**
      * 事件分发器
