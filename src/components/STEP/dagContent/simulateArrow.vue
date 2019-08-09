@@ -1,6 +1,6 @@
 <!--  模拟剪头拖动效果  -->
 <template>
-       <g>
+       <g class="only-watch-el">
           <path
           class="connector"
           :d="dragLinkPath()"
@@ -36,6 +36,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.only-watch-el {
+  pointer-events: none;
+}
 .connector {
   stroke: hsla(0, 0%, 50%, 0.6);
   stroke-width: 2px;

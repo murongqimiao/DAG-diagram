@@ -8,9 +8,9 @@
           :d="computedLink()"
           @contextmenu="r_click($event)"
           ></path>
-          <polyline  :points="computedArrow()"
+          <polyline  class="only-watch-el" :points="computedArrow()"
           style="stroke:#006600;"/>
-          <circle :cx="computedCx()" :cy="computedCy()" r="5"
+          <circle class="only-watch-el" :cx="computedCx()" :cy="computedCy()" r="5"
             style="stroke:#006600;
             stroke-width: 2;
             fill:#FFFFFF"/>
@@ -154,6 +154,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.only-watch-el {
+  pointer-events: none;
+}
 .connector {
   stroke: hsla(0, 0%, 50%, 0.6);
   stroke-width: 2px;
