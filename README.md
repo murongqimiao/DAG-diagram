@@ -21,6 +21,11 @@
 ## 在线预览
 [https://murongqimiao.github.io/DAGBoard/#/](https://murongqimiao.github.io/DAGBoard/#/)
 
+## 目前已经做成插件 npm install --save dag-board 可以在vue项目中随意使用
+暴露出来 DAGBoard 与 node-bus标签
+具体示例如下
+[https://murongqimiao.github.io/DAGBoard/#example/](https://murongqimiao.github.io/DAGBoard/#/example)
+
 
 
 ###  简书配套教程地址:
