@@ -14,7 +14,6 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "dag-board": "0.0.4",
     "element-ui": "^2.10.1",
     "sass-loader": "^7.1.0",
     "vue": "^2.5.2",
@@ -41,6 +40,7 @@
     "copy-webpack-plugin": "^4.0.1",
     "cross-spawn": "^5.0.1",
     "css-loader": "^0.28.0",
+    "dag-board": "0.0.4",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",

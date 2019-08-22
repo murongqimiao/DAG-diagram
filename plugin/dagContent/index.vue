@@ -702,6 +702,7 @@ export default {
   padding: 10px 20px;
   border-radius: 30px 20px;
   background: #fff;
+  pointer-events: none;
 }
 .node-pop:after {
     content: '.';
@@ -714,11 +715,11 @@ export default {
     border-right: none;
     z-index: 100;
     position: absolute;
-    transform: skew(-33deg, -1deg) scale(1.5);
+    transform: rotate(-34deg) skew(-33deg, -1deg) scale(1.5);
     border-radius: 20px 0 0 0;
     left: -14px;
     top: 22px;
-    rotate: -34deg;
+    pointer-events: none;
 }
 .pane-node-parent {
   position: fixed;
