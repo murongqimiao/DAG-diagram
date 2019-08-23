@@ -1,6 +1,6 @@
 
 
-[VUE DAG diagram ]( https://murongqimiao.github.io/DAGBoard/#/example)
+[VUE DAG diagram ]( https://murongqimiao.github.io/DAG-diagram/#/example)
 
 ===========
 [中文](https://github.com/murongqimiao/DAG-diagram/blob/master/README_CN.md)
@@ -9,7 +9,7 @@
 `only support chrome now, compatibility for other browser may need your help. glad 4 everyone's PR ~ `
 
 ## SEE WHAT IT IS
-[https://murongqimiao.github.io/DAGBoard/#/example](https://murongqimiao.github.io/DAGBoard/#/example)
+[https://murongqimiao.github.io/DAG-diagram/#/example](https://murongqimiao.github.io/DAG-diagram/#/example)
 
 ## HOW TO USE
 ```
