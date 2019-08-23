@@ -1,8 +1,9 @@
 
 
 [VUE DAG diagram ]( https://murongqimiao.github.io/DAGBoard/#/example)
-[中文文档](https://github.com/murongqimiao/DAG-diagram/blob/master/README_CN.md)
+
 ===========
+[中文](https://github.com/murongqimiao/DAG-diagram/blob/master/README_CN.md)
 
 `DAG diagram base in vue.`
 `only support chrome now, compatibility for other browser may need your help. glad 4 everyone's PR ~ `
