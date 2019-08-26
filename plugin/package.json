@@ -1,11 +1,12 @@
 {
   "name": "dag-board",
-  "version": "0.0.8",
+  "version": "0.0.90",
   "description": "a plugin to show DAG graph . 用于流程图或者DAG图展示.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependence": {},
   "keywords": [
     "DAG",
     "graph"

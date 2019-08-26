@@ -653,7 +653,6 @@ export default {
   float: left;
   margin-left: 2px;
   width: 135px;
-  // height: 28px;
   line-height: 28px;
   font-size: 14px;
   overflow: hidden;
