@@ -450,6 +450,7 @@ export default {
     },
     delEdge({ id }) {
       // 删除边
+      console.log('id', id)
       let _edges = []
       this.DataAll.edges.forEach((item, i) => {
         if (item.id !== id) {

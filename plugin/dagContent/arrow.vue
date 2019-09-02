@@ -41,7 +41,7 @@ export default {
     }
   },
   computed: {
-   svgScale() { return window.localStorage['svgScale'] || 1 }
+   svgScale() { return sessionStorage['svgScale'] || 1 }
   },
   data() {
     return {
@@ -75,9 +75,10 @@ export default {
       this.$emit('delEdge', params)
     },
     r_click(e) {
-      const x = e.offsetX / this.svgScale;
-      const y = e.offsetY / this.svgScale;
-      this.menu_style = Object.assign({}, this.menu_style, { left: `${x - (sessionStorage['svg_left'] || 0)}px`, top: `${y - (sessionStorage['svg_top'] || 0)}px` })
+      console.log(this.svgScale)
+      const x = e.offsetX;
+      const y = e.offsetY;
+      this.menu_style = Object.assign({}, this.menu_style, { left: `${(x - (sessionStorage['svg_left'] || 0)) / this.svgScale}px`, top: `${(y - (sessionStorage['svg_top'] || 0)) / this.svgScale}px` })
       this.r_click_menu = true;
       e.stopPropagation();
       e.preventDefault();
