@@ -3,9 +3,10 @@
         <foreignObject width="100%" height="100%" style="position: relative" @click="click_menu_cover($event)">
         <body xmlns="http://www.w3.org/1999/xhtml" :style="get_menu_style()">
             <div class="menu_contain">
-                <span @click="delEdges">删除节点</span>
-                <span @click="changePort('in_ports')">增加入口</span>
-                <span @click="changePort('out_ports')">增加出口</span>
+                <span @click="delEdges">DELETE</span>
+                <span @click="changePort('in_ports')">ADD IN PORT</span>
+                <span @click="changePort('out_ports')">ADD OUT PORT</span>
+                <span v-if="isEditAreaShow.detail" @click="editNode">EDIT IT</span>
             </div>
         </body>
         </foreignObject>
@@ -53,6 +54,9 @@ export default {
     },
     changePort(action) {
       this.$emit('changePort', action, this.isEditAreaShow.id)
+    },
+    editNode() {
+      this.$emit('editNodeDetails', this.isEditAreaShow)
     }
   }
 };

@@ -8,6 +8,7 @@
     @mouseleave="atMouseOut"
     @mouseup="dragEnd($event)">
     <g :transform="` translate(${svg_left}, ${svg_top}) scale(${svgScale})`" >
+          <!-- 节点主体 -->
           <g
           v-for="(item, i) in DataAll.nodes"
           :key="'_' + i" class="svgEach"
@@ -19,7 +20,7 @@
               <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
               <div>
                 <div :style="item.nodeStyle" :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'">
-                    <i :style="item.iconStyle" :class="`${getPaneNodeIconClass(item.type)} icon icon-data`"></i>
+                    <i :style="item.iconStyle" :class="`${item.iconClassName || 'el-icon-coin'} icon icon-data`"></i>
                     <input type="text" class="name"  v-model="item.name" @change="changeNodeName(item)">
                 </div>
                 <p v-if="choice.paneNode.indexOf(item.id) !== -1" class="node-pop">{{item.nameDescribe || item.name}}</p>
@@ -42,7 +43,7 @@
           <SimulateArrow v-if="currentEvent === 'dragLink'" :dragLink="dragLink"/>
           <SimulateSelArea v-if="['sel_area', 'sel_area_ing'].indexOf(currentEvent) !== -1" :simulate_sel_area="simulate_sel_area" />
       </g>
-      <EditArea :isEditAreaShow="is_edit_area" @delNode="delNode" @changePort="changePort" @close_click_nodes="close_click_nodes"/>
+      <EditArea @editNodeDetails="editNodeDetails" :isEditAreaShow="is_edit_area" @delNode="delNode" @changePort="changePort" @close_click_nodes="close_click_nodes"/>
       <Control @changeModelRunningStatus="changeModelRunningStatus" @sizeInit="sizeInit" @sizeExpend="sizeExpend" @sizeShrink="sizeShrink"  @sel_area="sel_area" :modelRunningStatus="modelRunningStatus" :currentEvent="currentEvent" />
     </svg>
 </template>
@@ -100,6 +101,10 @@ export default {
      */
     dragPre(e, i, item) {
       // 准备拖动节点
+      this.multipleSelectNodes = JSON.parse(JSON.stringify(this.choice))
+      if (this.multipleSelectNodes && this.multipleSelectNodes.paneNode.length) {
+        this.initMultiplePosition = JSON.parse(JSON.stringify(this.DataAll.nodes))
+      }
       this.setInitRect(); // 工具类 初始化dom坐标
       this.currentEvent = "dragPane"; // 修正行为
       this.choice.index = i;
@@ -253,10 +258,16 @@ export default {
         pos_x: x,
         pos_y: y
       };
-      this.moveNode(params);
+      if (this.multipleMoveNode && this.multipleSelectNodes.paneNode.length > 1) {
+        this.multipleMoveNode(params)
+      } else {
+        this.moveNode(params);
+      }
     },
     paneDragEnd(e) {
       // 节点拖动结束
+      this.multipleSelectNodes = {}
+      this.initMultiplePosition = null
       this.dragFrame = { dragFrame: false, posX: 0, posY: 0 };
       const x =
         (e.x - this.initPos.left - (sessionStorage["svg_left"] || 0)) /
@@ -272,7 +283,6 @@ export default {
         pos_x: x,
         pos_y: y
       };
-      this.moveNode(params);
     },
     selPaneNode(id) {
       // 单选节点
@@ -321,6 +331,7 @@ export default {
           item.pos_y > top &&
           item.pos_y < top + height
         ) {
+          // set the select nodes into this.data.choice
           this.choice.paneNode.push(item.id);
         }
       });
@@ -386,13 +397,15 @@ export default {
       // 节点右键模态
       this.setInitRect();
       const id = this.DataAll.nodes[i].id;
+      const detail = this.DataAll.nodes[i].detail || null
       const x = e.x - this.initPos.left;
       const y = e.y - this.initPos.top;
       this.is_edit_area = {
         value: true,
         x,
         y,
-        id
+        id,
+        detail
       };
       e.stopPropagation();
       e.cancelBubble = true;
@@ -413,22 +426,6 @@ export default {
      */
     changeModelRunningStatus(status) {
       this.$emit('updateDAG', this.DataAll, 'startRunning')
-    },
-    getPaneNodeIconClass(name) {
-      let className = 'el-icon-timer'
-      switch (name) {
-        case 'active':
-          className = 'el-icon-loading'
-          break
-        case 'success':
-          className = 'el-icon-check paneSuccess'
-          break
-        case 'pause':
-          className = 'el-icon-video-pause'
-          break
-        default:
-      }
-      return className
     },
     /**
      * 数据层逻辑
@@ -472,6 +469,28 @@ export default {
           item.pos_y = params.pos_y
         }
       })
+      this.$emit('updateDAG', _DataAll, 'moveNode')
+    },
+    multipleMoveNode(params) {
+      // 同时移动多个点
+      const { id, pos_x, pos_y } = params
+      let x = 0
+      let y = 0
+      let _initMultiplePosition = this.initMultiplePosition
+      let _DataAll = this.DataAll
+      _initMultiplePosition.map(item => {
+        if (item.id === id) {
+          x = pos_x - item.pos_x
+          y = pos_y - item.pos_y
+        }
+      })
+      _initMultiplePosition.forEach(item => {
+        if (this.multipleSelectNodes.paneNode.indexOf(item.id) > -1) {
+          item.pos_x += x
+          item.pos_y += y
+        }
+      })
+      _DataAll.nodes = _initMultiplePosition
       this.$emit('updateDAG', _DataAll, 'moveNode')
     },
     addNode: (params) => {
@@ -536,6 +555,10 @@ export default {
         }
       })
       this.$emit('updateDAG', this.DataAll, 'changePort')
+    },
+    editNodeDetails(value) {
+      // 抛出待编辑内容
+      this.$emit('editNodeDetails', value)
     }
   },
   data() {
@@ -586,7 +609,9 @@ export default {
       canMouseWheelUse: true,
       step: 0, // 模型训练计步
       modelRunningStatus: false,
-      nextStep: null
+      nextStep: null,
+      multipleSelectNodes: {},
+      initMultiplePosition: {}
     };
   },
   components: {

@@ -16,12 +16,18 @@ export const simple_example_data = {
       out_ports: [0],
       pos_x: 157,
       pos_y: 120,
-      type: 'Variable'
+      type: 'Variable',
+      iconClassName: 'el-icon-link',
+      detail: [{
+        label: 'time',
+        value: '2018'
+      }]
     },
     {
       id: 2,
       in_ports: [0],
       name: 'NODE_CHILD',
+      iconClassName: 'el-icon-cpu',
       out_ports: [0],
       pos_x: 459,
       pos_y: 257,

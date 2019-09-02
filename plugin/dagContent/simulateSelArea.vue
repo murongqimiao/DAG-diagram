@@ -27,10 +27,8 @@ export default {
       const { left, top, width, height } = this.simulate_sel_area;
       return `width: ${width}px; height: ${height}px; left: ${left}px; top: ${top}px; border: 3px dashed #289de9;position: absolute;`;
     }
-  },
-  mounted() {
-    console.log("1");
   }
+
 };
 </script>
 
