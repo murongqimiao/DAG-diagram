@@ -6,6 +6,8 @@
 [for English guide , click there](https://github.com/murongqimiao/DAG-diagram/blob/master/README_EN.md)
 
 
+[具体展示页,可以改右侧json看效果](https://murongqimiao.github.io/DAG-diagram/#/example)
+
 ## 效果展示
 - 画布移动 / 复原
 ![[图片上传中...(画布缩放.gif-823313-1567493208259-0)]
