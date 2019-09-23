@@ -5,6 +5,24 @@
 ===========
 [for English guide , click there](https://github.com/murongqimiao/DAG-diagram/blob/master/README_EN.md)
 
+## 更新说明 2019年09月23日17:34:22
+节点可以添加
+```
+  rightClickEvent": [
+				{
+					"label": "do some thing1",
+					"eventName": "eventOfDoSomeThingFirst"
+				},
+				{
+					"label": "do some thing2",
+					"eventName": "evnetOfDoSomeThingSecond"
+				}
+			],
+```
+属性来实现私有方法追加, 右键的面板会展示私有方法名.点击可以触发 doSthPersonal方法,  第一个参数为你定义的方法名, 第二个参数可以拿到节点id, 具体看demo即可.
+```
+    <DAGBoard :DataAll="DataAll" @updateDAG="updateDAG" @editNodeDetails="editNodeDetails" @doSthPersonal="doSthPersonal"></DAGBoard>
+```
 
 [具体展示页,可以改右侧json看效果](https://murongqimiao.github.io/DAG-diagram/#/example)
 
