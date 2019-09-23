@@ -8,14 +8,14 @@
       <p @mousedown="dragIt('drag name')">drag node</p>
       <span @click="saveChange">save change</span>
     </div>
-    <DAGBoard :DataAll="DataAll" @updateDAG="updateDAG" @editNodeDetails="editNodeDetails"></DAGBoard>
+    <DAGBoard :DataAll="DataAll" @updateDAG="updateDAG" @editNodeDetails="editNodeDetails" @doSthPersonal="doSthPersonal"></DAGBoard>
     <node-bus v-if="dragBus" :value="busValue.value" :pos_x="busValue.pos_x" :pos_y="busValue.pos_y" />
     <editor ref='myEditor' class="json-editor" v-model="jsonEditor" :options="options"  @init="editorInit" lang="json" theme="chrome" width="400" height="100%"></editor>
   </div>
 </template>
 
 <script>
-import { simple_example_data, edges_example_data, nodes_example_data, ports_example_data, complex_example_data } from './data'
+import { simple_example_data, simple_r_click_data, edges_example_data, nodes_example_data, ports_example_data, complex_example_data } from './data'
 export default {
   components: {
     editor: require('vue2-ace-editor')
@@ -48,6 +48,9 @@ export default {
         }, {
           label: 'add ports',
           value: ports_example_data
+        }, {
+          label: 'personal r_click',
+          value: simple_r_click_data
         }]
       }, {
         label: 'complex example',
@@ -177,6 +180,9 @@ export default {
     },
     editNodeDetails(value) {
       alert(`edit id ${value.id} , info : ${JSON.stringify(value.detail, null, 4)} `)
+    },
+    doSthPersonal(eventName, id) {
+      alert(`edit personal things like ${eventName}, the id is ${id}, current node detail is ${JSON.stringify(this.DataAll.nodes.find(item => item.id === id))}`)
     }
   },
   mounted() {

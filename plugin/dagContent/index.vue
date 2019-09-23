@@ -20,7 +20,7 @@
               <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
               <div>
                 <div :style="item.nodeStyle" :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'">
-                    <i :style="item.iconStyle" :class="`${item.iconClassName || 'el-icon-coin'} icon icon-data`"></i>
+                    <i @dblclick="nodesPersonalEvent('dbClickNodeIcon',item.id)" :style="item.iconStyle" :class="`${item.iconClassName || 'el-icon-coin'} icon icon-data`"></i>
                     <input type="text" class="name"  v-model="item.name" @change="changeNodeName(item)">
                 </div>
                 <p v-if="choice.paneNode.indexOf(item.id) !== -1" class="node-pop">{{item.nameDescribe || item.name}}</p>
@@ -43,7 +43,7 @@
           <SimulateArrow v-if="currentEvent === 'dragLink'" :dragLink="dragLink"/>
           <SimulateSelArea v-if="['sel_area', 'sel_area_ing'].indexOf(currentEvent) !== -1" :simulate_sel_area="simulate_sel_area" />
       </g>
-      <EditArea @editNodeDetails="editNodeDetails" :isEditAreaShow="is_edit_area" @delNode="delNode" @changePort="changePort" @close_click_nodes="close_click_nodes"/>
+      <EditArea @editNodeDetails="editNodeDetails" :isEditAreaShow="is_edit_area" @nodesPersonalEvent="nodesPersonalEvent" @delNode="delNode" @changePort="changePort" @close_click_nodes="close_click_nodes"/>
       <Control @changeModelRunningStatus="changeModelRunningStatus" @sizeInit="sizeInit" @sizeExpend="sizeExpend" @sizeShrink="sizeShrink"  @sel_area="sel_area" :modelRunningStatus="modelRunningStatus" :currentEvent="currentEvent" />
     </svg>
 </template>
@@ -398,6 +398,7 @@ export default {
       this.setInitRect();
       const id = this.DataAll.nodes[i].id;
       const detail = this.DataAll.nodes[i].detail || null
+      const rightClickEvent = this.DataAll.nodes[i].rightClickEvent || null
       const x = e.x - this.initPos.left;
       const y = e.y - this.initPos.top;
       this.is_edit_area = {
@@ -405,7 +406,8 @@ export default {
         x,
         y,
         id,
-        detail
+        detail,
+        rightClickEvent
       };
       e.stopPropagation();
       e.cancelBubble = true;
@@ -560,6 +562,9 @@ export default {
     editNodeDetails(value) {
       // 抛出待编辑内容
       this.$emit('editNodeDetails', value)
+    },
+    nodesPersonalEvent(eventName, id) {
+      this.$emit('doSthPersonal', eventName, id)
     }
   },
   data() {

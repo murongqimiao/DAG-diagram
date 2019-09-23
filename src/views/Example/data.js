@@ -36,6 +36,58 @@ export const simple_example_data = {
   ]
 }
 
+export const simple_r_click_data = {
+  edges: [
+    {
+      dst_input_idx: 0,
+      dst_node_id: 2,
+      id: 1,
+      src_node_id: 1,
+      src_output_idx: 0
+    }
+  ],
+  nodes: [
+    {
+      id: 1,
+      in_ports: [0],
+      name: 'NODE_PARENT',
+      out_ports: [0],
+      pos_x: 157,
+      pos_y: 120,
+      type: 'Variable',
+      iconClassName: 'el-icon-link',
+      rightClickEvent: [{
+        label: 'do some thing1',
+        eventName: 'eventOfDoSomeThingFirst'
+      }, {
+        label: 'do some thing2',
+        eventName: 'evnetOfDoSomeThingSecond'
+      }],
+      detail: [{
+        label: 'time',
+        value: '2018'
+      }]
+    },
+    {
+      id: 2,
+      in_ports: [0],
+      name: 'NODE_CHILD',
+      iconClassName: 'el-icon-cpu',
+      out_ports: [0],
+      pos_x: 459,
+      pos_y: 257,
+      rightClickEvent: [{
+        label: 'do some thing3',
+        eventName: 'eventOfDoSomeThingThird'
+      }, {
+        label: 'do some thing4',
+        eventName: 'evnetOfDoSomeThing4'
+      }],
+      type: 'Variable'
+    }
+  ]
+}
+
 export const edges_example_data = {
   edges: [
     {

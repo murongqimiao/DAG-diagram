@@ -7,6 +7,7 @@
                 <span @click="changePort('in_ports')">ADD IN PORT</span>
                 <span @click="changePort('out_ports')">ADD OUT PORT</span>
                 <span v-if="isEditAreaShow.detail" @click="editNode">EDIT IT</span>
+                <span v-for="item in isEditAreaShow.rightClickEvent" @click="handlePersonalThs(item.eventName)" :key="item.label">{{ item.label }}</span>
             </div>
         </body>
         </foreignObject>
@@ -27,6 +28,9 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    console.log('isEditAreaShow', this.isEditAreaShow)
   },
   methods: {
     click_menu_cover(e) {
@@ -57,6 +61,9 @@ export default {
     },
     editNode() {
       this.$emit('editNodeDetails', this.isEditAreaShow)
+    },
+    handlePersonalThs(eventName) {
+      this.$emit('nodesPersonalEvent', eventName, this.isEditAreaShow.id)
     }
   }
 };
