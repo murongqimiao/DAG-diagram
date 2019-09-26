@@ -5,9 +5,9 @@ import dagStore from './modules/dagStore';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    modules: {
-        dagStore
-    }
+  modules: {
+    dagStore
+  }
 });
 
 export default store;
