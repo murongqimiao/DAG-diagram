@@ -1,6 +1,6 @@
 {
   "name": "dag-board",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "a plugin to show DAG graph . 用于流程图或者DAG图展示.",
   "main": "index.js",
   "scripts": {

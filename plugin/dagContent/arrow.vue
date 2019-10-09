@@ -9,6 +9,7 @@
           :style="each.style"
           @contextmenu="r_click($event)"
           ></path>
+          <text ref="edgeText" v-if="each.edgesText" :style="computedText()">{{each.edgesText}}</text>
           <polyline class="only-watch-el" :points="computedArrow()"
           style="stroke:#006600;"/>
           <circle class="only-watch-el" :cx="computedCx()" :cy="computedCy()" r="5"
@@ -115,6 +116,39 @@ export default {
           2} ${(t_Y + f_Y) / 2} T ${t_X} ${t_Y}`;
       }
     },
+    computedText() { // 计算文字坐标
+        if (!this.DataAll) {
+        return `M 0 0 T 0 0`;
+      } else {
+          const {
+            dst_input_idx, // 目标
+            dst_node_id, // 目标id
+            src_node_id, // 来源id
+            src_output_idx // 来源
+          } = this.each;
+          const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
+          const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
+          if (!f_Pos) {
+            alert(src_node_id)
+          }
+          if (!t_Pos) {
+            alert(dst_node_id)
+          }
+          const f_X =
+            f_Pos.pos_x +
+            (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
+          const f_Y = f_Pos.pos_y + 30;
+          const t_X =
+            t_Pos.pos_x +
+            (180 / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
+          const t_Y = t_Pos.pos_y;
+          return {
+            transform: `translate(${(f_X + t_X) / 2}px, ${(f_Y + t_Y) / 2}px)`,
+            stroke: '#fff',
+            ...this.each.textStyle
+          };
+        }
+    },
     computedArrow() {
       // 计算箭头坐标
       if (!this.DataAll) {
@@ -148,6 +182,13 @@ export default {
       const f_Y = f_Pos.pos_y + 30;
       return `${f_Y}`;
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      if (this.$refs.edgeText) {
+        console.log(this.$refs.edgeText.style.width)
+      }
+    })
   }
 };
 </script>
