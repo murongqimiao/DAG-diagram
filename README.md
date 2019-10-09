@@ -5,24 +5,6 @@
 ===========
 [for English guide , click there](https://github.com/murongqimiao/DAG-diagram/blob/master/README_EN.md)
 
-## 更新说明 2019年09月23日17:34:22
-节点可以添加
-```
-  rightClickEvent": [
-				{
-					"label": "do some thing1",
-					"eventName": "eventOfDoSomeThingFirst"
-				},
-				{
-					"label": "do some thing2",
-					"eventName": "evnetOfDoSomeThingSecond"
-				}
-			],
-```
-属性来实现私有方法追加, 右键的面板会展示私有方法名.点击可以触发 doSthPersonal方法,  第一个参数为你定义的方法名, 第二个参数可以拿到节点id, 具体看demo即可.
-```
-    <DAGBoard :DataAll="DataAll" @updateDAG="updateDAG" @editNodeDetails="editNodeDetails" @doSthPersonal="doSthPersonal"></DAGBoard>
-```
 
 [具体展示页,可以改右侧json看效果](https://murongqimiao.github.io/DAG-diagram/#/example)
 
@@ -137,6 +119,52 @@ editNodeDetails: 可选内容,右键点击节点会带出节点数据,用此方�
 
 可以qq群艾特我.793841737.
 
+## 更新说明 2019年09月23日17:34:22
+节点可以添加
+```
+  rightClickEvent": [
+				{
+					"label": "do some thing1",
+					"eventName": "eventOfDoSomeThingFirst"
+				},
+				{
+					"label": "do some thing2",
+					"eventName": "evnetOfDoSomeThingSecond"
+				}
+			],
+```
+属性来实现私有方法追加, 右键的面板会展示私有方法名.点击可以触发 doSthPersonal方法,  第一个参数为你定义的方法名, 第二个参数可以拿到节点id, 具体看demo即可.
+```
+    <DAGBoard :DataAll="DataAll" @updateDAG="updateDAG" @editNodeDetails="editNodeDetails" @doSthPersonal="doSthPersonal"></DAGBoard>
+```
+
+## 更新说明 2019年10月09日12:26:25
+节点可以添加
+```
+  edgesText
+  textStyle
+  {
+			"dst_input_idx": 0,
+			"dst_node_id": 2,
+			"id": 1,
+			"src_node_id": 1,
+			"src_output_idx": 3,
+			"edgesText": "example text"
+		},
+		{
+			"dst_input_idx": 1,
+			"dst_node_id": 3,
+			"id": 2,
+			"src_node_id": 1,
+			"src_output_idx": 1,
+			"edgesText": "personal style",
+			"textStyle": {
+				"fontSize": "12px",
+				"stroke": "yellow"
+			}
+		},
+```
+属性来实现文字的展示, edgesText是文字内容, textStyle是文字的私有样式,注意是svg的标签, 字段与普通dom不同
 
 
 
