@@ -833,3 +833,35 @@ export const complex_example_data = {
     }
   ]
 }
+
+export const leads = [{
+  label: 'simple example',
+  children: [{
+    label: 'basic',
+    value: simple_example_data
+  }, {
+    label: 'expend edges',
+    value: edges_example_data
+  }, {
+    label: 'expend nodes',
+    value: nodes_example_data
+  }, {
+    label: 'add ports',
+    value: ports_example_data
+  }, {
+    label: 'edge text',
+    value: text_example_data
+  }, {
+    label: 'personal r_click',
+    value: simple_r_click_data
+  }]
+}, {
+  label: 'complex example',
+  children: [{
+    label: 'basic',
+    value: complex_example_data
+  }, {
+    label: 'try play training!',
+    url: '/'
+  }]
+}]

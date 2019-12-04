@@ -23,13 +23,30 @@ export default {
   methods: {
     dragLinkPath() {
       const { fromX, fromY, toX, toY } = this.dragLink;
-      return `M ${fromX} ${fromY}  Q ${fromX} ${fromY + 50} ${(toX + fromX) /
+      if (this.isCross()) {
+        return `M ${fromX} ${fromY}  Q ${fromX} ${fromY + 50} ${(toX + fromX) /
         2} ${(fromY + toY) / 2} T ${toX} ${toY}`;
+      } else {
+        return `M ${fromX} ${fromY} Q ${fromX + 30} ${fromY}  ${(toX + fromX) /
+        2} ${(fromY + toY) / 2} T ${toX} ${toY}`;
+      }
     },
     computedArrow() {
       // 计算箭头坐标
       const { toX, toY } = this.dragLink;
-      return `${toX} ${toY} ${toX - 3} ${toY - 6} ${toX + 3} ${toY - 6}`;
+      if (this.isCross()) {
+        return `${toX} ${toY} ${toX - 3} ${toY - 6} ${toX + 3} ${toY - 6}`;
+      } else {
+        return `${toX - 3} ${toY + 3} ${toX} ${toY} ${toX - 3} ${toY - 3}`;
+      }
+    },
+    isCross() {
+      let GlobalConfig = { isCross: true }
+      let _GlobalConfig = localStorage.getItem('GlobalConfig')
+      if (_GlobalConfig.length > 0) {
+        GlobalConfig = Object.assign(GlobalConfig, JSON.parse(_GlobalConfig))
+      }
+      return GlobalConfig.isCross
     }
   }
 };

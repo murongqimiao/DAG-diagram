@@ -16,29 +16,17 @@
           @contextmenu="r_click_nodes($event, i)"
           @dblclick="focusInput($event.path[0])"
           @mousedown="dragPre($event, i, item)">
-              <foreignObject width="180" height="30" >
-              <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
-              <div>
-                <div :style="item.nodeStyle" :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'">
-                    <i @dblclick="nodesPersonalEvent('dbClickNodeIcon',item.id)" :style="item.iconStyle" :class="`${item.iconClassName || 'el-icon-coin'} icon icon-data`"></i>
-                    <input type="text" class="name"  v-model="item.name" @change="changeNodeName(item)">
-                </div>
-                <p v-if="choice.paneNode.indexOf(item.id) !== -1" class="node-pop">{{item.nameDescribe || item.name}}</p>
-                <div :class="currentEvent === 'dragLink' ? 'pane-node-parent-hl' : 'pane-node-parent' ">
-                  <div v-for="(poi, nth) in item.in_ports" :key="'__' + nth" :style="{width: `${ 100 / (item.in_ports.length + 1)}%`}">
-                    <span class="space" @mouseup="linkEnd(i, nth)"></span>
-                  </div>
-                </div>
-                <div class="pane-node-children">
-                  <div v-for="(poi, nth) in item.out_ports" :key="'___' + nth" :style="{width: `${ 100 / (item.out_ports.length + 1)}%`}">
-                    <span class="space" @mousedown="linkPre($event, i, nth)"></span>
-                  </div>
-                </div>
-              </div>
-              </body>
-            </foreignObject>
+          <main-body
+            :item="item"
+            :i="i"
+            :choice="choice"
+            :currentEvent="currentEvent"
+            @nodesPersonalEvent="nodesPersonalEvent"
+            @changeNodeName="changeNodeName"
+            @linkEnd="linkEnd"
+            @linkPre="linkPre"
+          ></main-body>
           </g>
-          <!-- <SimulateFrame  v-if="currentEvent === 'PaneDraging'" :dragFrame="dragFrame" /> -->
           <Arrow v-for="(each, n) in DataAll.edges" :key="'____' + n" :DataAll="DataAll"  @delEdge="delEdge" :each="each" :index="n" />
           <SimulateArrow v-if="currentEvent === 'dragLink'" :dragLink="dragLink"/>
           <SimulateSelArea v-if="['sel_area', 'sel_area_ing'].indexOf(currentEvent) !== -1" :simulate_sel_area="simulate_sel_area" />
@@ -54,6 +42,7 @@ import SimulateFrame from "./simulateFrame.vue";
 import EditArea from "./editArea.vue";
 import Control from "./control.vue";
 import SimulateSelArea from "./simulateSelArea.vue";
+import mainBody from './mainBody.vue'
 
 export default {
   name: 'DAGBoard',
@@ -107,7 +96,9 @@ export default {
       }
       this.setInitRect(); // 工具类 初始化dom坐标
       this.currentEvent = "dragPane"; // 修正行为
-      this.choice.index = i;
+      sessionStorage['offsetX'] = e.offsetX
+      sessionStorage['offsetY'] = e.offsetY
+      this.choice.index = i; // 当前选择的接点
       this.timeStamp = e.timeStamp;
       this.selPaneNode(item.id);
       this.setDragFramePosition(e);
@@ -119,12 +110,11 @@ export default {
       // 事件发放器 根据currentEvent来执行系列事件
       switch (this.currentEvent) {
         case 'dragPane':
-          // this.currentEvent = "PaneDraging"; // 确认是拖动节点
           this.paneDragIng(e);
           break;
-        case 'PaneDraging':
-           this.setDragFramePosition(e); // 触发节点拖动
-           break;
+        // case 'PaneDraging':
+        //    this.setDragFramePosition(e); // 触发节点拖动
+        //    break;
         case 'dragLink':
           this.setDragLinkPostion(e); // 触发连线拖动
           break;
@@ -140,8 +130,8 @@ export default {
     dragEnd(e) {
       // 拖动结束
       switch (this.currentEvent) {
-        case 'PaneDraging': this.paneDragEnd(e); // 触发节点拖动结束
-        break;
+        // case 'PaneDraging': this.paneDragEnd(e); // 触发节点拖动结束
+        // break;
         case 'sel_area_ing': this.getSelNodes(this.simulate_sel_area);
         break;
         default: () => { }
@@ -244,14 +234,14 @@ export default {
       };
     },
     paneDragIng(e) {
+      let offsetX = sessionStorage['offsetX'] || 0
+      let offsetY = sessionStorage['offsetY'] || 0
       const x =
         (e.x - this.initPos.left - (sessionStorage["svg_left"] || 0)) /
-          this.svgScale -
-        90;
+          this.svgScale - 30 - offsetX
       const y =
         (e.y - this.initPos.top - (sessionStorage["svg_top"] || 0)) /
-          this.svgScale -
-        15;
+          this.svgScale - offsetY;
       let params = {
         model_id: sessionStorage["newGraph"],
         id: this.DataAll.nodes[this.choice.index].id,
@@ -528,12 +518,19 @@ export default {
     changeSize(action) {
       // 改变size
       let svgScale = typeof sessionStorage['svgScale'] === 'string' ? Number(sessionStorage['svgScale']) : 1
+      let _width = window.innerWidth
+      let _height = window.innerHeight
       switch (action) {
         case 'shrink':
-          svgScale -= 0.1;
+          svgScale -= 0.05;
+          this.svg_left = sessionStorage['svg_left'] = this.svg_left + _width * 0.01
+          this.svg_top = sessionStorage['svg_top'] = this.svg_top + _height * 0.01
+
           break;
         case 'expend':
-          svgScale += 0.1;
+          svgScale += 0.05;
+          this.svg_top = sessionStorage['svg_top'] = this.svg_top - _height * 0.01
+          this.svg_left = sessionStorage['svg_left'] = this.svg_left - _width * 0.01
           break;
         case 'init':
           svgScale = 1
@@ -626,7 +623,8 @@ export default {
     SimulateFrame,
     EditArea,
     Control,
-    SimulateSelArea
+    SimulateSelArea,
+    mainBody
   }
 };
 </script>
@@ -635,182 +633,7 @@ export default {
 .svgEach {
   position: relative;
 }
-.pane-node-content {
-  box-sizing: border-box;
-  width: 180px;
-  height: 30px;
-  background-color: hsla(0, 0%, 100%, 0.9);
-  border: 1px solid #289de9;
-  border-radius: 15px;
-  font-size: 12px;
-  -webkit-transition: background-color 0.2s;
-  transition: background-color 0.2s;
-}
-.pane-node-content .icon {
-    width: 26px;
-    height: 26px;
-    margin: 1px;
-    border-radius: 100%;
-    float: left;
-    color: #fff;
-    font-size: 26px;
-    background-color: #289de9;
-    cursor: pointer;
-}
-.pane-node-content  .parentLink {
-  font-size: 0;
-  height: 12px;
-  width: 12px;
-  position: absolute;
-  top: 0;
-  left: 90px;
-  transform: translateX(-50%);
-  border-top: 6px solid black;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-}
-.pane-node-content  .childLink {
-  height: 10px;
-  width: 10px;
-  position: absolute;
-  bottom: 0;
-  left: 90px;
-  transform: translate(-50%, 50%);
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: crosshair;
-}
-.pane-node-content .name {
-  float: left;
-  margin-left: 2px;
-  width: 135px;
-  line-height: 28px;
-  font-size: 14px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
-  user-select: none;
-  height: 26px;
-  background: transparent;
-  border: none;
-}
-.pane-node-parent-hl {
-  position: fixed;
-  top: -5px;
-  height: 10px;
-  width: 100%;
-  display: flex;
-  transform: translateX(6px);
-}
-.pane-node-parent-hl .space {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1px solid gray;
-    background: #ffffff;
-    position: absolute;
-    right: 0;
-    top: 0;
-    cursor: crosshair;
-}
-.pane-node-parent-hl .space:hover {
-  box-shadow: 0 0 0 6px #3ddd73;
-}
-.paneSuccess {
-  background: #3ddd73 !important;
-}
-.pane-node-parent-hl > div {
-  position: relative;
-  display: inline-block;
-}
-.node-pop {
-  position: absolute;
-  right: -30px;
-  top: -100px;
-  border: 1px solid #ccc;
-  padding: 10px 20px;
-  border-radius: 30px 20px;
-  background: #fff;
-  pointer-events: none;
-}
-.node-pop:after {
-    content: '.';
-    font-size: 0;
-    height: 20px;
-    width: 20px;
-    background: #fff;
-    border: 2px #ccc solid;
-    border-top: none;
-    border-right: none;
-    z-index: 100;
-    position: absolute;
-    transform: rotate(-34deg) skew(-33deg, -1deg) scale(1.5);
-    border-radius: 20px 0 0 0;
-    left: -14px;
-    top: 22px;
-    pointer-events: none;
-}
-.pane-node-parent {
-  position: fixed;
-  top: -5px;
-  height: 10px;
-  width: 100%;
-  display: flex;
-  opacity: 0;
-  transform: translateX(6px);
-  .space {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1px solid gray;
-    background: #ffffff;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-}
 
-.pane-node-parent > div {
-  position: relative;
-  display: inline-block;
-}
-
-.pane-node-children {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  opacity: 0;
-  transform: translateX(6px);
-}
-.pane-node-children .space{
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1px solid gray;
-    background: #ffffff;
-    position: absolute;
-    right: 0px;
-    bottom: -6px;
-    cursor: crosshair;
-}
-
-.pane-node-children .space {
-   background: #cccccc;
-}
-.pane-node-children:hover {
-  opacity: 1;
-}
-
-.pane-node-children > div {
-  position: relative;
-  display: inline-block;
-}
-
-.selected {
-  background: rgba(227, 244, 255, 0.9) !important;
-}
 .connector {
   stroke: hsla(0, 0%, 50%, 0.6);
   stroke-width: 2px;

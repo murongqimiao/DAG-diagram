@@ -87,6 +87,7 @@ export default {
     },
     computedLink() {
       // 计算起始点坐标
+      let f_X, f_Y, t_X, t_Y
       if (!this.DataAll) {
         return `M 0 0 T 0 0`;
       } else {
@@ -98,22 +99,20 @@ export default {
         } = this.each;
         const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
         const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
-        if (!f_Pos) {
-          alert(src_node_id)
+        if (!f_Pos || !t_Pos) { alert(src_node_id) }
+        if (this.isCross()) {
+          f_X = f_Pos.pos_x + (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
+          f_Y = f_Pos.pos_y + 30;
+          t_X = t_Pos.pos_x + (180 / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
+          t_Y = t_Pos.pos_y;
+          return `M ${f_X} ${f_Y}  Q ${f_X} ${f_Y + 50} ${(t_X + f_X) / 2} ${(t_Y + f_Y) / 2} T ${t_X} ${t_Y}`;
+        } else {
+          f_X = f_Pos.pos_x + 180
+          f_Y = f_Pos.pos_y + 15
+          t_X = t_Pos.pos_x
+          t_Y = t_Pos.pos_y + 15
+          return `M ${f_X} ${f_Y}  Q ${f_X + 30} ${f_Y} ${(t_X + f_X) / 2} ${(t_Y + f_Y) / 2} T ${t_X} ${t_Y}`;
         }
-        if (!t_Pos) {
-          alert(dst_node_id)
-        }
-        const f_X =
-          f_Pos.pos_x +
-          (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
-        const f_Y = f_Pos.pos_y + 30;
-        const t_X =
-          t_Pos.pos_x +
-          (180 / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
-        const t_Y = t_Pos.pos_y;
-        return `M ${f_X} ${f_Y}  Q ${f_X} ${f_Y + 50} ${(t_X + f_X) /
-          2} ${(t_Y + f_Y) / 2} T ${t_X} ${t_Y}`;
       }
     },
     computedText() { // 计算文字坐标
@@ -161,26 +160,46 @@ export default {
           src_output_idx
         } = this.each;
         const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
-        const t_X =
-          t_Pos.pos_x +
-          (180 / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
-        const t_Y = t_Pos.pos_y;
-        return `${t_X} ${t_Y + 3} ${t_X - 3} ${t_Y - 3} ${t_X + 3} ${t_Y - 3}`;
+        let t_X = t_Pos.pos_x + (180 / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
+        let t_Y = t_Pos.pos_y;
+        if (this.isCross()) {
+          return `${t_X} ${t_Y + 3} ${t_X - 3} ${t_Y - 3} ${t_X + 3} ${t_Y - 3}`;
+        } else {
+          let t_X = t_Pos.pos_x
+          let t_Y = t_Pos.pos_y + 15
+          return `${t_X - 2} ${t_Y + 3} ${t_X - 3} ${t_Y - 3} ${t_X + 3} ${t_Y - 1}`
+        }
       }
     },
     computedCx() {
       const { src_node_id, src_output_idx } = this.each;
       const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
-      const f_X =
-        f_Pos.pos_x +
-        (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
+      let f_X = 0
+      if (this.isCross()) {
+        f_X = f_Pos.pos_x + (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
+      } else {
+        f_X = f_Pos.pos_x + 180
+      }
       return `${f_X}`;
     },
     computedCy() {
+      let f_Y = 0
       const { src_node_id } = this.each;
       const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
-      const f_Y = f_Pos.pos_y + 30;
+      if (this.isCross()) {
+        f_Y = f_Pos.pos_y + 30;
+      } else {
+        f_Y = f_Pos.pos_y + 15
+      }
       return `${f_Y}`;
+    },
+    isCross() {
+      let GlobalConfig = { isCross: true }
+      let _GlobalConfig = localStorage.getItem('GlobalConfig')
+      if (_GlobalConfig.length > 0) {
+        GlobalConfig = Object.assign(GlobalConfig, JSON.parse(_GlobalConfig))
+      }
+      return GlobalConfig.isCross
     }
   },
   mounted() {
