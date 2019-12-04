@@ -860,8 +860,5 @@ export const leads = [{
   children: [{
     label: 'basic',
     value: complex_example_data
-  }, {
-    label: 'try play training!',
-    url: '/'
   }]
 }]

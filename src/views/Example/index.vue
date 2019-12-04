@@ -6,7 +6,8 @@
     </div>
     <div class="headbar">
       <p @mousedown="dragIt('drag name')">drag node</p>
-      <span @click="saveChange">save change</span>
+      <span class="changeVersion" @click="changeVersion">change direction</span>
+      <span class="saveChange" @click="saveChange">save change</span>
     </div>
     <DAGBoard :DataAll="DataAll" @updateDAG="updateDAG" @editNodeDetails="editNodeDetails" @doSthPersonal="doSthPersonal"></DAGBoard>
     <node-bus v-if="dragBus" :value="busValue.value" :pos_x="busValue.pos_x" :pos_y="busValue.pos_y" />
@@ -158,12 +159,24 @@ export default {
     },
     doSthPersonal(eventName, id) {
       alert(`edit personal things like ${eventName}, the id is ${id}, current node detail is ${JSON.stringify(this.DataAll.nodes.find(item => item.id === id))}`)
+    },
+    changeVersion() {
+      let GlobalConfigString = localStorage.getItem('GlobalConfig')
+      let GlobalConfig = {}
+      if (GlobalConfigString && GlobalConfigString.length > 0) {
+        GlobalConfig = JSON.parse(GlobalConfigString)
+        GlobalConfig.isVertical = !GlobalConfig.isVertical
+        localStorage.setItem('GlobalConfig', JSON.stringify(GlobalConfig))
+      } else {
+        GlobalConfig.isVertical = false
+        localStorage.setItem('GlobalConfig', JSON.stringify(GlobalConfig))
+      }
+      location.reload()
+      alert(`change to ${GlobalConfig.isVertical ? 'vertical version' : 'cross version'}`)
     }
   },
   created() {
-    if (localStorage['currentExample']) {
-      this.handleNodeClick({ value: JSON.parse(localStorage['currentExample']) })
-    }
+      this.handleNodeClick({ value: localStorage['currentExample'] ? JSON.parse(localStorage['currentExample']) : simple_example_data }) // 读取缓存
   }
 };
 </script>
@@ -214,12 +227,23 @@ export default {
   position: relative;
   height: 50px;
 }
-.headbar span {
+.headbar .saveChange {
+  padding: 10px;
+  float:right;
+  margin-top: 5px;
+  margin-right:10px;
+  border-radius: 4px;
+  box-shadow: 0 0 4px #fff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 800;
+}
+.headbar .changeVersion {
   padding: 10px;
   float:right;
   margin-top: 5px;
   border-radius: 4px;
-  margin-right: 420px;
+  margin-right: 410px;
   box-shadow: 0 0 4px #fff;
   color: #fff;
   cursor: pointer;

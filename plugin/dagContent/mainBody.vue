@@ -1,6 +1,6 @@
 <template>
     <!-- 正常竖版 -->
-    <foreignObject v-if="isCross()" width="180" height="30" >
+    <foreignObject v-if="isVertical()" width="180" height="30" >
               <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
               <div>
                 <div :style="item.nodeStyle" :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'">
@@ -88,13 +88,13 @@
             }
         },
         methods: {
-          isCross() {
-            let GlobalConfig = { isCross: true }
+          isVertical() {
+            let GlobalConfig = { isVertical: true }
             let _GlobalConfig = localStorage.getItem('GlobalConfig')
-            if (_GlobalConfig.length > 0) {
+            if (_GlobalConfig && _GlobalConfig.length > 0) {
               GlobalConfig = Object.assign(GlobalConfig, JSON.parse(_GlobalConfig))
             }
-            return GlobalConfig.isCross
+            return GlobalConfig.isVertical
           }
         }
     }

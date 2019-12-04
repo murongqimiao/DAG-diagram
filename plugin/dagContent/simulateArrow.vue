@@ -23,7 +23,7 @@ export default {
   methods: {
     dragLinkPath() {
       const { fromX, fromY, toX, toY } = this.dragLink;
-      if (this.isCross()) {
+      if (this.isVertical()) {
         return `M ${fromX} ${fromY}  Q ${fromX} ${fromY + 50} ${(toX + fromX) /
         2} ${(fromY + toY) / 2} T ${toX} ${toY}`;
       } else {
@@ -34,19 +34,19 @@ export default {
     computedArrow() {
       // 计算箭头坐标
       const { toX, toY } = this.dragLink;
-      if (this.isCross()) {
+      if (this.isVertical()) {
         return `${toX} ${toY} ${toX - 3} ${toY - 6} ${toX + 3} ${toY - 6}`;
       } else {
         return `${toX - 3} ${toY + 3} ${toX} ${toY} ${toX - 3} ${toY - 3}`;
       }
     },
-    isCross() {
-      let GlobalConfig = { isCross: true }
+    isVertical() {
+      let GlobalConfig = { isVertical: true }
       let _GlobalConfig = localStorage.getItem('GlobalConfig')
-      if (_GlobalConfig.length > 0) {
+      if (_GlobalConfig && _GlobalConfig.length > 0) {
         GlobalConfig = Object.assign(GlobalConfig, JSON.parse(_GlobalConfig))
       }
-      return GlobalConfig.isCross
+      return GlobalConfig.isVertical
     }
   }
 };

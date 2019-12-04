@@ -100,7 +100,7 @@ export default {
         const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
         const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
         if (!f_Pos || !t_Pos) { alert(src_node_id) }
-        if (this.isCross()) {
+        if (this.isVertical()) {
           f_X = f_Pos.pos_x + (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
           f_Y = f_Pos.pos_y + 30;
           t_X = t_Pos.pos_x + (180 / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
@@ -162,7 +162,7 @@ export default {
         const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
         let t_X = t_Pos.pos_x + (180 / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
         let t_Y = t_Pos.pos_y;
-        if (this.isCross()) {
+        if (this.isVertical()) {
           return `${t_X} ${t_Y + 3} ${t_X - 3} ${t_Y - 3} ${t_X + 3} ${t_Y - 3}`;
         } else {
           let t_X = t_Pos.pos_x
@@ -175,7 +175,7 @@ export default {
       const { src_node_id, src_output_idx } = this.each;
       const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
       let f_X = 0
-      if (this.isCross()) {
+      if (this.isVertical()) {
         f_X = f_Pos.pos_x + (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
       } else {
         f_X = f_Pos.pos_x + 180
@@ -186,20 +186,20 @@ export default {
       let f_Y = 0
       const { src_node_id } = this.each;
       const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
-      if (this.isCross()) {
+      if (this.isVertical()) {
         f_Y = f_Pos.pos_y + 30;
       } else {
         f_Y = f_Pos.pos_y + 15
       }
       return `${f_Y}`;
     },
-    isCross() {
-      let GlobalConfig = { isCross: true }
+    isVertical() {
+      let GlobalConfig = { isVertical: true }
       let _GlobalConfig = localStorage.getItem('GlobalConfig')
-      if (_GlobalConfig.length > 0) {
+      if (_GlobalConfig && _GlobalConfig.length > 0) {
         GlobalConfig = Object.assign(GlobalConfig, JSON.parse(_GlobalConfig))
       }
-      return GlobalConfig.isCross
+      return GlobalConfig.isVertical
     }
   },
   mounted() {
