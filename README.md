@@ -1,12 +1,12 @@
 
 
-[VUE DAG diagram ]( https://murongqimiao.github.io/DAG-diagram/#/example)
+[VUE DAG diagram ]( https://murongqimiao.github.io/DAG-diagram/#/)
 
 ===========
 [for English guide , click there](https://github.com/murongqimiao/DAG-diagram/blob/master/README_EN.md)
 
 
-[具体展示页,可以改右侧json看效果](https://murongqimiao.github.io/DAG-diagram/#/example)
+[DEMO](https://murongqimiao.github.io/DAG-diagram/#/)
 
 ## 效果展示
 - 画布移动 / 复原
@@ -118,6 +118,10 @@ editNodeDetails: 可选内容,右键点击节点会带出节点数据,用此方�
 
 
 可以qq群艾特我.793841737.
+## 更新说明 2019-12-04 15:55:15
+增加横版模式 ( demo页点击右上角 change version 体验 )
+拖拽更加顺滑
+缩放效率更加合理
 
 ## 更新说明 2019年09月23日17:34:22
 节点可以添加
