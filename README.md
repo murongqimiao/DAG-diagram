@@ -1,6 +1,6 @@
 
 
-[VUE DAG diagram ]( https://murongqimiao.github.io/DAG-diagram/#/)
+## VUE DAG diagram
 
 ===========
 [for English guide , click there](https://github.com/murongqimiao/DAG-diagram/blob/master/README_EN.md)
