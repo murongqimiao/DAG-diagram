@@ -8,7 +8,7 @@
 
 [DEMO](https://murongqimiao.github.io/DAG-diagram/#/)
 ## 使用说明
-  ![B站视频](https://www.bilibili.com/video/av80288517/)
+  [B站视频 https://www.bilibili.com/video/av80288517/](https://www.bilibili.com/video/av80288517/)
 ## 效果展示
 - 画布移动 / 复原
 ![[图片上传中...(画布缩放.gif-823313-1567493208259-0)]
