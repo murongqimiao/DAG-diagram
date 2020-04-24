@@ -203,7 +203,8 @@ export default {
       }, 1500);
     },
     saveAsFrames() {
-      this.animationArr.push(this.DataAll)
+      this.animationArr.push(JSON.parse(JSON.stringify(this.DataAll)))
+      console.log(this.animationArr)
     }
 
   },
@@ -293,6 +294,7 @@ export default {
   border: 1px solid #289de9;
   line-height:30px;
   display: inline-block;
+  cursor: pointer;
 }
 .headbar .animation-btn {
   left: 200px;
