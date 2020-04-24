@@ -6,7 +6,9 @@
 [for English guide , click there](https://github.com/murongqimiao/DAG-diagram/blob/master/README_EN.md)
 
 
-[DEMO](https://murongqimiao.github.io/DAG-diagram/#/)
+[DEMO](https://murongqimiao.github.io/DAG-diagram/#/) 
+[DEMO  国内用](http://39.106.169.7/#/)
+
 ## 使用说明
   [B站视频 https://www.bilibili.com/video/av80288517/](https://www.bilibili.com/video/av80288517/)
 ## 效果展示
