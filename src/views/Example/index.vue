@@ -1,22 +1,29 @@
 <template>
   <div class="page-content" @mousedown="startNodesBus($event)" @mousemove="moveNodesBus($event)" @mouseup="endNodesBus($event)">
+    <!-- 左侧导航 -->
     <div class="page-left">
       <div class="logo">DAG-Board</div>
       <el-tree :data="leads" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
     </div>
+    <!-- 顶栏 -->
     <div class="headbar">
       <p @mousedown="dragIt('drag name')">drag node</p>
+      <p class="animation-btn" @click="makeSomeAnimation">播放动画</p>
+      <p class="frames-btn" @click="saveAsFrames" >保存为一帧</p>
       <span class="changeVersion" @click="changeVersion">change direction</span>
       <span class="saveChange" @click="saveChange">save change</span>
     </div>
+    <!-- DAG-Diagram主体 -->
     <DAGBoard :DataAll="DataAll" @updateDAG="updateDAG" @editNodeDetails="editNodeDetails" @doSthPersonal="doSthPersonal"></DAGBoard>
+    <!-- 用来模拟拖拽添加的元素 -->
     <node-bus v-if="dragBus" :value="busValue.value" :pos_x="busValue.pos_x" :pos_y="busValue.pos_y" />
+    <!-- 右侧JSOn展示,你忽略就行了 -->
     <editor  ref='myEditor' class="json-editor" v-model="jsonEditor" :options="options"  @init="editorInit" lang="json" theme="chrome" width="400" height="100%"></editor>
   </div>
 </template>
 
 <script>
-import { simple_example_data, text_example_data, simple_r_click_data, edges_example_data, nodes_example_data, ports_example_data, complex_example_data, leads } from './data'
+import { simple_example_data, text_example_data, simple_r_click_data, edges_example_data, nodes_example_data, ports_example_data, complex_example_data, leads, animationJSON } from './data'
 export default {
   components: {
     editor: require('vue2-ace-editor')
@@ -28,6 +35,10 @@ export default {
         enableSnippets: true,
         enableLiveAutocompletion: true/* 自动补全 */
       },
+      clockOfAnimation: null, // 动画播放计时器
+      currentAnimate: 0, // 当前动画播放到第几帧
+      maxAnimateFrames: 0,
+      animationArr: [],
       jsonshow: false,
       dragBus: false,
       busValue: {
@@ -144,7 +155,7 @@ export default {
         this.svgScale = sessionStorage['svgScale'] = 1.5
       }
     },
-    editorInit: function (editor) {
+    editorInit: function (editor) { // 右侧JSON相关可以忽略
         require('brace/ext/language_tools') // language extension prerequsite...
         require('brace/mode/html')
         require('brace/mode/javascript') // language
@@ -173,7 +184,28 @@ export default {
       }
       location.reload()
       alert(`change to ${GlobalConfig.isVertical ? 'vertical version' : 'cross version'}`)
+    },
+    makeSomeAnimation() { // 动画范例
+      this.currentAnimate = 0
+      if (!this.animationArr.length) this.animationArr = animationJSON
+      this.maxAnimateFrames = this.animationArr.length // 帧动画长度
+
+      this.play()
+    },
+    play() { // 播放帧动画
+      console.log('当前帧', this.currentAnimate, '最大帧', this.maxAnimateFrames)
+      if (this.currentAnimate >= this.maxAnimateFrames) return false
+      this.DataAll = this.animationArr[this.currentAnimate]
+      this.jsonEditor = JSON.stringify(this.DataAll, null, 4)
+      this.currentAnimate++
+      setTimeout(() => {
+        this.play()
+      }, 1500);
+    },
+    saveAsFrames() {
+      this.animationArr.push(this.DataAll)
     }
+
   },
   created() {
       this.handleNodeClick({ value: localStorage['currentExample'] ? JSON.parse(localStorage['currentExample']) : simple_example_data }) // 读取缓存
@@ -227,6 +259,7 @@ export default {
   position: relative;
   height: 50px;
 }
+
 .headbar .saveChange {
   padding: 10px;
   float:right;
@@ -260,6 +293,12 @@ export default {
   border: 1px solid #289de9;
   line-height:30px;
   display: inline-block;
+}
+.headbar .animation-btn {
+  left: 200px;
+}
+.headbar .frames-btn {
+  left: 350px;
 }
 .page-left {
   position: fixed;
