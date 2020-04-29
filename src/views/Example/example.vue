@@ -1,5 +1,10 @@
 <template>
-  <div class="page-content" @mousedown="startNodesBus($event)" @mousemove="moveNodesBus($event)" @mouseup="endNodesBus($event)">
+  <div
+    class="page-content"
+    @mousedown="startNodesBus($event)"
+    @mousemove="moveNodesBus($event)"
+    @mouseup="endNodesBus($event)"
+  >
     <!-- 左侧导航 -->
     <div class="page-left">
       <div class="logo">DAG-Board</div>
@@ -9,16 +14,36 @@
     <div class="headbar">
       <p @mousedown="dragIt('drag name')">drag node</p>
       <p class="animation-btn" @click="makeSomeAnimation">播放动画</p>
-      <p class="frames-btn" @click="saveAsFrames" >保存为一帧</p>
+      <p class="frames-btn" @click="saveAsFrames">保存为一帧</p>
       <span class="changeVersion" @click="changeVersion">change direction</span>
       <span class="saveChange" @click="saveChange">save change</span>
     </div>
     <!-- DAG-Diagram主体 -->
-    <DAGBoard :DataAll="DataAll" @updateDAG="updateDAG" @editNodeDetails="editNodeDetails" @doSthPersonal="doSthPersonal"></DAGBoard>
+    <DAGBoard
+      :DataAll="DataAll"
+      @updateDAG="updateDAG"
+      @editNodeDetails="editNodeDetails"
+      @doSthPersonal="doSthPersonal"
+    ></DAGBoard>
     <!-- 用来模拟拖拽添加的元素 -->
-    <node-bus v-if="dragBus" :value="busValue.value" :pos_x="busValue.pos_x" :pos_y="busValue.pos_y" />
+    <node-bus
+      v-if="dragBus"
+      :value="busValue.value"
+      :pos_x="busValue.pos_x"
+      :pos_y="busValue.pos_y"
+    />
     <!-- 右侧JSOn展示,你忽略就行了 -->
-    <editor  ref='myEditor' class="json-editor" v-model="jsonEditor" :options="options"  @init="editorInit" lang="json" theme="chrome" width="400" height="100%"></editor>
+    <editor
+      ref="myEditor"
+      class="json-editor"
+      v-model="jsonEditor"
+      :options="options"
+      @init="editorInit"
+      lang="json"
+      theme="chrome"
+      width="400"
+      height="100%"
+    ></editor>
   </div>
 </template>
 
@@ -210,12 +235,57 @@ export default {
   },
   created() {
       this.handleNodeClick({ value: localStorage['currentExample'] ? JSON.parse(localStorage['currentExample']) : simple_example_data }) // 读取缓存
+      this.$nextTick(() => {
+        this.$confirm('现在可以前往示范页查看新内容了, 是否跳转?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$router.push('/diagramExample')
+        }).catch(() => {
+
+        });
+      })
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.defaultArrow, .connector-hl {
+  stroke-dashoffset: 1000px !important;
+  stroke-dasharray: 0px;
+  animation: line_success 4s !important;
+}
+@keyframes line_success {
+  0% {
+    stroke-dashoffset: 100%;
+    stroke-dasharray: 100%;
+  }
+  50% {
+    stroke-dashoffset: 0%;
+    stroke-dasharray:100%;
+  }
+  99% {
+   stroke-dashoffset: 0%;
+   stroke-dasharray: 100%;
+  }
+  100% {
+    stroke-dashoffset: 100%;
+    stroke-dasharray: 0px;
+  }
+}
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .page-content {
   position: absolute;
   left: 0;

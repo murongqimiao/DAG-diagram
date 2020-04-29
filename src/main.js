@@ -2,9 +2,9 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
-import store from './store'
+import router from './router/index'
 import ElementUI from 'element-ui'
+import store from './views/store'
 import 'element-ui/lib/theme-chalk/index.css'
 import DAGBoard from '../plugin/index'
 // import DAGBoard from 'dag-board'
@@ -17,7 +17,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
-  template: '<App/>',
-  store
+  template: '<App/>'
 })

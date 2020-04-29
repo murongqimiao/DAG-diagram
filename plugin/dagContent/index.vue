@@ -1,39 +1,72 @@
 <template>
   <svg
-     id="svgContent"
-     :style="{cursor: this.currentEvent === 'move_graph' ? 'grabbing' : 'grab'}"
-     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="100%" height="1029" data-spm-anchor-id="TODO.11007039.0.i6.12b64a9bcbXQmm"
+    id="svgContent"
+    :style="{cursor: this.currentEvent === 'move_graph' ? 'grabbing' : 'grab'}"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    version="1.1"
+    width="100%"
+    height="1029"
+    data-spm-anchor-id="TODO.11007039.0.i6.12b64a9bcbXQmm"
     @mousedown="svgMouseDown"
     @mousemove="dragIng($event)"
     @mouseleave="atMouseOut"
-    @mouseup="dragEnd($event)">
-    <g :transform="` translate(${svg_left}, ${svg_top}) scale(${svgScale})`" >
-          <!-- 节点主体 -->
-          <g
-          v-for="(item, i) in DataAll.nodes"
-          :key="'_' + i" class="svgEach"
-          :transform="`translate(${item.pos_x}, ${item.pos_y})`"
-          @contextmenu="r_click_nodes($event, i)"
-          @dblclick="focusInput($event.path[0])"
-          @mousedown="dragPre($event, i, item)">
-          <main-body
-            :item="item"
-            :i="i"
-            :choice="choice"
-            :currentEvent="currentEvent"
-            @nodesPersonalEvent="nodesPersonalEvent"
-            @changeNodeName="changeNodeName"
-            @linkEnd="linkEnd"
-            @linkPre="linkPre"
-          ></main-body>
-          </g>
-          <Arrow v-for="(each, n) in DataAll.edges" :key="'____' + n" :DataAll="DataAll"  @delEdge="delEdge" :each="each" :index="n" />
-          <SimulateArrow v-if="currentEvent === 'dragLink'" :dragLink="dragLink"/>
-          <SimulateSelArea v-if="['sel_area', 'sel_area_ing'].indexOf(currentEvent) !== -1" :simulate_sel_area="simulate_sel_area" />
+    @mouseup="dragEnd($event)"
+  >
+    <g :transform="` translate(${svg_left}, ${svg_top}) scale(${svgScale})`">
+      <!-- 节点主体 -->
+      <g
+        v-for="(item, i) in DataAll.nodes"
+        :key="'_' + i"
+        class="svgEach"
+        :transform="`translate(${item.pos_x}, ${item.pos_y})`"
+        @contextmenu="r_click_nodes($event, i)"
+        @dblclick="focusInput($event.path[0])"
+        @mousedown="dragPre($event, i, item)"
+      >
+        <main-body
+          :item="item"
+          :i="i"
+          :choice="choice"
+          :currentEvent="currentEvent"
+          @nodesPersonalEvent="nodesPersonalEvent"
+          @changeNodeName="changeNodeName"
+          @linkEnd="linkEnd"
+          @linkPre="linkPre"
+        />
       </g>
-      <EditArea @editNodeDetails="editNodeDetails" :isEditAreaShow="is_edit_area" @nodesPersonalEvent="nodesPersonalEvent" @delNode="delNode" @changePort="changePort" @close_click_nodes="close_click_nodes"/>
-      <Control @changeModelRunningStatus="changeModelRunningStatus" @sizeInit="sizeInit" @sizeExpend="sizeExpend" @sizeShrink="sizeShrink"  @sel_area="sel_area" :modelRunningStatus="modelRunningStatus" :currentEvent="currentEvent" />
-    </svg>
+      <Arrow
+        v-for="(each, n) in DataAll.edges"
+        :key="'____' + n"
+        :DataAll="DataAll"
+        @delEdge="delEdge"
+        :each="each"
+        :index="n"
+      />
+      <SimulateArrow v-if="currentEvent === 'dragLink'" :dragLink="dragLink" />
+      <SimulateSelArea
+        v-if="['sel_area', 'sel_area_ing'].indexOf(currentEvent) !== -1"
+        :simulate_sel_area="simulate_sel_area"
+      />
+    </g>
+    <EditArea
+      @editNodeDetails="editNodeDetails"
+      :isEditAreaShow="is_edit_area"
+      @nodesPersonalEvent="nodesPersonalEvent"
+      @delNode="delNode"
+      @changePort="changePort"
+      @close_click_nodes="close_click_nodes"
+    />
+    <Control
+      @changeModelRunningStatus="changeModelRunningStatus"
+      @sizeInit="sizeInit"
+      @sizeExpend="sizeExpend"
+      @sizeShrink="sizeShrink"
+      @sel_area="sel_area"
+      :modelRunningStatus="modelRunningStatus"
+      :currentEvent="currentEvent"
+    />
+  </svg>
 </template>
 <script>
 import Arrow from "./arrow.vue";
@@ -279,6 +312,7 @@ export default {
       this.choice.paneNode.length = [];
       if (id) {
         this.choice.paneNode.push(id);
+        this.$emit('updateDAG', this.DataAll, 'selectNode', id)
       }
     },
     selAreaStart(e) {
