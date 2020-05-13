@@ -1,6 +1,6 @@
 <template>
     <!-- 正常竖版 -->
-    <foreignObject v-if="isVertical()" width="180" height="30" >
+    <foreignObject v-if="isVertical()" width="180" height="60" >
               <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
               <div>
                 <div :style="item.nodeStyle" :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'">
@@ -24,7 +24,7 @@
                   <div v-for="(poi, nth) in item.out_ports" :key="'___' + nth" :style="{width: `${ 100 / (item.out_ports.length + 1)}%`}">
                     <span
                     class="space"
-                    @mousedown="$emit('linkPre', $event, i, nth)"></span>
+                    @mousedown="$emit('linkPre', $event, i, nth)">{{poi}}</span>
                   </div>
                 </div>
               </div>
@@ -101,13 +101,16 @@
 </script>
 
 <style scoped>
+foreignObject {
+  overflow: visible;
+}
 .pane-node-content {
   box-sizing: border-box;
-  width: 180px;
-  height: 30px;
+  min-width: 180px;
+  min-height: 60px;
   background-color: hsla(0, 0%, 100%, 0.9);
   border: 1px solid #289de9;
-  border-radius: 15px;
+  /* border-radius: 15px; */
   font-size: 12px;
   -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
@@ -218,7 +221,7 @@
 
 .node-pop {
   position: absolute;
-  right: -30px;
+  left: 100px;
   top: -100px;
   border: 1px solid #ccc;
   padding: 10px 20px;
@@ -270,10 +273,10 @@
 
 .pane-node-children {
   position: fixed;
-  bottom: 0;
+  bottom: 10px;
   width: 100%;
   display: flex;
-  opacity: 0;
+  /* opacity: 0; */
   transform: translateX(6px);
 }
 .pane-node-children .space{
@@ -286,11 +289,18 @@
     right: 0px;
     bottom: -6px;
     cursor: crosshair;
+        /* 下面是改动 */
+    width: 40px;
+    border-radius: 2px;
+    height: 30px;
+    background: deepskyblue;
+    border: none;
+    transform: translate(35%, 0%);
 }
-
+/*
 .pane-node-children .space {
    background: #cccccc;
-}
+} */
 .pane-node-children:hover {
   opacity: 1;
 }
