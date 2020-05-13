@@ -14,7 +14,7 @@ export const simple_example_data = {
       id: 1,
       in_ports: [0],
       name: 'NODE_PARENT',
-      out_ports: [0],
+      out_ports: ['文字1', '文2'],
       pos_x: 157,
       pos_y: 120,
       type: 'Variable',
@@ -31,7 +31,7 @@ export const simple_example_data = {
       in_ports: [0],
       name: 'NODE_CHILD',
       iconClassName: 'el-icon-cpu',
-      out_ports: [0],
+      out_ports: ['文字3'],
       pos_x: 459,
       pos_y: 457,
       type: 'Variable'

@@ -296,6 +296,7 @@ foreignObject {
     background: deepskyblue;
     border: none;
     transform: translate(35%, 0%);
+    font-size: 12px;
 }
 /*
 .pane-node-children .space {
