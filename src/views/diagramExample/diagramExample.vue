@@ -44,6 +44,7 @@
 
     <!-- DAG-Diagram主体 -->
     <DAGBoard
+      ref="DAGBoard"
       :DataAll="yourJSONDataFillThere"
       @updateDAG="updateDAG"
       @editNodeDetails="editNodeDetails"
@@ -90,15 +91,53 @@ export default {
       formDetail: {
         currentEditNodeId: null,
         form: {}
-      }
+      },
+      // 监听的事件
+      onkeydown: null,
+      // 复制的内容
+      copyContent: []
     }
   },
   created () {
     this.loadJSON()
+    this.onkeydown = document.addEventListener('keydown', e => {
+      if (e.ctrlKey && e.key === 'c') {
+        // 按下ctrl + c
+        this.ctrlC()
+      } else if (e.ctrlKey && e.key === 'v') {
+        // 按下ctrl + v
+        this.ctrlV()
+      }
+    })
   },
   mounted () {
   },
+  beforeDestroy() {
+    this.onkeydown = null // 销毁事件
+  },
   methods: {
+    ctrlC () {
+      let currentChoice = this.$refs.DAGBoard.choice
+      if (currentChoice.index > -1) { // 有选中元素
+      let activeNodes = this.yourJSONDataFillThere.nodes.filter(item => currentChoice.paneNode.indexOf(item.id) > -1)
+        this.copyContent = JSON.parse(JSON.stringify(activeNodes))
+        this.copyContent.forEach(item => {
+          item.id = item.id + this.yourJSONDataFillThere.nodes.length + 100 // 自定义id规范 这里随便写个长度+100作为id
+          item.pos_x += (100 / (sessionStorage['svgScale'] || 1))
+          item.pos_y += (100 / (sessionStorage['svgScale'] || 1))
+        })
+      }
+    },
+    ctrlV () {
+      if (!this.copyContent.length) return false
+      this.yourJSONDataFillThere.nodes.push(...this.copyContent)
+      this.$refs.DAGBoard.choice = {
+        paneNode: [], // 选取的节点下标组
+        index: -1,
+        point: -1
+      }// 复制完成 取消选中状态
+      this.copyContent = []
+    },
     updateDAG (data, action, id) {
       console.log(...arguments)
       console.log(JSON.stringify(arguments[0]))
