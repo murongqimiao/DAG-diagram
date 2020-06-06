@@ -85,8 +85,18 @@ export default {
       e.preventDefault();
       e.cancelBubble = true;
     },
+    getWidthFromOutPoints(outPointsArr) {
+      let length = 0
+      outPointsArr.map(item => {
+        length += item.toString().length * 5 + 60
+      })
+      return length > 180 ? length : 180
+    },
     computedLink() {
       // 计算起始点坐标
+      const HEIGHT_FROM_TOP = 60 // 距离顶部
+      let WIDTH_FROM_NODE = 180 // 出节点的宽度
+      let WIDTH_TO_NODE = 180 // 入节点的宽度
       let f_X, f_Y, t_X, t_Y
       if (!this.DataAll) {
         return `M 0 0 T 0 0`;
@@ -99,19 +109,21 @@ export default {
         } = this.each;
         const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
         const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
+        WIDTH_FROM_NODE = this.getWidthFromOutPoints(f_Pos.out_ports)
+        WIDTH_TO_NODE = this.getWidthFromOutPoints(t_Pos.out_ports)
         if (!f_Pos || !t_Pos) { alert(src_node_id) }
         if (this.isVertical()) {
-          f_X = f_Pos.pos_x + (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
-          f_Y = f_Pos.pos_y + 30;
-          t_X = t_Pos.pos_x + (180 / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
+          f_X = f_Pos.pos_x + (WIDTH_FROM_NODE / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
+          f_Y = f_Pos.pos_y + HEIGHT_FROM_TOP;
+          t_X = t_Pos.pos_x + (WIDTH_TO_NODE / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
           t_Y = t_Pos.pos_y;
           return `M ${f_X} ${f_Y}  Q ${f_X} ${f_Y + 50} ${(t_X + f_X) / 2} ${(t_Y + f_Y) / 2} T ${t_X} ${t_Y}`;
         } else {
-          f_X = f_Pos.pos_x + 180
-          f_Y = f_Pos.pos_y + 15
+          f_X = f_Pos.pos_x + WIDTH_FROM_NODE
+          f_Y = f_Pos.pos_y + HEIGHT_FROM_TOP / 2
           t_X = t_Pos.pos_x
-          t_Y = t_Pos.pos_y + 15
-          return `M ${f_X} ${f_Y}  Q ${f_X + 30} ${f_Y} ${(t_X + f_X) / 2} ${(t_Y + f_Y) / 2} T ${t_X} ${t_Y}`;
+          t_Y = t_Pos.pos_y + HEIGHT_FROM_TOP / 2
+          return `M ${f_X} ${f_Y}  Q ${f_X + HEIGHT_FROM_TOP} ${f_Y} ${(t_X + f_X) / 2} ${(t_Y + f_Y) / 2} T ${t_X} ${t_Y}`;
         }
       }
     },
@@ -150,6 +162,7 @@ export default {
     },
     computedArrow() {
       // 计算箭头坐标
+      let WIDTH_TO_NODE = 180 // 入节点的宽度
       if (!this.DataAll) {
         return `0,0 0,0 0,0`;
       } else {
@@ -160,7 +173,8 @@ export default {
           src_output_idx
         } = this.each;
         const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
-        let t_X = t_Pos.pos_x + (180 / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
+        WIDTH_TO_NODE = this.getWidthFromOutPoints(t_Pos.out_ports)
+        let t_X = t_Pos.pos_x + (WIDTH_TO_NODE / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
         let t_Y = t_Pos.pos_y;
         if (this.isVertical()) {
           return `${t_X} ${t_Y + 3} ${t_X - 3} ${t_Y - 3} ${t_X + 3} ${t_Y - 3}`;
@@ -172,24 +186,27 @@ export default {
       }
     },
     computedCx() {
+      let WIDTH_FROM_NODE = 180 // 入节点的宽度
       const { src_node_id, src_output_idx } = this.each;
       const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
+      WIDTH_FROM_NODE = this.getWidthFromOutPoints(f_Pos.out_ports)
       let f_X = 0
       if (this.isVertical()) {
-        f_X = f_Pos.pos_x + (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
+        f_X = f_Pos.pos_x + (WIDTH_FROM_NODE / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
       } else {
-        f_X = f_Pos.pos_x + 180
+        f_X = f_Pos.pos_x + WIDTH_FROM_NODE
       }
       return `${f_X}`;
     },
     computedCy() {
+      const HEIGHT_FROM_TOP = 60 // 距离顶部
       let f_Y = 0
       const { src_node_id } = this.each;
       const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
       if (this.isVertical()) {
-        f_Y = f_Pos.pos_y + 30;
+        f_Y = f_Pos.pos_y + HEIGHT_FROM_TOP;
       } else {
-        f_Y = f_Pos.pos_y + 15
+        f_Y = f_Pos.pos_y + HEIGHT_FROM_TOP / 2
       }
       return `${f_Y}`;
     },

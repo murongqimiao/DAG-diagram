@@ -585,7 +585,7 @@ export default {
     changePort(action, id) {
       this.DataAll.nodes.forEach(item => {
         if (item.id === id) {
-          item[action] ? item[action].push(item[action].length) : item[action] = ['0']
+          item[action] ? item[action].push(item[action].length + '随便加点中文') : item[action] = ['0']
         }
       })
       this.$emit('updateDAG', this.DataAll, 'changePort')

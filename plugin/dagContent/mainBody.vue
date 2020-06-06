@@ -1,6 +1,6 @@
 <template>
     <!-- 正常竖版 -->
-    <foreignObject v-if="isVertical()" width="180" height="60" >
+    <foreignObject v-if="isVertical()" :width="getWidthFromOutPoints(item.out_ports)" height="60" >
               <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
               <div>
                 <div :style="item.nodeStyle" :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'">
@@ -88,6 +88,14 @@
             }
         },
         methods: {
+          getWidthFromOutPoints(outPointsArr) {
+            let length = 0
+            outPointsArr.map(item => {
+              length += item.toString().length * 5 + 60
+            })
+            console.log('长度是', length, outPointsArr)
+            return length > 180 ? length : 180
+          },
           isVertical() {
             let GlobalConfig = { isVertical: true }
             let _GlobalConfig = localStorage.getItem('GlobalConfig')
@@ -228,6 +236,7 @@ foreignObject {
   border-radius: 30px 20px;
   background: #fff;
   pointer-events: none;
+  display: none;
 }
 .node-pop:after {
     content: '.';
@@ -298,10 +307,11 @@ foreignObject {
     transform: translate(35%, 0%);
     font-size: 12px;
 }
-/*
-.pane-node-children .space {
-   background: #cccccc;
-} */
+
+.pane-node-children .space:hover {
+  white-space: nowrap;
+  overflow: visible;;
+}
 .pane-node-children:hover {
   opacity: 1;
 }
