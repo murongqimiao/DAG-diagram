@@ -24,7 +24,9 @@
                   <div v-for="(poi, nth) in item.out_ports" :key="'___' + nth" :style="{width: `${ 100 / (item.out_ports.length + 1)}%`}">
                     <span
                     class="space"
-                    @mousedown="$emit('linkPre', $event, i, nth)">{{poi}}</span>
+                    @contextmenu.stop="mouseUpOnOutButton($event, i, nth)"
+                    @mousedown.stop="mouseDownOnOutButton($event, i, nth)">{{poi}}</span>
+                    <!-- @mousedown="$emit('linkPre', $event, i, nth)">{{poi}}</span> -->
                   </div>
                 </div>
               </div>
@@ -88,6 +90,21 @@
             }
         },
         methods: {
+          mouseUpOnOutButton(e, i, nth) {
+            e.stopPropagation()
+            e.preventDefault()
+          },
+          mouseDownOnOutButton(e, i, nth) {
+            console.log(e.button === 2, e, i, nth)
+            if (e.button === 2) {
+              // 点击的是右键
+              alert('监听到右键事件')
+            } else {
+              this.$emit('linkPre', e, i, nth)
+            }
+            e.stopPropagation()
+            e.preventDefault()
+          },
           getWidthFromOutPoints(outPointsArr) {
             let length = 0
             outPointsArr.map(item => {
