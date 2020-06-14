@@ -24,6 +24,7 @@
                   <div v-for="(poi, nth) in item.out_ports" :key="'___' + nth" :style="{width: `${ 100 / (item.out_ports.length + 1)}%`}">
                     <span
                     class="space"
+                    @dblclick="dbclickButton"
                     @contextmenu.stop="mouseUpOnOutButton($event, i, nth)"
                     @mousedown.stop="mouseDownOnOutButton($event, i, nth)">{{poi}}</span>
                     <!-- @mousedown="$emit('linkPre', $event, i, nth)">{{poi}}</span> -->
@@ -93,6 +94,9 @@
           mouseUpOnOutButton(e, i, nth) {
             e.stopPropagation()
             e.preventDefault()
+          },
+          dbclickButton() {
+            alert('监听到了双击事件！')
           },
           mouseDownOnOutButton(e, i, nth) {
             console.log(e.button === 2, e, i, nth)

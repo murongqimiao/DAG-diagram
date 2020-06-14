@@ -1,6 +1,6 @@
 <!--  模拟剪头拖动效果  -->
 <template>
-       <g>
+       <g style="pointer-events:none;">
           <path
           class="connector only-watch-el"
           :d="dragLinkPath()"
