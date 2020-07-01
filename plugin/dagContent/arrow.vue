@@ -113,7 +113,7 @@ export default {
         WIDTH_TO_NODE = this.getWidthFromOutPoints(t_Pos.out_ports)
         if (!f_Pos || !t_Pos) { alert(src_node_id) }
         if (this.isVertical()) {
-          f_X = f_Pos.pos_x + (WIDTH_FROM_NODE / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
+          f_X = f_Pos.pos_x + (WIDTH_FROM_NODE / (f_Pos.out_ports.join().length)) * (f_Pos.out_ports.slice(0, src_output_idx).join().length + f_Pos.out_ports[src_output_idx].length / 2);
           f_Y = f_Pos.pos_y + HEIGHT_FROM_TOP;
           t_X = t_Pos.pos_x + (WIDTH_TO_NODE / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
           t_Y = t_Pos.pos_y;
@@ -192,7 +192,8 @@ export default {
       WIDTH_FROM_NODE = this.getWidthFromOutPoints(f_Pos.out_ports)
       let f_X = 0
       if (this.isVertical()) {
-        f_X = f_Pos.pos_x + (WIDTH_FROM_NODE / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
+        // f_X = f_Pos.pos_x + (WIDTH_FROM_NODE / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
+        f_X = f_Pos.pos_x + (WIDTH_FROM_NODE / (f_Pos.out_ports.join().length)) * (f_Pos.out_ports.slice(0, src_output_idx).join().length + f_Pos.out_ports[src_output_idx].length / 2);
       } else {
         f_X = f_Pos.pos_x + WIDTH_FROM_NODE
       }

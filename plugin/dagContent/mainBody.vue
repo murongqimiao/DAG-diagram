@@ -21,7 +21,7 @@
                   </div>
                 </div>
                 <div class="pane-node-children">
-                  <div v-for="(poi, nth) in item.out_ports" :key="'___' + nth" :style="{width: `${ 100 / (item.out_ports.length + 1)}%`}">
+                  <div v-for="(poi, nth) in item.out_ports" :key="'___' + nth" :style="{width: `${  (item.out_ports[nth].length) * 100 / item.out_ports.join().length }%`}">
                     <span
                     class="space"
                     @dblclick="dbclickButton"
@@ -112,7 +112,7 @@
           getWidthFromOutPoints(outPointsArr) {
             let length = 0
             outPointsArr.map(item => {
-              length += item.toString().length * 5 + 60
+              length += item.toString().length * 10
             })
             console.log('长度是', length, outPointsArr)
             return length > 180 ? length : 180
@@ -307,7 +307,7 @@ foreignObject {
   width: 100%;
   display: flex;
   /* opacity: 0; */
-  transform: translateX(6px);
+  /* transform: translateX(6px); */
 }
 .pane-node-children .space{
     width: 12px;
@@ -317,20 +317,23 @@ foreignObject {
     background: #ffffff;
     position: absolute;
     right: 0px;
+    left: 0px;
     bottom: -6px;
     cursor: crosshair;
         /* 下面是改动 */
-    width: 40px;
+    min-width: 40px;
+    width: auto;
     border-radius: 2px;
     height: 30px;
     background: deepskyblue;
     border: none;
-    transform: translate(35%, 0%);
     font-size: 12px;
+    margin: 4px;
+    text-align: left;
 }
 
 .pane-node-children .space:hover {
-  white-space: nowrap;
+  /* white-space: nowrap; */
   overflow: visible;;
 }
 .pane-node-children:hover {

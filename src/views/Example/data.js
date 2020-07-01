@@ -14,7 +14,7 @@ export const simple_example_data = {
       id: 1,
       in_ports: [0],
       name: 'NODE_PARENT',
-      out_ports: ['文字1', '文2'],
+      out_ports: ['测测试文字的长测试文字的长测试文字的长试文字的长度', '文测试文字的长2'],
       pos_x: 157,
       pos_y: 120,
       type: 'Variable',
