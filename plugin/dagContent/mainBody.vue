@@ -1,132 +1,155 @@
 <template>
-    <!-- 正常竖版 -->
-    <foreignObject v-if="isVertical()" :width="getWidthFromOutPoints(item.out_ports)" height="60" >
-              <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
-              <div>
-                <div :style="item.nodeStyle" :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'">
-                    <i
-                    @dblclick="$emit('nodesPersonalEvent', 'dbClickNodeIcon', item.id)"
-                    :style="item.iconStyle" :class="`${item.iconClassName || 'el-icon-coin'} icon icon-data`"></i>
-                    <input
-                    type="text" class="name"
-                    v-model="item.name"
-                    @change="$emit('changeNodeName', item)">
-                </div>
-                <p v-if="choice.paneNode.indexOf(item.id) !== -1" class="node-pop">{{item.nameDescribe || item.name}}</p>
-                <div :class="currentEvent === 'dragLink' ? 'pane-node-parent-hl' : 'pane-node-parent' ">
-                  <div v-for="(poi, nth) in item.in_ports" :key="'__' + nth" :style="{width: `${ 100 / (item.in_ports.length + 1)}%`}">
-                    <span
-                    class="space"
-                    @mouseup="$emit('linkEnd', i, nth)"></span>
-                  </div>
-                </div>
-                <div class="pane-node-children">
-                  <div v-for="(poi, nth) in item.out_ports" :key="'___' + nth" :style="{width: `${  (item.out_ports[nth].length) * 100 / item.out_ports.join().length }%`}">
-                    <span
-                    class="space"
-                    @dblclick="dbclickButton"
-                    @contextmenu.stop="mouseUpOnOutButton($event, i, nth)"
-                    @mousedown.stop="mouseDownOnOutButton($event, i, nth)">{{poi}}</span>
-                    <!-- @mousedown="$emit('linkPre', $event, i, nth)">{{poi}}</span> -->
-                  </div>
-                </div>
-              </div>
-              </body>
-    </foreignObject>
-    <!-- 横版 -->
-    <foreignObject v-else width="180" height="30" >
-              <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0" >
-              <div>
-                <div :style="item.nodeStyle" :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'">
-                    <i
-                    @dblclick="$emit('nodesPersonalEvent', 'dbClickNodeIcon', item.id)"
-                    :style="item.iconStyle" :class="`${item.iconClassName || 'el-icon-coin'} icon icon-data`"></i>
-                    <input
-                    type="text" class="name"
-                    v-model="item.name"
-                    @change="$emit('changeNodeName', item)">
-                </div>
-                <p v-if="choice.paneNode.indexOf(item.id) !== -1" class="node-pop">{{item.nameDescribe || item.name}}</p>
-                <div id="parent-cross" :class="currentEvent === 'dragLink' ? 'pane-node-parent-hl' : 'pane-node-parent' ">
-                  <div v-for="(poi, nth) in item.in_ports" :key="'__' + nth" :style="{width: `${ 100 / (item.in_ports.length + 1)}%`}">
-                    <span
-                    class="space"
-                    @mouseup="$emit('linkEnd', i, nth)"></span>
-                  </div>
-                </div>
-                <div id="children-cross" class="pane-node-children">
-                  <div v-for="(poi, nth) in item.out_ports" :key="'___' + nth" :style="{width: `${ 100 / (item.out_ports.length + 1)}%`}">
-                    <span
-                    class="space"
-                    @mousedown="$emit('linkPre', $event, i, nth)"></span>
-                  </div>
-                </div>
-              </div>
-              </body>
-    </foreignObject>
+<!-- 正常竖版 -->
+<foreignObject v-if="isVertical()" :width="getWidthFromOutPoints(item.out_ports)" height="100">
+  <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0">
+    <div>
+      <div
+        :style="item.nodeStyle"
+        :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'"
+      >
+        <i
+          @dblclick="$emit('nodesPersonalEvent', 'dbClickNodeIcon', item.id)"
+          :style="item.iconStyle"
+          :class="`${item.iconClassName || 'el-icon-coin'} icon icon-data`"
+        ></i>
+        <input type="text" class="name" v-model="item.name" @change="$emit('changeNodeName', item)" />
+      </div>
+      <p
+        v-if="choice.paneNode.indexOf(item.id) !== -1"
+        class="node-pop"
+      >{{item.nameDescribe || item.name}}</p>
+      <div :class="currentEvent === 'dragLink' ? 'pane-node-parent-hl' : 'pane-node-parent' ">
+        <div
+          v-for="(poi, nth) in item.in_ports"
+          :key="'__' + nth"
+          :style="{width: `${ 100 / (item.in_ports.length + 1)}%`}"
+        >
+          <span class="space" @mouseup="$emit('linkEnd', i, nth)"></span>
+        </div>
+      </div>
+      <div class="pane-node-children">
+        <div
+          v-for="(poi, nth) in item.out_ports"
+          :key="'___' + nth"
+          :style="`flex: 0 0 ${poi.length}%`"
+        >
+          <span
+            class="space"
+            @dblclick="dbclickButton"
+            @contextmenu.stop="mouseUpOnOutButton($event, i, nth)"
+            @mousedown.stop="mouseDownOnOutButton($event, i, nth)"
+          >{{poi.text}}</span>
+          <!-- @mousedown="$emit('linkPre', $event, i, nth)">{{poi}}</span> -->
+        </div>
+      </div>
+    </div>
+  </body>
+</foreignObject>
+<!-- 横版 -->
+<foreignObject v-else width="180" height="30">
+  <body xmlns="http://www.w3.org/1999/xhtml" style="margin: 0">
+    <div>
+      <div
+        :style="item.nodeStyle"
+        :class="choice.paneNode.indexOf(item.id) !== -1 ? 'pane-node-content selected' : 'pane-node-content'"
+      >
+        <i
+          @dblclick="$emit('nodesPersonalEvent', 'dbClickNodeIcon', item.id)"
+          :style="item.iconStyle"
+          :class="`${item.iconClassName || 'el-icon-coin'} icon icon-data`"
+        ></i>
+        <input type="text" class="name" v-model="item.name" @change="$emit('changeNodeName', item)" />
+      </div>
+      <p
+        v-if="choice.paneNode.indexOf(item.id) !== -1"
+        class="node-pop"
+      >{{item.nameDescribe || item.name}}</p>
+      <div
+        id="parent-cross"
+        :class="currentEvent === 'dragLink' ? 'pane-node-parent-hl' : 'pane-node-parent' "
+      >
+        <div
+          v-for="(poi, nth) in item.in_ports"
+          :key="'__' + nth"
+          :style="{width: `${ 100 / (item.in_ports.length + 1)}%`}"
+        >
+          <span class="space" @mouseup="$emit('linkEnd', i, nth)"></span>
+        </div>
+      </div>
+      <div id="children-cross" class="pane-node-children">
+        <div
+          v-for="(poi, nth) in item.out_ports"
+          :key="'___' + nth"
+          :style="{width: `${ 100 / (item.out_ports.length + 1)}%`}"
+        >
+          <span class="space" @mousedown="$emit('linkPre', $event, i, nth)"></span>
+        </div>
+      </div>
+    </div>
+  </body>
+</foreignObject>
 </template>
 
 <script>
-    export default {
-        props: {
-            item: {
-                type: Object,
-                default: () => {}
-            },
-            choice: {
-                type: Object,
-                default: () => {}
-            },
-            currentEvent: {
-                type: String,
-                default: () => ''
-            },
-            i: {
-                type: Number,
-                default: () => 0
-            }
-        },
-        data() {
-            return {
-            }
-        },
-        methods: {
-          mouseUpOnOutButton(e, i, nth) {
-            e.stopPropagation()
-            e.preventDefault()
-          },
-          dbclickButton() {
-            alert('监听到了双击事件！')
-          },
-          mouseDownOnOutButton(e, i, nth) {
-            console.log(e.button === 2, e, i, nth)
-            if (e.button === 2) {
-              // 点击的是右键
-              alert('监听到右键事件')
-            } else {
-              this.$emit('linkPre', e, i, nth)
-            }
-            e.stopPropagation()
-            e.preventDefault()
-          },
-          getWidthFromOutPoints(outPointsArr) {
-            let length = 0
-            outPointsArr.map(item => {
-              length += item.toString().length * 10
-            })
-            console.log('长度是', length, outPointsArr)
-            return length > 180 ? length : 180
-          },
-          isVertical() {
-            let GlobalConfig = { isVertical: true }
-            let _GlobalConfig = localStorage.getItem('GlobalConfig')
-            if (_GlobalConfig && _GlobalConfig.length > 0) {
-              GlobalConfig = Object.assign(GlobalConfig, JSON.parse(_GlobalConfig))
-            }
-            return GlobalConfig.isVertical
-          }
-        }
+export default {
+  props: {
+    item: {
+      type: Object,
+      default: () => {}
+    },
+    choice: {
+      type: Object,
+      default: () => {}
+    },
+    currentEvent: {
+      type: String,
+      default: () => ""
+    },
+    i: {
+      type: Number,
+      default: () => 0
     }
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    mouseUpOnOutButton(e, i, nth) {
+      e.stopPropagation();
+      e.preventDefault();
+    },
+    dbclickButton() {
+      alert("监听到了双击事件！");
+    },
+    mouseDownOnOutButton(e, i, nth) {
+      console.log(e.button === 2, e, i, nth);
+      if (e.button === 2) {
+        // 点击的是右键
+        alert("监听到右键事件");
+      } else {
+        this.$emit("linkPre", e, i, nth);
+      }
+      e.stopPropagation();
+      e.preventDefault();
+    },
+    getWidthFromOutPoints(outPointsArr) {
+      let length = 0;
+      outPointsArr.map(item => {
+        length += item.toString().length * 10;
+      });
+      console.log("长度是", length, outPointsArr);
+      return length > 180 ? length : 180;
+    },
+    isVertical() {
+      let GlobalConfig = { isVertical: true };
+      let _GlobalConfig = localStorage.getItem("GlobalConfig");
+      if (_GlobalConfig && _GlobalConfig.length > 0) {
+        GlobalConfig = Object.assign(GlobalConfig, JSON.parse(_GlobalConfig));
+      }
+      return GlobalConfig.isVertical;
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -135,8 +158,8 @@ foreignObject {
 }
 .pane-node-content {
   box-sizing: border-box;
-  min-width: 180px;
-  min-height: 60px;
+  min-height: 100px;
+  height: 100%;
   background-color: hsla(0, 0%, 100%, 0.9);
   border: 1px solid #289de9;
   /* border-radius: 15px; */
@@ -145,17 +168,17 @@ foreignObject {
   transition: background-color 0.2s;
 }
 .pane-node-content .icon {
-    width: 26px;
-    height: 26px;
-    margin: 1px;
-    border-radius: 100%;
-    float: left;
-    color: #fff;
-    font-size: 26px;
-    background-color: #289de9;
-    cursor: pointer;
+  width: 26px;
+  height: 26px;
+  margin: 1px;
+  border-radius: 100%;
+  float: left;
+  color: #fff;
+  font-size: 26px;
+  background-color: #289de9;
+  cursor: pointer;
 }
-.pane-node-content  .parentLink {
+.pane-node-content .parentLink {
   font-size: 0;
   height: 12px;
   width: 12px;
@@ -167,7 +190,7 @@ foreignObject {
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
 }
-.pane-node-content  .childLink {
+.pane-node-content .childLink {
   height: 10px;
   width: 10px;
   position: absolute;
@@ -202,15 +225,15 @@ foreignObject {
   transform: translateX(6px);
 }
 .pane-node-parent-hl .space {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1px solid gray;
-    background: #ffffff;
-    position: absolute;
-    right: 0;
-    top: 0;
-    cursor: crosshair;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid gray;
+  background: #ffffff;
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: crosshair;
 }
 .pane-node-parent-hl .space:hover {
   box-shadow: 0 0 0 6px #3ddd73;
@@ -223,29 +246,29 @@ foreignObject {
   display: inline-block;
 }
 #parent-cross {
-  top: 0px ;
-  height: 100% ;
-  width: 10px ;
-  left: -10px ;
+  top: 0px;
+  height: 100%;
+  width: 10px;
+  left: -10px;
 }
 #parent-cross .space {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 #children-cross {
-    top:0px;
-    right: 0;
-    height: 100%;
-    width: 10px;
-    position: fixed;
+  top: 0px;
+  right: 0;
+  height: 100%;
+  width: 10px;
+  position: fixed;
 }
-#children-cross .space{
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
+#children-cross .space {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .node-pop {
@@ -260,21 +283,21 @@ foreignObject {
   display: none;
 }
 .node-pop:after {
-    content: '.';
-    font-size: 0;
-    height: 20px;
-    width: 20px;
-    background: #fff;
-    border: 2px #ccc solid;
-    border-top: none;
-    border-right: none;
-    z-index: 100;
-    position: absolute;
-    transform: rotate(-34deg) skew(-33deg, -1deg) scale(1.5);
-    border-radius: 20px 0 0 0;
-    left: -14px;
-    top: 22px;
-    pointer-events: none;
+  content: ".";
+  font-size: 0;
+  height: 20px;
+  width: 20px;
+  background: #fff;
+  border: 2px #ccc solid;
+  border-top: none;
+  border-right: none;
+  z-index: 100;
+  position: absolute;
+  transform: rotate(-34deg) skew(-33deg, -1deg) scale(1.5);
+  border-radius: 20px 0 0 0;
+  left: -14px;
+  top: 22px;
+  pointer-events: none;
 }
 .pane-node-parent {
   position: fixed;
@@ -286,14 +309,14 @@ foreignObject {
   transform: translateX(6px);
 }
 .pane-node-parent .space {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1px solid gray;
-    background: #ffffff;
-    position: absolute;
-    right: 0;
-    top: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid gray;
+  background: #ffffff;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .pane-node-parent > div {
@@ -309,32 +332,32 @@ foreignObject {
   /* opacity: 0; */
   /* transform: translateX(6px); */
 }
-.pane-node-children .space{
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1px solid gray;
-    background: #ffffff;
-    position: absolute;
-    right: 0px;
-    left: 0px;
-    bottom: -6px;
-    cursor: crosshair;
-        /* 下面是改动 */
-    min-width: 40px;
-    width: auto;
-    border-radius: 2px;
-    height: 30px;
-    background: deepskyblue;
-    border: none;
-    font-size: 12px;
-    margin: 4px;
-    text-align: left;
+.pane-node-children .space {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid gray;
+  background: #ffffff;
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  bottom: -6px;
+  cursor: crosshair;
+  /* 下面是改动 */
+  min-width: 40px;
+  width: auto;
+  border-radius: 2px;
+  height: 30px;
+  background: deepskyblue;
+  border: none;
+  font-size: 12px;
+  margin: 4px;
+  text-align: left;
 }
 
 .pane-node-children .space:hover {
   /* white-space: nowrap; */
-  overflow: visible;;
+  overflow: visible;
 }
 .pane-node-children:hover {
   opacity: 1;

@@ -1,34 +1,42 @@
 <!--  剪头渲染组件  -->
 <template>
-        <g v-if="this.DataAll">
-          <path
-          @mouseover="pathHover"
-          @mouseout="pathOut"
-          :class="(isHover || r_click_menu) ? 'connector-hl' : each.type && each.type == 'active' ? 'connector-active' : each.type && each.type == 'success' ? 'connector' : 'defaultArrow'"
-          :d="computedLink()"
-          :style="each.style"
-          @contextmenu="r_click($event)"
-          ></path>
-          <text ref="edgeText" v-if="each.edgesText" :style="computedText()">{{each.edgesText}}</text>
-          <polyline class="only-watch-el" :points="computedArrow()"
-          style="stroke:#006600;"/>
-          <circle class="only-watch-el" :cx="computedCx()" :cy="computedCy()" r="5"
-            style="stroke:#006600;
+<g v-if="this.DataAll">
+  <path
+    @mouseover="pathHover"
+    @mouseout="pathOut"
+    :class="(isHover || r_click_menu) ? 'connector-hl' : each.type && each.type == 'active' ? 'connector-active' : each.type && each.type == 'success' ? 'connector' : 'defaultArrow'"
+    :d="computedLink()"
+    :style="each.style"
+    @contextmenu="r_click($event)"
+  ></path>
+  <text ref="edgeText" v-if="each.edgesText" :style="computedText()">{{each.edgesText}}</text>
+  <polyline class="only-watch-el" :points="computedArrow()" style="stroke:#006600;" />
+  <circle
+    class="only-watch-el"
+    :cx="computedCx()"
+    :cy="computedCy()"
+    r="5"
+    style="stroke:#006600;
             stroke-width: 2;
-            fill:#FFFFFF"/>
-            <g v-if="r_click_menu">
-              <foreignObject width="100%" height="100%" style="position: relative" @click="click_menu_cover($event)">
-                <body xmlns="http://www.w3.org/1999/xhtml" :style="menu_style">
-                    <div class="menu_contain">
-                      <span @click="delEdges">删除</span>
-                    </div>
-                </body>
-              </foreignObject>
-            </g>
-        </g>
+            fill:#FFFFFF"
+  />
+  <g v-if="r_click_menu">
+    <foreignObject
+      width="100%"
+      height="100%"
+      style="position: relative"
+      @click="click_menu_cover($event)"
+    >
+      <body xmlns="http://www.w3.org/1999/xhtml" :style="menu_style">
+        <div class="menu_contain">
+          <span @click="delEdges">删除</span>
+        </div>
+      </body>
+    </foreignObject>
+  </g>
+</g>
 </template>
 <script>
-
 export default {
   props: {
     DataAll: {
@@ -42,7 +50,9 @@ export default {
     }
   },
   computed: {
-   svgScale() { return sessionStorage['svgScale'] || 1 }
+    svgScale() {
+      return sessionStorage["svgScale"] || 1;
+    }
   },
   data() {
     return {
@@ -69,35 +79,40 @@ export default {
       e.preventDefault();
       e.cancelBubble = true;
     },
-    delEdges() { // 删除此条连线
+    delEdges() {
+      // 删除此条连线
       let params = {
         id: this.each.id
-      }
-      this.$emit('delEdge', params)
+      };
+      this.$emit("delEdge", params);
     },
     r_click(e) {
-      console.log(this.svgScale)
+      console.log(this.svgScale);
       const x = e.offsetX;
       const y = e.offsetY;
-      this.menu_style = Object.assign({}, this.menu_style, { left: `${(x - (sessionStorage['svg_left'] || 0)) / this.svgScale}px`, top: `${(y - (sessionStorage['svg_top'] || 0)) / this.svgScale}px` })
+      this.menu_style = Object.assign({}, this.menu_style, {
+        left: `${(x - (sessionStorage["svg_left"] || 0)) / this.svgScale}px`,
+        top: `${(y - (sessionStorage["svg_top"] || 0)) / this.svgScale}px`
+      });
       this.r_click_menu = true;
       e.stopPropagation();
       e.preventDefault();
       e.cancelBubble = true;
     },
     getWidthFromOutPoints(outPointsArr) {
-      let length = 0
+      let length = 0;
       outPointsArr.map(item => {
-        length += item.toString().length * 5 + 60
-      })
-      return length > 180 ? length : 180
+        length += item.toString().length * 5 + 60;
+      });
+      return length > 180 ? length : 180;
     },
     computedLink() {
       // 计算起始点坐标
-      const HEIGHT_FROM_TOP = 60 // 距离顶部
-      let WIDTH_FROM_NODE = 180 // 出节点的宽度
-      let WIDTH_TO_NODE = 180 // 入节点的宽度
-      let f_X, f_Y, t_X, t_Y
+      const HEIGHT_FROM_TOP = 90; // 距离顶部
+      let WIDTH_FROM_NODE = 180; // 出节点的宽度
+      let WIDTH_TO_NODE = 180; // 入节点的宽度
+      const PADDING = 20; // 按钮组两侧的padding
+      let f_X, f_Y, t_X, t_Y;
       if (!this.DataAll) {
         return `M 0 0 T 0 0`;
       } else {
@@ -109,60 +124,79 @@ export default {
         } = this.each;
         const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
         const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
-        WIDTH_FROM_NODE = this.getWidthFromOutPoints(f_Pos.out_ports)
-        WIDTH_TO_NODE = this.getWidthFromOutPoints(t_Pos.out_ports)
-        if (!f_Pos || !t_Pos) { alert(src_node_id) }
+        WIDTH_FROM_NODE = this.getWidthFromOutPoints(f_Pos.out_ports);
+        WIDTH_TO_NODE = this.getWidthFromOutPoints(t_Pos.out_ports);
+        if (!f_Pos || !t_Pos) {
+          alert(src_node_id);
+        }
         if (this.isVertical()) {
-          f_X = f_Pos.pos_x + (WIDTH_FROM_NODE / (f_Pos.out_ports.join().length)) * (f_Pos.out_ports.slice(0, src_output_idx).join().length + f_Pos.out_ports[src_output_idx].length / 2);
+          f_X =
+            f_Pos.pos_x +
+            (((WIDTH_FROM_NODE - PADDING * 2) /
+              f_Pos.out_ports
+                .map(item => item.length)
+                .reduce((a, b) => Number(a) + Number(b), 0)) *
+              f_Pos.out_ports
+                .slice(0, src_output_idx)
+                .map(item => item.length)
+                .reduce((a, b) => Number(a) + Number(b), 0) +
+              f_Pos.out_ports[src_output_idx].length / 2) +
+            PADDING;
           f_Y = f_Pos.pos_y + HEIGHT_FROM_TOP;
-          t_X = t_Pos.pos_x + (WIDTH_TO_NODE / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
+          t_X =
+            t_Pos.pos_x +
+            (WIDTH_TO_NODE / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
           t_Y = t_Pos.pos_y;
-          return `M ${f_X} ${f_Y}  Q ${f_X} ${f_Y + 50} ${(t_X + f_X) / 2} ${(t_Y + f_Y) / 2} T ${t_X} ${t_Y}`;
+          return `M ${f_X} ${f_Y}  Q ${f_X} ${f_Y + 50} ${(t_X + f_X) /
+            2} ${(t_Y + f_Y) / 2} T ${t_X} ${t_Y}`;
         } else {
-          f_X = f_Pos.pos_x + WIDTH_FROM_NODE
-          f_Y = f_Pos.pos_y + HEIGHT_FROM_TOP / 2
-          t_X = t_Pos.pos_x
-          t_Y = t_Pos.pos_y + HEIGHT_FROM_TOP / 2
-          return `M ${f_X} ${f_Y}  Q ${f_X + HEIGHT_FROM_TOP} ${f_Y} ${(t_X + f_X) / 2} ${(t_Y + f_Y) / 2} T ${t_X} ${t_Y}`;
+          f_X = f_Pos.pos_x + WIDTH_FROM_NODE;
+          f_Y = f_Pos.pos_y + HEIGHT_FROM_TOP / 2;
+          t_X = t_Pos.pos_x;
+          t_Y = t_Pos.pos_y + HEIGHT_FROM_TOP / 2;
+          return `M ${f_X} ${f_Y}  Q ${f_X + HEIGHT_FROM_TOP} ${f_Y} ${(t_X +
+            f_X) /
+            2} ${(t_Y + f_Y) / 2} T ${t_X} ${t_Y}`;
         }
       }
     },
-    computedText() { // 计算文字坐标
-        if (!this.DataAll) {
+    computedText() {
+      // 计算文字坐标
+      if (!this.DataAll) {
         return `M 0 0 T 0 0`;
       } else {
-          const {
-            dst_input_idx, // 目标
-            dst_node_id, // 目标id
-            src_node_id, // 来源id
-            src_output_idx // 来源
-          } = this.each;
-          const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
-          const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
-          if (!f_Pos) {
-            alert(src_node_id)
-          }
-          if (!t_Pos) {
-            alert(dst_node_id)
-          }
-          const f_X =
-            f_Pos.pos_x +
-            (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
-          const f_Y = f_Pos.pos_y + 30;
-          const t_X =
-            t_Pos.pos_x +
-            (180 / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
-          const t_Y = t_Pos.pos_y;
-          return {
-            transform: `translate(${(f_X + t_X) / 2}px, ${(f_Y + t_Y) / 2}px)`,
-            stroke: '#fff',
-            ...this.each.textStyle
-          };
+        const {
+          dst_input_idx, // 目标
+          dst_node_id, // 目标id
+          src_node_id, // 来源id
+          src_output_idx // 来源
+        } = this.each;
+        const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
+        const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
+        if (!f_Pos) {
+          alert(src_node_id);
         }
+        if (!t_Pos) {
+          alert(dst_node_id);
+        }
+        const f_X =
+          f_Pos.pos_x +
+          (180 / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
+        const f_Y = f_Pos.pos_y + 30;
+        const t_X =
+          t_Pos.pos_x +
+          (180 / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
+        const t_Y = t_Pos.pos_y;
+        return {
+          transform: `translate(${(f_X + t_X) / 2}px, ${(f_Y + t_Y) / 2}px)`,
+          stroke: "#fff",
+          ...this.each.textStyle
+        };
+      }
     },
     computedArrow() {
       // 计算箭头坐标
-      let WIDTH_TO_NODE = 180 // 入节点的宽度
+      let WIDTH_TO_NODE = 180; // 入节点的宽度
       if (!this.DataAll) {
         return `0,0 0,0 0,0`;
       } else {
@@ -173,66 +207,87 @@ export default {
           src_output_idx
         } = this.each;
         const t_Pos = this.DataAll.nodes.find(item => item.id === dst_node_id);
-        WIDTH_TO_NODE = this.getWidthFromOutPoints(t_Pos.out_ports)
-        let t_X = t_Pos.pos_x + (WIDTH_TO_NODE / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
+        WIDTH_TO_NODE = this.getWidthFromOutPoints(t_Pos.out_ports);
+        let t_X =
+          t_Pos.pos_x +
+          (WIDTH_TO_NODE / (t_Pos.in_ports.length + 1)) * (dst_input_idx + 1);
         let t_Y = t_Pos.pos_y;
         if (this.isVertical()) {
-          return `${t_X} ${t_Y + 3} ${t_X - 3} ${t_Y - 3} ${t_X + 3} ${t_Y - 3}`;
+          return `${t_X} ${t_Y + 3} ${t_X - 3} ${t_Y - 3} ${t_X + 3} ${t_Y -
+            3}`;
         } else {
-          let t_X = t_Pos.pos_x
-          let t_Y = t_Pos.pos_y + 15
-          return `${t_X - 2} ${t_Y + 3} ${t_X - 3} ${t_Y - 3} ${t_X + 3} ${t_Y - 1}`
+          let t_X = t_Pos.pos_x;
+          let t_Y = t_Pos.pos_y + 15;
+          return `${t_X - 2} ${t_Y + 3} ${t_X - 3} ${t_Y - 3} ${t_X + 3} ${t_Y -
+            1}`;
         }
       }
     },
     computedCx() {
-      let WIDTH_FROM_NODE = 180 // 入节点的宽度
+      let WIDTH_FROM_NODE = 180; // 入节点的宽度
+      const PADDING = 20;
       const { src_node_id, src_output_idx } = this.each;
       const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
-      WIDTH_FROM_NODE = this.getWidthFromOutPoints(f_Pos.out_ports)
-      let f_X = 0
+      WIDTH_FROM_NODE = this.getWidthFromOutPoints(f_Pos.out_ports);
+      let f_X = 0;
       if (this.isVertical()) {
         // f_X = f_Pos.pos_x + (WIDTH_FROM_NODE / (f_Pos.out_ports.length + 1)) * (src_output_idx + 1);
-        f_X = f_Pos.pos_x + (WIDTH_FROM_NODE / (f_Pos.out_ports.join().length)) * (f_Pos.out_ports.slice(0, src_output_idx).join().length + f_Pos.out_ports[src_output_idx].length / 2);
+        // f_X =
+        //   f_Pos.pos_x +
+        //   (WIDTH_FROM_NODE / f_Pos.out_ports.join().length) *
+        //     (f_Pos.out_ports.slice(0, src_output_idx).join().length +
+        //       f_Pos.out_ports[src_output_idx].length / 2);
+        f_X =
+          f_Pos.pos_x +
+          (((WIDTH_FROM_NODE - PADDING * 2) /
+            f_Pos.out_ports
+              .map(item => item.length)
+              .reduce((a, b) => Number(a) + Number(b), 0)) *
+            f_Pos.out_ports
+              .slice(0, src_output_idx)
+              .map(item => item.length)
+              .reduce((a, b) => Number(a) + Number(b), 0) +
+            f_Pos.out_ports[src_output_idx].length / 2) +
+          PADDING;
       } else {
-        f_X = f_Pos.pos_x + WIDTH_FROM_NODE
+        f_X = f_Pos.pos_x + WIDTH_FROM_NODE;
       }
       return `${f_X}`;
     },
     computedCy() {
-      const HEIGHT_FROM_TOP = 60 // 距离顶部
-      let f_Y = 0
+      const HEIGHT_FROM_TOP = 90; // 距离顶部
+      let f_Y = 0;
       const { src_node_id } = this.each;
       const f_Pos = this.DataAll.nodes.find(item => item.id === src_node_id);
       if (this.isVertical()) {
         f_Y = f_Pos.pos_y + HEIGHT_FROM_TOP;
       } else {
-        f_Y = f_Pos.pos_y + HEIGHT_FROM_TOP / 2
+        f_Y = f_Pos.pos_y + HEIGHT_FROM_TOP / 2;
       }
       return `${f_Y}`;
     },
     isVertical() {
-      let GlobalConfig = { isVertical: true }
-      let _GlobalConfig = localStorage.getItem('GlobalConfig')
+      let GlobalConfig = { isVertical: true };
+      let _GlobalConfig = localStorage.getItem("GlobalConfig");
       if (_GlobalConfig && _GlobalConfig.length > 0) {
-        GlobalConfig = Object.assign(GlobalConfig, JSON.parse(_GlobalConfig))
+        GlobalConfig = Object.assign(GlobalConfig, JSON.parse(_GlobalConfig));
       }
-      return GlobalConfig.isVertical
+      return GlobalConfig.isVertical;
     }
   },
   mounted() {
     this.$nextTick(() => {
       if (this.$refs.edgeText) {
-        console.log(this.$refs.edgeText.style.width)
+        console.log(this.$refs.edgeText.style.width);
       }
-    })
+    });
   }
 };
 </script>
 
 <style scoped>
 .only-watch-el {
-   pointer-events: none;
+  pointer-events: none;
 }
 .connector {
   stroke: #00c0ff;
@@ -269,7 +324,7 @@ export default {
   animation: grown 40s infinite linear;
 }
 @keyframes grown {
-  to{
+  to {
     stroke-dashoffset: 0px;
   }
 }
@@ -293,12 +348,12 @@ export default {
   border-radius: 5px;
   padding: 3px;
 }
-.meun_contain  span {
+.meun_contain span {
   width: 100%;
   display: inline-block;
 }
-.menu_contain  span:hover {
-    background-color: rgba(40,157,233, .3);
-    cursor: none;
+.menu_contain span:hover {
+  background-color: rgba(40, 157, 233, 0.3);
+  cursor: none;
 }
 </style>
