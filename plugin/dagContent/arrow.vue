@@ -17,7 +17,7 @@
             stroke-width: 2;
             fill:#FFFFFF"/>
             <g v-if="r_click_menu">
-              <foreignObject width="100%" height="100%" style="position: relative" @click="click_menu_cover($event)">
+              <foreignObject width="1000vw" height="1000vh" style="position: relative" @click="click_menu_cover($event)">
                 <body xmlns="http://www.w3.org/1999/xhtml" :style="menu_style">
                     <div class="menu_contain">
                       <span @click="delEdges">删除</span>
@@ -219,7 +219,8 @@ export default {
 .connector {
   stroke: #00c0ff;
   stroke-width: 2px;
-  fill: none;
+  /* fill: none; */
+  fill: transparent;
   cursor: pointer;
   stroke-dasharray: 100%;
   animation: line_success 2s;
@@ -234,7 +235,8 @@ export default {
 }
 .connector-active {
   stroke: rgba(91, 230, 20, 0.6);
-  fill: none;
+  /* fill: none; */
+  fill: transparent;
   cursor: pointer;
   stroke-width: 2px;
   stroke-dasharray: 5px;
@@ -244,7 +246,8 @@ export default {
 .defaultArrow {
   stroke: #00c0ff;
   stroke-width: 2px;
-  fill: none;
+  /* fill: none; */
+  fill: transparent;
   cursor: pointer;
   stroke-dasharray: 5px;
   stroke-dashoffset: 1000px;
@@ -265,7 +268,8 @@ export default {
 .connector-hl {
   stroke: #00c0ff;
   stroke-width: 5px;
-  fill: none;
+  /* fill: none; */
+  fill: transparent;
   cursor: pointer;
 }
 .menu_contain {
