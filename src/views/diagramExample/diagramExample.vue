@@ -15,7 +15,9 @@
         v-for="(item, i) in initNodesBasic"
         :key="'nodes_basic' + i"
         @mousedown="dragIt(item)"
-      >{{item.name}}</div>
+      >
+        {{ item.name }}
+      </div>
     </div>
 
     <!-- 顶栏 -->
@@ -38,6 +40,20 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">保存变更</el-button>
+        </el-form-item>
+      </el-form>
+
+      <el-form ref="autoLayout" :model="formDetail.layout" label-width="80px">
+        <div class="title">前端自动布局体验</div>
+        <el-form-item label="节点数量">
+          <el-input type="number" v-model="formDetail.form.nodes"></el-input>
+        </el-form-item>
+        <el-form-item label="连线数量">
+          <el-input type="number" v-model="formDetail.form.sides"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="generate">生成新图</el-button>
+          <el-button type="primary" @click="autoLayout">自动布局</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -90,7 +106,10 @@ export default {
       // 以下为表单展示数据
       formDetail: {
         currentEditNodeId: null,
-        form: {}
+        form: {
+          sides: 100,
+          nodes: 100
+        }
       },
       // 监听的事件
       onkeydown: null,
@@ -112,14 +131,102 @@ export default {
   },
   mounted () {
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.onkeydown = null // 销毁事件
   },
   methods: {
+    generate () { // 生成随机图
+      const nodesNumber = this.formDetail.form.nodes || 100; // 节点数量
+      const sidesNumber = this.formDetail.form.sides || 100; // 边的数量
+      const GRAPH_WIDTH = (nodesNumber > 100 ? nodesNumber : 100) * 10; // 图的宽度
+      const GRAPH_HEIGHT = (nodesNumber > 100 ? nodesNumber : 100) * 10; // 图的高度
+      const newGraphNodes = [];
+      const newGraphSides = [];
+      this.yourJSONDataFillThere = {
+        nodes: [],
+        edges: []
+      }
+      // step1 生成节点
+      const generatePosition = () => { // 生成坐标
+        const PosX = (Math.random() * GRAPH_WIDTH).toFixed();
+        const PosY = (Math.random() * GRAPH_HEIGHT).toFixed();
+        return {
+          pos_x: Number(PosX),
+          pos_y: Number(PosY)
+        }
+      }
+      for (let nodeIndex = 0; nodeIndex < nodesNumber; nodeIndex++) {
+        const eachGraphNode = {
+          "id": nodeIndex + 1,
+          "in_ports": [0],
+          "name": `NODE_${nodeIndex}`,
+          "out_ports": [0],
+          "detail": [],
+          ...generatePosition()
+        }
+        newGraphNodes.push(eachGraphNode);
+      }
+      this.yourJSONDataFillThere.nodes = newGraphNodes
+      // step2 生成边 因为id是有序的,所以这里id范围根据节点生成
+      const generateNodeEntry = (nodesMax) => { return (Math.random() * nodesMax).toFixed(); }
+      for (let sideIndex = 0; sideIndex < sidesNumber; sideIndex++) {
+        const eachSide = {
+          "dst_input_idx": 0,
+          "dst_node_id": Number(generateNodeEntry(nodesNumber)) || 1,
+          "id": sideIndex + 1,
+          "src_node_id": Number(generateNodeEntry(nodesNumber)) || 1,
+          "src_output_idx": 0,
+          "edgesText": ""
+        }
+        if (eachSide.dst_node_id !== eachSide.src_node_id) {
+          newGraphSides.push(eachSide);
+        }
+      }
+      this.yourJSONDataFillThere.edges = newGraphSides
+      console.log(JSON.stringify(this.yourJSONDataFillThere, null, 4))
+    },
+    autoLayout () { // 自动布局
+      const allSidesArr = this.yourJSONDataFillThere.edges.map(i => [i.src_node_id, i.dst_node_id]); // [[1,2], [2,3]]
+      const connectTest = (a, b) => { // 测试关联
+        if (a[0] === b[1] || b[0] === a[1]) {
+          return true
+        } else {
+          return false
+        }
+      }
+      let arrSeparate = [[allSidesArr.shift()]];
+      const testArr = (allSidesArr) => {
+        for (let i = 0; i < arrSeparate[arrSeparate.length - 1].length; i++) {
+          for (let j = 0; j < allSidesArr.length; j++) {
+            if (connectTest(arrSeparate[arrSeparate.length - 1][i], allSidesArr[j])) { // 建立关联,放入分组
+              arrSeparate[arrSeparate.length - 1] = arrSeparate[arrSeparate.length - 1].concat(allSidesArr.splice(j, 1));
+              testArr(allSidesArr) // 递归
+              return false;
+            }
+          }
+        }
+        // 循环完毕仍然有数据的话, 放入第二个数组
+        if (allSidesArr.length) {
+          arrSeparate.push(allSidesArr.shift());
+          testArr(allSidesArr);
+        }
+      }
+      testArr(allSidesArr)
+      console.log("整理好的数据", arrSeparate)
+      this.drawSingleGraph(arrSeparate.shift());
+    },
+    drawSingleGraph (graphArr) {
+      const left = graphArr.map(v => v[0]); // 出口集合
+      const right = graphArr.map(v => v[1]); // 入口集合
+      const result = [[]];
+      // 寻找最上层节点
+      result[0] = left.filter(v => right.indexOf(v) === -1);
+      debugger
+    },
     ctrlC () {
       let currentChoice = this.$refs.DAGBoard.choice
       if (currentChoice.index > -1) { // 有选中元素
-      let activeNodes = this.yourJSONDataFillThere.nodes.filter(item => currentChoice.paneNode.indexOf(item.id) > -1)
+        let activeNodes = this.yourJSONDataFillThere.nodes.filter(item => currentChoice.paneNode.indexOf(item.id) > -1)
         this.copyContent = JSON.parse(JSON.stringify(activeNodes))
         this.copyContent.forEach(item => {
           item.id = item.id + this.yourJSONDataFillThere.nodes.length + 100 // 自定义id规范 这里随便写个长度+100作为id
@@ -145,25 +252,25 @@ export default {
         case 'selectNode':
           this.showNodeDetails(data.nodes.find(item => item.id === id))
           break;
-        default: () => {}
+        default: () => { }
       }
     },
-    editNodeDetails() {
+    editNodeDetails () {
       console.log(...arguments)
     },
-    doSthPersonal() {
+    doSthPersonal () {
       console.log(...arguments)
     },
-    loadJSON() {
+    loadJSON () {
       // 这里可以跟服务端交互获取数据
       setTimeout(() => {
-              this.yourJSONDataFillThere = JSONFromService
+        this.yourJSONDataFillThere = JSONFromService
       }, 500);
     },
     /**
      * 通过拖拽方式加入新节点必须的函数
      */
-    startNodesBus(e) {
+    startNodesBus (e) {
       /**
        *  别的组件调用时, 先放入缓存
        * dragDes: {
@@ -188,7 +295,7 @@ export default {
         this.dragBus = true;
       }
     },
-    moveNodesBus(e) {
+    moveNodesBus (e) {
       // 移动模拟节点
       if (this.dragBus) {
         const x = e.pageX;
@@ -227,12 +334,12 @@ export default {
           id: this.yourJSONDataFillThere.nodes.length + 100, // 这里注意, 新增的id一定不能重复, 建议id交由后端处理
           in_ports: [0],
           out_ports: [0]
-       })
+        })
       }
       window.sessionStorage["dragDes"] = null;
       this.dragBus = false;
     },
-    dragIt(val) {
+    dragIt (val) {
       val.form.createTime = new Date().toDateString()
       sessionStorage["dragDes"] = JSON.stringify({
         drag: true,
@@ -242,15 +349,15 @@ export default {
     /**
      * 右侧form展示逻辑
      */
-    showNodeDetails(val) { // 展示选中的节点
+    showNodeDetails (val) { // 展示选中的节点
       const { id, form } = val
       if (!form) return
       this.formDetail = {
         currentEditNodeId: id,
-        form
+        form: Object.assign(this.formDetail.form, form, {})
       }
     },
-    onSubmit() { // 更新所选节点的信息
+    onSubmit () { // 更新所选节点的信息
       const { currentEditNodeId, form } = this.formDetail
       this.yourJSONDataFillThere.nodes.map(item => {
         if (item.id === currentEditNodeId) {
@@ -267,68 +374,91 @@ export default {
 
 <style lang="scss" scoped>
 .diagramExample {
-   width: 100%;
-   height: 100vh;
-   overflow: hidden;
-   position: relative;
-   .basic-node {
-      margin-top: 5px;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  .basic-node {
+    margin-top: 5px;
+    background: #fff;
+    color: black;
+    border-radius: 15px;
+    height: 30px;
+    width: 140px;
+    border: 1px solid #289de9;
+    line-height: 30px;
+    display: inline-block;
+    cursor: pointer;
+    user-select: none;
+  }
+  .page-left {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200px;
+    height: 100vh;
+    background: #717171;
+    .logo {
+      font-size: 20px;
+      line-height: 40px;
+      font-weight: bold;
+      border-bottom: 1px solid #ccc;
       background: #fff;
-      color:black;
-      border-radius: 15px;
-      height: 30px;
-      width: 140px;
-      border: 1px solid #289de9;
-      line-height:30px;
-      display: inline-block;
-      cursor: pointer;
-      user-select: none;
-   }
-   .page-left {
-     position: absolute;
-     left: 0;
-     top: 0;
-     width: 200px;
-     height: 100vh;
-     background: #717171;
-     .logo {
-       font-size: 20px;
-       line-height: 40px;
-       font-weight: bold;
-       border-bottom: 1px solid #ccc;
-       background: #fff;
-     }
-   }
-   .headbar {
-     position: absolute;
-     top: 0;
-     left: 200px;
-     right:0;
-     line-height: 40px;
-     text-align: left;
-     text-indent: 20px;
-     user-select:none;
-   }
-   .right-form {
-     width: 400px;
-     position: absolute;
-     right: 0;
-     top: 0;
-     height: 100vh;
-     border-left: 1px solid #ccc;
-     background: #fff;
-     .title {
-       font-size: 20px;
-       line-height: 80px;
-     }
-   }
+    }
+  }
+  .headbar {
+    position: absolute;
+    top: 0;
+    left: 200px;
+    right: 0;
+    line-height: 40px;
+    text-align: left;
+    text-indent: 20px;
+    user-select: none;
+  }
+  .right-form {
+    width: 400px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    border-left: 1px solid #ccc;
+    background: #fff;
+    .title {
+      font-size: 20px;
+      line-height: 80px;
+    }
+  }
 }
 /** 给svg添加格子背景 */
 #svgContent {
   background-size: 50px 50px;
-  background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent);
+  background-image: linear-gradient(
+      0deg,
+      transparent 24%,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(255, 255, 255, 0.05) 26%,
+      transparent 27%,
+      transparent 74%,
+      rgba(255, 255, 255, 0.05) 75%,
+      rgba(255, 255, 255, 0.05) 76%,
+      transparent 77%,
+      transparent
+    ),
+    linear-gradient(
+      90deg,
+      transparent 24%,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(255, 255, 255, 0.05) 26%,
+      transparent 27%,
+      transparent 74%,
+      rgba(255, 255, 255, 0.05) 75%,
+      rgba(255, 255, 255, 0.05) 76%,
+      transparent 77%,
+      transparent
+    );
   background-color: rgb(60, 60, 60) !important;
-  margin-left:200px;
+  margin-left: 200px;
   margin-top: 40px;
   margin-right: 200px;
 }
