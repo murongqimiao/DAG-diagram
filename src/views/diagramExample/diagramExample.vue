@@ -187,15 +187,15 @@ export default {
     },
     autoLayout () { // 自动布局
       const allSidesArr = this.yourJSONDataFillThere.edges.map(i => [i.src_node_id, i.dst_node_id]); // [[1,2], [2,3]]
-      const connectTest = (a, b) => { // 测试关联
-        if (a[0] === b[1] || b[0] === a[1]) {
+      const connectTest = (a, b) => { // 测试关联 [1, 2], [2, 3]
+        if (a[0] === b[1] || b[0] === a[1] || a[0] === b[0] || a[1] === b[1]) {
           return true
         } else {
           return false
         }
       }
       let arrSeparate = [[allSidesArr.shift()]];
-      const testArr = (allSidesArr) => {
+      const testArr = (allSidesArr) => { // 递归检测连线的关系,把有关联的连线放在一起
         for (let i = 0; i < arrSeparate[arrSeparate.length - 1].length; i++) {
           for (let j = 0; j < allSidesArr.length; j++) {
             if (connectTest(arrSeparate[arrSeparate.length - 1][i], allSidesArr[j])) { // 建立关联,放入分组
@@ -213,15 +213,59 @@ export default {
       }
       testArr(allSidesArr)
       console.log("整理好的数据", arrSeparate)
-      this.drawSingleGraph(arrSeparate.shift());
+      // while (arrSeparate.length) { // 递归画所有的关系图
+      //   this.drawSingleGraph(arrSeparate.shift());
+      // }
+      this.drawSingleGraph(arrSeparate.shift()); // 先画一个
+    },
+    unique (arr) { // 数组去重
+      return Array.from(new Set(arr))
     },
     drawSingleGraph (graphArr) {
       const left = graphArr.map(v => v[0]); // 出口集合
       const right = graphArr.map(v => v[1]); // 入口集合
       const result = [[]];
-      // 寻找最上层节点
+      // 寻找最上层节点 只有出口没有入口的都是顶点
       result[0] = left.filter(v => right.indexOf(v) === -1);
+      // 没有上类节点的图证明成环,放弃渲染 有顶点才会渲染
+      let recursionArr = graphArr // 全部数组  [[1,2], [2,3], [3,4]]...
+      if (result[0].length) {
+        result[0] = this.unique(result[0]);
+        while (recursionArr.length) { // 剩余连线存在就一直递归
+          // recursionArr = graphArr.filter(eachArr => result[0].indexOf(eachArr[0]) === -1); // 更新剩余的边
+          let nextLevelNodesArr = []
+          result[result.length - 1].map(sourceFromId => { // 当前循环到的层级
+            recursionArr.map(eachArr => {
+              if (result[result.length - 1].indexOf(eachArr[0]) > -1) { // 检测到入口对应的边,把出口id放入数组下一级
+                 nextLevelNodesArr.push(eachArr[1])
+              }
+            })
+          })
+          recursionArr = recursionArr.filter(eachArr => result[result.length - 1].indexOf(eachArr[0]) === -1)// 更新剩余的边
+          if (nextLevelNodesArr.length) {
+            nextLevelNodesArr = this.unique(nextLevelNodesArr);
+            result[result.length] = nextLevelNodesArr
+          }
+        }
+      }
       debugger
+      this.draw(result);
+    },
+    draw(nodesIdArr) {
+      const newNodesJSON = [];
+      const CANVAS_WIDTH = 1440;
+      const EACH_LEVEL_HIGH = 300;
+      this.yourJSONDataFillThere.nodes.map(v => {
+        v.pos_x = -1000;
+        v.pox_y = 0;
+      })
+      nodesIdArr.forEach((row, rowIndex) => {
+        row.map((curId, curIndex) => {
+          const aim = this.yourJSONDataFillThere.nodes.find(v => v.id === curId);
+          aim.pos_x = (CANVAS_WIDTH / row.length + 1) * (curIndex + 1);
+          aim.pos_y = EACH_LEVEL_HIGH * (rowIndex + 1);
+        })
+      })
     },
     ctrlC () {
       let currentChoice = this.$refs.DAGBoard.choice
