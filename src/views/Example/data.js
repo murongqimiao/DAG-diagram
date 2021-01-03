@@ -100,7 +100,7 @@ export const simple_r_click_data = {
 }
 
 export const edges_example_data = {
-  edges: [
+  rectEdges: [
     {
       dst_input_idx: 0,
       dst_node_id: 2,

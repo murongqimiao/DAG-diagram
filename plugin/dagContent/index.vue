@@ -43,6 +43,16 @@
         :each="each"
         :index="n"
       />
+      <!-- 这里演示新增arrow类型的方式 -->
+      <ArrowRect
+       v-for="(each, n) in DataAll.rectEdges"
+        :key="'____' + n"
+        :DataAll="DataAll"
+        @delEdge="delEdge"
+        @updateData="updateData"
+        :each="each"
+        :index="n"
+      ></ArrowRect>
       <SimulateArrow v-if="currentEvent === 'dragLink'" :dragLink="dragLink" />
       <SimulateSelArea
         v-if="['sel_area', 'sel_area_ing'].indexOf(currentEvent) !== -1"
@@ -70,6 +80,7 @@
 </template>
 <script>
 import Arrow from "./arrow.vue";
+import ArrowRect from "./arrowRect.vue";
 import SimulateArrow from "./simulateArrow.vue";
 import SimulateFrame from "./simulateFrame.vue";
 import EditArea from "./editArea.vue";
@@ -590,6 +601,9 @@ export default {
       })
       this.$emit('updateDAG', this.DataAll, 'changePort')
     },
+    updateData(DataAll, name) {
+      this.$emit('updateDAG', DataAll, name)
+    },
     editNodeDetails(value) {
       // 抛出待编辑内容
       this.$emit('editNodeDetails', value)
@@ -653,6 +667,7 @@ export default {
   },
   components: {
     Arrow,
+    ArrowRect,
     SimulateArrow,
     SimulateFrame,
     EditArea,
