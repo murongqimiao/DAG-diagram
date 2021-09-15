@@ -18,32 +18,32 @@
 
 
 - 画布缩放 / 复原
-![画布缩放.gif](https://user-gold-cdn.xitu.io/2019/9/3/16cf623733ecdfc7?w=480&h=272&f=gif&s=1473557)
+![画布缩放.gif](https://upload-images.jianshu.io/upload_images/6385607-f9b2135817c0c606.gif?imageMogr2/auto-orient/strip)
 
 - 拖动节点
-![节点拖动gif.gif](https://user-gold-cdn.xitu.io/2019/9/3/16cf62373431d132?w=480&h=272&f=gif&s=1204905)
+![节点拖动gif.gif](https://upload-images.jianshu.io/upload_images/6385607-7216c13df58d9577.gif?imageMogr2/auto-orient/strip)
 
 - 框选拖动多个节点
-![框选拖动gif.gif](https://user-gold-cdn.xitu.io/2019/9/3/16cf62373450ce06?w=480&h=272&f=gif&s=2861637)
+![框选拖动gif.gif](https://upload-images.jianshu.io/upload_images/6385607-48b010c3fe92b177.gif?imageMogr2/auto-orient/strip)
 
 - 添加节点
-![添加节点gif.gif](https://user-gold-cdn.xitu.io/2019/9/3/16cf623734116275?w=480&h=272&f=gif&s=1639185)
+![添加节点gif.gif](https://upload-images.jianshu.io/upload_images/6385607-7043a33b5ce857be.gif?imageMogr2/auto-orient/strip)
 
 - 删除节点
-![删除节点.gif](https://user-gold-cdn.xitu.io/2019/9/3/16cf62373444fd40?w=480&h=272&f=gif&s=241017)
+![删除节点.gif](https://upload-images.jianshu.io/upload_images/6385607-ba2ed2c331ef72fe.gif?imageMogr2/auto-orient/strip)
 
 - 添加节点关系
-![添加节点关系gif.gif](https://user-gold-cdn.xitu.io/2019/9/3/16cf623767191fb9?w=480&h=272&f=gif&s=437941)
+![添加节点关系gif.gif](https://upload-images.jianshu.io/upload_images/6385607-ba2ed2c331ef72fe.gif?imageMogr2/auto-orient/strip)
 
 
 - 删除节点关系
-![删除节点关系gif.gif](https://user-gold-cdn.xitu.io/2019/9/3/16cf62376ad2613c?w=480&h=272&f=gif&s=237366)
+![删除节点关系gif.gif](https://upload-images.jianshu.io/upload_images/6385607-e9e8fd0fa83a7daa.gif?imageMogr2/auto-orient/strip)
 
 - 添加节点入口 / 出口
-![节点出入口添加gif.gif](https://user-gold-cdn.xitu.io/2019/9/3/16cf62376aeb19c8?w=480&h=272&f=gif&s=1422164)
+![节点出入口添加gif.gif](https://upload-images.jianshu.io/upload_images/6385607-c6b72e629f2d3f66.gif?imageMogr2/auto-orient/strip)
 
 - 展示模型训练流程 ( 自定义用法需自行开发 )
-![节点训练gif.gif](https://user-gold-cdn.xitu.io/2019/9/3/16cf623785bd2f52?w=480&h=272&f=gif&s=2304369)
+![节点训练gif.gif](https://upload-images.jianshu.io/upload_images/6385607-b85560e461afb740.gif?imageMogr2/auto-orient/strip)
 
 
 ## 使用方法
