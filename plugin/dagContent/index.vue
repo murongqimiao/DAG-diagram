@@ -321,6 +321,13 @@ export default {
     selPaneNode(id) {
       // 单选节点
       this.choice.paneNode.length = [];
+      /**
+       * 解释说明 ↑
+       * js中数组想要重置为空数组, 可以采用的方式有, 直接赋值[], 或者arr.length = 0, 或者arr.length = []
+       * arr.length做赋值操作时候, 参数可以为正整数,0, null, [], 其中后三者会把数组清空
+       * 上面的代码可以简单的理解为 this.choice.paneNode = []
+       * 其实是当年写的快了没检查, 注释擦一下屁股~  o(╯□╰)o
+       */
       if (id) {
         this.choice.paneNode.push(id);
         this.$emit('updateDAG', this.DataAll, 'selectNode', id)
