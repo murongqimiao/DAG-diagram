@@ -10,6 +10,16 @@
           @contextmenu="r_click($event)"
           ></path>
           <text ref="edgeText" v-if="each.edgesText" :style="computedText()">{{each.edgesText}}</text>
+          <!-- 增加一个icon 这里可以替换成任意想要的 -->
+          <g v-if="!each.hideIcon">
+            <foreignObject width="40px" height="40px" style="position: relative">
+              <body xmlns="http://www.w3.org/1999/xhtml" :style="menu_style">
+                  <i @click="editEdges" :class="`${each.iconClassName || 'el-icon-edit'} sides-edit-icon`"></i>
+              </body>
+            </foreignObject>
+          </g>
+
+
           <polyline class="only-watch-el" :points="computedArrow()"
           style="stroke:#006600;"/>
           <circle class="only-watch-el" :cx="computedCx()" :cy="computedCy()" r="5"
@@ -20,7 +30,8 @@
               <foreignObject width="1000vw" height="1000vh" style="position: relative" @click="click_menu_cover($event)">
                 <body xmlns="http://www.w3.org/1999/xhtml" :style="menu_style">
                     <div class="menu_contain">
-                      <span @click="delEdges">删除</span>
+                      <div @click="delEdges">删除</div>
+                      <div @click="editEdges">编辑</div>
                     </div>
                 </body>
               </foreignObject>
@@ -28,7 +39,6 @@
         </g>
 </template>
 <script>
-
 export default {
   props: {
     DataAll: {
@@ -74,6 +84,12 @@ export default {
         id: this.each.id
       }
       this.$emit('delEdge', params)
+    },
+    editEdges() { // 开始编辑
+      let params = {
+        id: this.each.id
+      }
+      this.$emit('editEdge', params)
     },
     r_click(e) {
       console.log(this.svgScale)
@@ -208,6 +224,9 @@ export default {
         console.log(this.$refs.edgeText.style.width)
       }
     })
+  },
+  components: {
+
   }
 };
 </script>
@@ -283,8 +302,12 @@ export default {
   width: 100%;
   display: inline-block;
 }
-.menu_contain  span:hover {
+.menu_contain  div:hover {
     background-color: rgba(40,157,233, .3);
     cursor: none;
+}
+.sides-edit-icon {
+  font-size: 30px;
+  color: white;
 }
 </style>

@@ -40,6 +40,7 @@
         :key="'____' + n"
         :DataAll="DataAll"
         @delEdge="delEdge"
+        @editEdge="editEdge"
         :each="each"
         :index="n"
       />
@@ -503,6 +504,13 @@ export default {
       })
       this.DataAll.edges = _edges
       this.$emit('updateDAG', this.DataAll, 'delEdge')
+    },
+     editEdge({ id }) {
+      // 编辑边
+      console.log("===========当前准备执行 编辑边=========")
+      console.log('id', id)
+       // 抛出待编辑id
+      this.$emit('editSideDetails', id)
     },
     moveNode(params) {
       // 移动点的位置
