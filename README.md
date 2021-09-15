@@ -14,7 +14,7 @@
 ## 效果展示
 - 画布移动 / 复原
 ![[图片上传中...(画布缩放.gif-823313-1567493208259-0)]
-](https://user-gold-cdn.xitu.io/2019/9/3/16cf623733d36222?w=480&h=272&f=gif&s=818562)
+](https://upload-images.jianshu.io/upload_images/6385607-13e8af401de01819.gif?imageMogr2/auto-orient/strip)
 
 
 - 画布缩放 / 复原
