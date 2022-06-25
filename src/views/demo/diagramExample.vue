@@ -248,7 +248,6 @@ export default {
           }
         }
       }
-      debugger
       this.draw(result);
     },
     draw(nodesIdArr) {
@@ -396,16 +395,17 @@ export default {
     showNodeDetails (val) { // 展示选中的节点
       const { id, form } = val
       if (!form) return
+      let selectNodeForm = Object.assign(this.formDetail.form, form, {})
       this.formDetail = {
         currentEditNodeId: id,
-        form: Object.assign(this.formDetail.form, form, {})
+        form: JSON.parse(JSON.stringify(selectNodeForm))
       }
     },
     onSubmit () { // 更新所选节点的信息
       const { currentEditNodeId, form } = this.formDetail
       this.yourJSONDataFillThere.nodes.map(item => {
         if (item.id === currentEditNodeId) {
-          item.form = form
+          item.form = JSON.parse(JSON.stringify(form))
         }
       })
       let _data = this.yourJSONDataFillThere.nodes.find(item => item.id === currentEditNodeId).form

@@ -3,8 +3,8 @@
  */
 
 import Route from '@/model/route'
-import example from './example'
+import diagramExample from './diagramExample'
 
 export default [
-  Route.new('/', example, 'example')
+  Route.new('/', diagramExample, 'diagramExample')
 ]
