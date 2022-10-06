@@ -11,6 +11,15 @@
 
 ## 使用说明
   [B站视频 https://www.bilibili.com/video/av80288517/](https://www.bilibili.com/video/av80288517/)
+  
+## 重要提醒
+   老版本为vue2, node版本16以上强烈建议使用vue3版本.
+   示例项目安装方法为joao-cli安装
+   npm install -g joao-cli
+   joao init 根据提示输入新建项目名称
+   cd project  npm i && npm run dev 打开localhost:5173
+   localhost:5173/dag就是示例页面
+  
 ## 效果展示
 - 画布移动 / 复原
 ![[图片上传中...(画布缩放.gif-823313-1567493208259-0)]
